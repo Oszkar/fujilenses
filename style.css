@@ -35,3 +35,14 @@ th.desc:after {
     content: ' \25BC';
     /* Downward arrow */
 }
+
+button.btn {
+    padding: 0;
+    width: 2em;
+    text-align: center;
+}
+
+td.collapse {
+    padding: 0.5em;
+    background-color: #f9f9f9;
+}
