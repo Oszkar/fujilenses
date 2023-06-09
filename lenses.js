@@ -1,49 +1,23 @@
-$(document).ready(function() {
-    loadLenses();
+// Function to load lenses data from JSON file and generate table
+function loadLenses(isFocalMapView) {
+    var fullFrameEquivalent = $("#switch1").is(":checked");
+    var onlyFujifilm = $("#switch2").is(":checked");
 
-    $("#switch1, #switch2, #switch3").change(function() {
-        if ($("#switch3").is(":checked")) {
-            $("#lensDisplayArea").html(generateFocalMapView());
+    $.getJSON('lenses.json', function(data) {
+        if (onlyFujifilm) {
+            data = data.filter(function(lens) {
+                return lens.Manufacturer.toLowerCase() === 'fujinon';
+            });
+        }
+
+        if (isFocalMapView) {
+            $("#lensDisplayArea").html(''); // Clear the display area
+            generateFocalMapView(data);
         } else {
-            loadLenses();
+            $("#lensDisplayArea").html(generateTableView(data, fullFrameEquivalent));
         }
     });
-
-    $(document).on('click', 'th', function() {
-        var table = $(this).parents('table').eq(0);
-        var tbodies = table.find('tbody').toArray();
-        var index = $(this).index();
-
-        this.asc = !this.asc;
-        // Clear the classes of all other column headers
-        $('th').not(this).removeClass('asc desc');
-        // Add asc or desc class to the clicked column header
-        $(this).addClass(this.asc ? 'asc' : 'desc');
-
-        tbodies.sort(function(a, b) {
-            var valA = getCellValue($(a).find('tr').first(), index);
-            var valB = getCellValue($(b).find('tr').first(), index);
-        return $.isNumeric(valA) && $.isNumeric(valB) ? valA - valB : valA.toString().localeCompare(valB);
-    });
-
-    if (!this.asc) {
-        tbodies = tbodies.reverse();
-    }
-
-    tbodies.forEach(function(tbody) {
-        table.append(tbody);
-    });
-    });
-});
-
-function compare(index) {
-    return function(a, b) {
-        var valA = getCellValue(a, index), valB = getCellValue(b, index)
-        return $.isNumeric(valA) && $.isNumeric(valB) ? valA - valB : valA.toString().localeCompare(valB)
-    }
 }
-
-function getCellValue(row, index){ return $(row).children('td').eq(index).text() }
 
 // Function to generate the table view
 function generateTableView(lenses, fullFrameEquivalent) {
@@ -90,25 +64,33 @@ function generateTableView(lenses, fullFrameEquivalent) {
 
     return tableView;
 }
-// Function to generate the placeholder for focal map view
-function generateFocalMapView() {
-    var focalMapView = '<h2>Focal Map View</h2>' +
-                       '<p>Content coming soon...</p>';
-    return focalMapView;
-}
 
-// Function to load lenses data from JSON file and generate table
-function loadLenses() {
-    var fullFrameEquivalent = $("#switch1").is(":checked");
-    var onlyFujifilm = $("#switch2").is(":checked");
+// Function to generate the focal map view
+function generateFocalMapView(lenses) {
+    // Add SVG to the lens display area
+    var svg = d3.select("#lensDisplayArea")
+                .append("svg")
+                .attr("width", 500) // Adjust as needed
+                .attr("height", lenses.length * 30); // Adjust as needed
 
-    $.getJSON('lenses.json', function(data) {
-        if (onlyFujifilm) {
-            data = data.filter(function(lens) {
-                return lens.Manufacturer.toLowerCase() === 'fujinon';
-            });
-        }
+    var xScale = d3.scaleLinear()
+                   .domain([0, d3.max(lenses, function(d) { return d.MaxFocalDistance; })])
+                   .range([0, 500]); // Adjust as needed
 
-        $("#lensDisplayArea").html(generateTableView(data, fullFrameEquivalent));
-    });
+    svg.selectAll("rect")
+       .data(lenses)
+       .enter()
+       .append("rect")
+       .attr("x", 0)
+       .attr("y", function(d, i) { return i * 30; }) // Adjust as needed
+       .attr("width", function(d) { return xScale(d.MaxFocalDistance); })
+       .attr("height", 20); // Adjust as needed
+
+    svg.selectAll("text")
+       .data(lenses)
+       .enter()
+       .append("text")
+       .attr("x", function(d) { return xScale(d.MaxFocalDistance); })
+       .attr("y", function(d, i) { return (i * 30) + 15; }) // Adjust as needed
+       .text(function(d) { return d.LensType + ": " + d.MinFocalDistance + " - " + d.MaxFocalDistance; });
 }
