@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Fujifilm Lens Selector</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">Fujifilm Lens Selector</a>
+    </nav>
+
+    <div class="jumbotron jumbotron-fluid" style="background-image: url('header-image.jpg'); background-size: cover;">
+        <div class="container">
+            <h1 class="display-4">Find Your Perfect Lens</h1>
+            <p class="lead">Explore our selection of Fujifilm lenses and find the one that's right for you.</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="custom-control custom-switch">
+            <input type="checkbox" class="custom-control-input" id="switch1">
+            <label class="custom-control-label" for="switch1">Switch to Full Frame Equivalent</label>
+        </div>
+        <div class="custom-control custom-switch">
+            <input type="checkbox" class="custom-control-input" id="switch2">
+            <label class="custom-control-label" for="switch2">Exclude 3rd Party Lenses</label>
+        </div>
+        <div class="custom-control custom-switch">
+            <input type="checkbox" class="custom-control-input" id="switch3">
+            <label class="custom-control-label" for="switch3">Switch to Focal Map View</label>
+        </div>
+
+        <div class="row">
+            <div class="col-12" id="lensDisplayArea">
+                <!-- Table view and focal map view will be inserted here based on user's selection -->
+            </div>
+        </div>
+    </div>
+
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="app.js"></script>
+</body>
+
+</html>

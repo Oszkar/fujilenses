@@ -1,0 +1,37 @@
+body {
+    padding-top: 20px;
+}
+
+.navbar {
+    margin-bottom: 20px;
+}
+
+.jumbotron {
+    color: white; /* To make sure the text is visible on the image */
+    height: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.custom-switch {
+    padding: 10px;
+}
+
+#lensDisplayArea {
+    margin-top: 20px;
+}
+
+th {
+    cursor: pointer;
+}
+
+th.asc:after {
+    content: ' \25B2';
+    /* Upward arrow */
+}
+
+th.desc:after {
+    content: ' \25BC';
+    /* Downward arrow */
+}

@@ -1,0 +1,40 @@
+[
+    {
+        "Manufacturer": "Fujinon",
+        "Model": "XF14mmF2.8 R",
+        "ZoomLens": false,
+        "MinFocalDistance": 14,
+        "MaxFocalDistance": 14,
+        "MaxAperture": 2.8,
+        "LinearMotor": false,
+        "ImageStabilization": false,
+        "ApertureRing": true,
+        "WeatherResistant": false
+    },
+
+    {
+        "Manufacturer": "Fujinon",
+        "Model": "XF16mmF2.8 R",
+        "ZoomLens": false,
+        "MinFocalDistance": 16,
+        "MaxFocalDistance": 16,
+        "MaxAperture": 2.9,
+        "LinearMotor": true,
+        "ImageStabilization": false,
+        "ApertureRing": true,
+        "WeatherResistant": false
+    },
+
+    {
+        "Manufacturer": "Sigma",
+        "Model": "XF16mmF2.8 R",
+        "ZoomLens": false,
+        "MinFocalDistance": 16,
+        "MaxFocalDistance": 16,
+        "MaxAperture": 2.9,
+        "LinearMotor": true,
+        "ImageStabilization": false,
+        "ApertureRing": true,
+        "WeatherResistant": false
+    }
+]
