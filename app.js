@@ -24,15 +24,15 @@ $(document).ready(function() {
             var valA = getCellValue($(a).find('tr').first(), index);
             var valB = getCellValue($(b).find('tr').first(), index);
         return $.isNumeric(valA) && $.isNumeric(valB) ? valA - valB : valA.toString().localeCompare(valB);
-        });
+    });
 
-        if (!this.asc) {
-            tbodies = tbodies.reverse();
-        }
+    if (!this.asc) {
+        tbodies = tbodies.reverse();
+    }
 
-        tbodies.forEach(function(tbody) {
-            table.append(tbody);
-        });
+    tbodies.forEach(function(tbody) {
+        table.append(tbody);
+    });
     });
 });
 
@@ -47,14 +47,14 @@ function getCellValue(row, index){ return $(row).children('td').eq(index).text()
 
 // Function to generate the table view
 function generateTableView(lenses, fullFrameEquivalent) {
-    var tableView = '<h2>Available Lenses</h2>' +
+    var tableView = '<h2>Available Lens List</h2>' +
                     '<table class="table table-striped" id="lensTable">' +
                     '<thead>' +
                     '<tr>' +
                     '<th></th>' + // new column for the '+' button
                     '<th>Manufacturer</th>' +
-                    '<th>Model</th>' +
-                    '<th>Zoom Lens</th>' +
+                    '<th>Model Name</th>' +
+                    '<th>Lens Type</th>' +
                     '<th>Min Focal Distance</th>' +
                     '<th>Max Focal Distance</th>' +
                     '<th>Max Aperture</th>' +
@@ -70,7 +70,7 @@ function generateTableView(lenses, fullFrameEquivalent) {
                      '<td><button class="btn btn-default">+</button></td>' +
                      '<td>' + lens.Manufacturer + '</td>' +
                      '<td>' + lens.Model + '</td>' +
-                     '<td>' + (lens.ZoomLens ? 'Yes' : 'No') + '</td>' +
+                     '<td>' + lens.LensType + '</td>' +
                      '<td>' + minFocalLength + ' mm</td>' +
                      '<td>' + maxFocalLength + ' mm</td>' +
                      '<td>f/' + lens.MaxAperture + '</td>' +

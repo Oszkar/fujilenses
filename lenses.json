@@ -2,7 +2,7 @@
     {
         "Manufacturer": "Fujinon",
         "Model": "XF14mmF2.8 R",
-        "ZoomLens": false,
+        "LensType": "Prime",
         "MinFocalDistance": 14,
         "MaxFocalDistance": 14,
         "MaxAperture": 2.8,
@@ -15,7 +15,7 @@
     {
         "Manufacturer": "Fujinon",
         "Model": "XF16-80mmF4 R OIS WR",
-        "ZoomLens": true,
+        "LensType": "Zoom",
         "MinFocalDistance": 16,
         "MaxFocalDistance": 80,
         "MaxAperture": 4,
@@ -28,7 +28,7 @@
     {
         "Manufacturer": "Sigma",
         "Model": "Sigma 16mm f/1.4 DC DN Contemporary X",
-        "ZoomLens": false,
+        "LensType": "Prime",
         "MinFocalDistance": 16,
         "MaxFocalDistance": 16,
         "MaxAperture": 1.4,
@@ -41,7 +41,7 @@
     {
         "Manufacturer": "Sigma",
         "Model": "Sigma 18-50mm f/2.8 DC DN Contemporary X",
-        "ZoomLens": true,
+        "LensType": "Zoom",
         "MinFocalDistance": 18,
         "MaxFocalDistance": 50,
         "MaxAperture": 2.8,
