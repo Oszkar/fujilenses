@@ -27,12 +27,12 @@ th {
 }
 
 th.asc:after {
-    content: ' \25B2';
+    content: " \25B2";
     /* Upward arrow */
 }
 
 th.desc:after {
-    content: ' \25BC';
+    content: " \25BC";
     /* Downward arrow */
 }
 

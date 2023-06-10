@@ -1,0 +1,118 @@
+[
+    {
+        "Manufacturer": "Fujinon",
+        "Model": "XF14mmF2.8 R",
+        "LensType": "Prime",
+        "MinFocalDistance": 14,
+        "MaxFocalDistance": 14,
+        "MaxAperture": 2.8,
+        "LinearMotor": false,
+        "ImageStabilization": false,
+        "ApertureRing": true,
+        "WeatherResistant": false
+    },
+
+    {
+        "Manufacturer": "Fujinon",
+        "Model": "XF16-80mmF4 R OIS WR",
+        "LensType": "Zoom",
+        "MinFocalDistance": 16,
+        "MaxFocalDistance": 80,
+        "MaxAperture": 4,
+        "LinearMotor": false,
+        "ImageStabilization": true,
+        "ApertureRing": true,
+        "WeatherResistant": true
+    },
+
+    {
+        "Manufacturer": "Fujinon",
+        "Model": "XF16mmF1.4 R WR",
+        "LensType": "Prime",
+        "MinFocalDistance": 16,
+        "MaxFocalDistance": 16,
+        "MaxAperture": 1.4,
+        "LinearMotor": false,
+        "ImageStabilization": false,
+        "ApertureRing": true,
+        "WeatherResistant": false
+    },
+
+    {
+        "Manufacturer": "Fujinon",
+        "Model": "XF90mmF2 R LM WR",
+        "LensType": "Prime",
+        "MinFocalDistance": 90,
+        "MaxFocalDistance": 90,
+        "MaxAperture": 2,
+        "LinearMotor": true,
+        "ImageStabilization": false,
+        "ApertureRing": true,
+        "WeatherResistant": true
+    },
+
+    {
+        "Manufacturer": "Fujinon",
+        "Model": "XF18-55mmF2.8-4 R LM OIS",
+        "LensType": "Zoom",
+        "MinFocalDistance": 18,
+        "MaxFocalDistance": 55,
+        "MaxAperture": 2.8,
+        "LinearMotor": true,
+        "ImageStabilization": true,
+        "ApertureRing": true,
+        "WeatherResistant": false
+    },
+
+    {
+        "Manufacturer": "Sigma",
+        "Model": "Sigma 16mm f/1.4 DC DN Contemporary X",
+        "LensType": "Prime",
+        "MinFocalDistance": 16,
+        "MaxFocalDistance": 16,
+        "MaxAperture": 1.4,
+        "LinearMotor": false,
+        "ImageStabilization": false,
+        "ApertureRing": false,
+        "WeatherResistant": false
+    },
+
+    {
+        "Manufacturer": "Sigma",
+        "Model": "Sigma 18-50mm f/2.8 DC DN Contemporary X",
+        "LensType": "Zoom",
+        "MinFocalDistance": 18,
+        "MaxFocalDistance": 50,
+        "MaxAperture": 2.8,
+        "LinearMotor": false,
+        "ImageStabilization": false,
+        "ApertureRing": false,
+        "WeatherResistant": false
+    },
+
+    {
+        "Manufacturer": "Sigma",
+        "Model": "Sigma 30mm f/1.4 DC DN Contemporary X",
+        "LensType": "Prime",
+        "MinFocalDistance": 30,
+        "MaxFocalDistance": 30,
+        "MaxAperture": 1.4,
+        "LinearMotor": false,
+        "ImageStabilization": false,
+        "ApertureRing": false,
+        "WeatherResistant": false
+    },
+
+    {
+        "Manufacturer": "Sigma",
+        "Model": "Sigma 56mm f/1.4 DC DN Contemporary X",
+        "LensType": "Prime",
+        "MinFocalDistance": 56,
+        "MaxFocalDistance": 56,
+        "MaxAperture": 1.4,
+        "LinearMotor": false,
+        "ImageStabilization": false,
+        "ApertureRing": false,
+        "WeatherResistant": false
+    }
+]

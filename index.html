@@ -1,53 +1,68 @@
 <!DOCTYPE html>
 <html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="description" content="Explore Fujifilm lenses and find the one that's right for you with our Fujifilm Lens Selector tool." />
+        <meta name="keywords" content="Fujifilm, Lens, Selector, Photography, Camera" />
+        <meta name="author" content="Oszkar Jozsa" />
+        <meta property="og:title" content="Fujifilm Lens Selector" />
+        <meta property="og:description" content="Explore Fujifilm lenses and find the one that's right for you with our Fujifilm Lens Selector tool." />
+        <meta property="og:image" content="TODO_URL_TO_IMAGE" />
+        <meta property="og:url" content="TODO_URL_TO_WEBSITE" />
+        <meta name="twitter:card" content="todo_summary_large_image" />
+        <title>Fujifilm Lens Selector</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" />
+        <link rel="stylesheet" href="css/style.css" />
+        <script src="https://code.jquery.com/jquery-3.5.1.min.js" defer></script>
+        <script src="https://d3js.org/d3.v7.min.js" defer></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" defer></script>
+        <script src="js/utils.js" defer></script>
+        <script src="js/lenses.js" defer></script>
+        <script src="js/main.js" defer></script>
+    </head>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Fujifilm Lens Selector</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-    <link rel="stylesheet" href="style.css">
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-    <script src="https://d3js.org/d3.v7.min.js"></script>
-</head>
+    <body>
+        <!-- Navigation bar -->
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" href="#">Fujifilm Lens Selector</a>
+        </nav>
 
-<body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="#">Fujifilm Lens Selector</a>
-    </nav>
-
-    <div class="jumbotron jumbotron-fluid" style="background-image: url('header-image.jpg'); background-size: cover;">
-        <div class="container">
-            <h1 class="display-4">Find Your Perfect Lens</h1>
-            <p class="lead">Explore Fujifilm lenses and find the one that's right for you.</p>
-        </div>
-    </div>
-
-    <div class="container">
-        <div class="custom-control custom-switch">
-            <input type="checkbox" class="custom-control-input" id="switch1">
-            <label class="custom-control-label" for="switch1">Switch to Full Frame Equivalent</label>
-        </div>
-        <div class="custom-control custom-switch">
-            <input type="checkbox" class="custom-control-input" id="switch2">
-            <label class="custom-control-label" for="switch2">Exclude 3rd Party Lenses</label>
-        </div>
-        <div class="custom-control custom-switch">
-            <input type="checkbox" class="custom-control-input" id="switch3">
-            <label class="custom-control-label" for="switch3">Switch to Focal Map View</label>
-        </div>
-
-        <div class="row">
-            <div class="col-12" id="lensDisplayArea">
-                <!-- Table view and focal map view will be inserted here based on user's selection -->
+        <!-- Jumbotron -->
+        <div class="jumbotron jumbotron-fluid" style="background-image: url('header-image.jpg'); background-size: cover">
+            <div class="container">
+                <h1 class="display-4">Find Your Perfect Lens</h1>
+                <p class="lead">Explore Fujifilm lenses and find the one that's right for you.</p>
             </div>
         </div>
-    </div>
 
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-    <script src="utils.js"></script>
-    <script src="lenses.js"></script>
-    <script src="main.js"></script>
-</body>
+        <!-- Main content -->
+        <div class="container">
+            <div class="custom-control custom-switch">
+                <input type="checkbox" class="custom-control-input" id="full-frame-switch" />
+                <label class="custom-control-label" for="full-frame-switch">Switch to Full Frame Equivalent</label>
+            </div>
+            <div class="custom-control custom-switch">
+                <input type="checkbox" class="custom-control-input" id="3rd-party-switch" />
+                <label class="custom-control-label" for="3rd-party-switch">Exclude 3rd Party Lenses</label>
+            </div>
+            <div class="custom-control custom-switch">
+                <input type="checkbox" class="custom-control-input" id="focal-map-switch" />
+                <label class="custom-control-label" for="focal-map-switch">Switch to Focal Map View</label>
+            </div>
 
+            <div class="row">
+                <div class="col-12" id="lensDisplayArea">
+                    <!-- Table view and focal map view will be inserted here based on user's selection -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="footer mt-auto py-3 bg-light">
+            <div class="container text-center">
+                <span class="text-muted">Copyright © 2023 Oszkar Jozsa. Under development. See code on Github.</span>
+            </div>
+        </footer>
+    </body>
 </html>
