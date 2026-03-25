@@ -3,6 +3,7 @@
 	import type { Lens, ScaleType } from '$lib/types';
 	import { manufacturerColors } from '$lib/data';
 	import { getFFMultiplier } from '$lib/filters';
+	import { getFontScale } from '$lib/preferences.svelte';
 
 	interface Props {
 		lenses: Lens[];
@@ -28,7 +29,7 @@
 		bottom: 20,
 		left: 0
 	});
-	let LABEL_WIDTH = $derived(containerWidth < 600 ? 140 : 220);
+	let LABEL_WIDTH = $derived(Math.round((containerWidth < 600 ? 140 : 220) * getFontScale()));
 	let containerEl: HTMLDivElement | undefined = $state();
 
 	// Tooltip state

@@ -48,10 +48,6 @@
 </script>
 
 <aside class="sidebar">
-	{#if filtersActive && !isKitView}
-		<button class="clear-btn" onclick={clearFilters}>Clear filters</button>
-	{/if}
-
 	<!-- Manufacturer -->
 	<div class="section" class:disabled={isKitView}>
 		<h3 class="section-header">Manufacturer</h3>
@@ -224,6 +220,10 @@
 			</button>
 		</div>
 	</div>
+
+	{#if filtersActive && !isKitView}
+		<button class="clear-btn" onclick={clearFilters}>Clear filters</button>
+	{/if}
 </aside>
 
 <style>
@@ -245,6 +245,7 @@
 		border-radius: 6px;
 		border: 1px solid var(--border-default);
 		background: transparent;
+		margin-top: auto;
 		font-family: var(--font-sans);
 		font-weight: 500;
 		font-size: 12px;
