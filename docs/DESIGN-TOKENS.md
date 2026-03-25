@@ -72,7 +72,7 @@ Font size selector (S/M/L) scales data rows proportionally across both Table and
 
 - **Sidebar:** 220px fixed width, left-aligned. Contains all filters and display settings. Shared across Table and Map views.
 - **Content area:** Flexible, fills remaining width. 36px horizontal padding.
-- **Nav bar:** Full width, 18px vertical padding, 40px horizontal. View tabs on left, status/sort on right.
+- **Nav bar:** Full width, 18px vertical padding, 40px horizontal. View tabs on left, kit count indicator on right. Sorting is handled via clickable table column headers (no nav bar sort control).
 - **Footer:** Full width, pinned to bottom.
 
 ## Kit Ownership Pattern
@@ -97,14 +97,17 @@ On the focal map, bars/dots always use manufacturer color. Kit status is only sh
 
 | Control | Table | Map |
 |---------|-------|-----|
+| Clear Filters | Yes (when active) | Yes (when active) |
 | Manufacturer | Yes | Yes |
 | Lens Type | Yes | Yes |
 | Features (WR, OIS, AR) | Yes | Yes |
-| FF Equivalent | Yes | Yes (as Native/FF toggle) |
+| FF Equivalent | Yes | Yes |
 | Font Size (S/M/L) | Yes | Yes |
 | Theme (Dark/Light) | Yes | Yes |
 | Scale (Log/Linear) | No | Yes |
 | Legend | No | Yes |
+
+"Clear Filters" button appears at the top of the sidebar only when one or more filters are active. It resets all filter params to defaults while preserving the current view.
 
 ## Accessibility
 
