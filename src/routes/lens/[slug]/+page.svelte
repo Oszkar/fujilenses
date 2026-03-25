@@ -311,7 +311,8 @@
 	}
 
 	.kit-btn.in-kit:hover {
-		background: color-mix(in srgb, var(--kit) 25%, transparent);
+		background: var(--danger-bg);
+		color: var(--danger);
 	}
 
 	.kit-btn:focus-visible {

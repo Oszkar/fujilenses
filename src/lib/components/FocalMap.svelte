@@ -125,6 +125,12 @@
 		role="img"
 		aria-label="Focal length range map"
 	>
+		<defs>
+			<clipPath id="label-clip">
+				<rect x="0" y="0" width={LABEL_WIDTH - 16} height={svgHeight} />
+			</clipPath>
+		</defs>
+
 		<!-- Axis ticks -->
 		{#each ticks as tick (tick)}
 			{@const x = LABEL_WIDTH + xScale(tick)}
@@ -181,6 +187,7 @@
 				dominant-baseline="central"
 				class="row-label"
 				class:kit-label={inKit}
+				clip-path="url(#label-clip)"
 			>
 				{focalLabel(lens)}
 			</text>

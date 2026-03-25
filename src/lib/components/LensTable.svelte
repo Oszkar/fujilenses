@@ -114,7 +114,7 @@
 					<!-- Kit toggle -->
 					<td class="kit-cell">
 						{#if inKit}
-							<button class="kit-badge" onclick={() => onToggleKit(lens.slug)}>IN KIT</button>
+							<button class="kit-badge" title="Remove from kit" onclick={() => onToggleKit(lens.slug)}>IN KIT</button>
 						{:else}
 							<button class="kit-add" onclick={() => onToggleKit(lens.slug)}>+ kit</button>
 						{/if}
@@ -283,7 +283,8 @@
 	}
 
 	.kit-badge:hover {
-		background: color-mix(in srgb, var(--kit) 25%, transparent);
+		background: var(--danger-bg);
+		color: var(--danger);
 	}
 
 	.kit-add {

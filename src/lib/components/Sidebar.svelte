@@ -20,6 +20,7 @@
 
 	const manufacturers = getManufacturers();
 
+	let isKitView = $derived(filters.view === 'kit');
 	let filtersActive = $derived(hasActiveFilters(filters));
 
 	function toggleManufacturer(mfr: string) {
@@ -47,12 +48,12 @@
 </script>
 
 <aside class="sidebar">
-	{#if filtersActive}
+	{#if filtersActive && !isKitView}
 		<button class="clear-btn" onclick={clearFilters}>Clear filters</button>
 	{/if}
 
 	<!-- Manufacturer -->
-	<div class="section">
+	<div class="section" class:disabled={isKitView}>
 		<h3 class="section-header">Manufacturer</h3>
 		<div class="mfr-list">
 			{#each manufacturers as mfr (mfr)}
@@ -80,7 +81,7 @@
 	</div>
 
 	<!-- Lens Type -->
-	<div class="section">
+	<div class="section" class:disabled={isKitView}>
 		<h3 class="section-header">Lens Type</h3>
 		<div class="segmented">
 			{#each [{ value: null, label: 'All' }, { value: 'prime', label: 'Prime' }, { value: 'zoom', label: 'Zoom' }] as opt (opt.label)}
@@ -96,7 +97,7 @@
 	</div>
 
 	<!-- Features -->
-	<div class="section">
+	<div class="section" class:disabled={isKitView}>
 		<h3 class="section-header">Features</h3>
 		<div class="toggle-list">
 			<label class="toggle-row">
@@ -130,7 +131,7 @@
 	</div>
 
 	<!-- Display -->
-	<div class="section">
+	<div class="section" class:disabled={isKitView}>
 		<h3 class="section-header">Display</h3>
 		<div class="toggle-list">
 			<label class="toggle-row">
@@ -264,6 +265,12 @@
 	.clear-btn:focus-visible {
 		outline: 2px solid var(--accent);
 		outline-offset: 2px;
+	}
+
+	.section.disabled {
+		opacity: 0.35;
+		pointer-events: none;
+		user-select: none;
 	}
 
 	.section-header {
