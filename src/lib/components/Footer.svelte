@@ -1,23 +1,22 @@
 <script lang="ts">
+	import FeedbackPopover from './FeedbackPopover.svelte';
+
 	interface Props {
 		lensCount: number;
 	}
 
 	let { lensCount }: Props = $props();
+
+	let feedbackOpen = $state(false);
 </script>
 
 <footer class="footer">
 	<div class="footer-left">
 		<span>{lensCount} lenses</span>
 		<span class="sep">&middot;</span>
-		<a
-			href="https://github.com/Oszkar/fujilenses/issues/new?labels=data&template=blank&title=Data+issue"
-			target="_blank"
-			rel="noopener noreferrer"
-			class="feedback-link"
-		>
-			Report an issue
-		</a>
+		<button class="feedback-btn" onclick={() => (feedbackOpen = true)}>
+			Send feedback
+		</button>
 	</div>
 	<div class="footer-right">
 		<span>FujiLenses v1.0</span>
@@ -25,6 +24,8 @@
 		<span>Independent project, not affiliated with Fujifilm</span>
 	</div>
 </footer>
+
+<FeedbackPopover open={feedbackOpen} onClose={() => (feedbackOpen = false)} />
 
 <style>
 	.footer {
@@ -53,13 +54,18 @@
 		opacity: 0.5;
 	}
 
-	.feedback-link {
+	.feedback-btn {
+		background: none;
+		border: none;
+		padding: 0;
 		color: var(--text-muted);
-		text-decoration: none;
+		font-family: var(--font-sans);
+		font-size: 12px;
+		cursor: pointer;
 		transition: color 150ms ease;
 	}
 
-	.feedback-link:hover {
+	.feedback-btn:hover {
 		color: var(--accent);
 	}
 
@@ -70,6 +76,10 @@
 			flex-direction: column;
 			gap: 4px;
 			align-items: flex-start;
+		}
+
+		.feedback-btn {
+			font-size: 11px;
 		}
 	}
 </style>
