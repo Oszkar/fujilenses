@@ -148,6 +148,13 @@
 		onSort={handleSort}
 		onToggleKit={handleToggleKit}
 	/>
+	<div class="table-legend">
+		<span class="legend-badge wr">WR</span> Weather Resistant
+		<span class="legend-sep">&middot;</span>
+		<span class="legend-badge feature">OIS</span> Optical Image Stabilization
+		<span class="legend-sep">&middot;</span>
+		<span class="legend-badge feature">LM</span> Linear Motor
+	</div>
 {/if}
 
 <style>
@@ -164,6 +171,42 @@
 		font-size: 13px;
 		color: var(--text-muted);
 		margin: 0 0 24px 0;
+	}
+
+	/* Table legend */
+	.table-legend {
+		display: flex;
+		align-items: center;
+		gap: 6px;
+		flex-wrap: wrap;
+		padding: 12px 0;
+		font-family: var(--font-sans);
+		font-size: 11px;
+		color: var(--text-muted);
+	}
+
+	.legend-badge {
+		display: inline-block;
+		padding: 1px 6px;
+		border-radius: 3px;
+		font-family: var(--font-mono);
+		font-weight: 500;
+		font-size: 10px;
+		text-transform: uppercase;
+	}
+
+	.legend-badge.wr {
+		color: var(--spec-wr);
+		background: color-mix(in srgb, var(--spec-wr) 15%, transparent);
+	}
+
+	.legend-badge.feature {
+		color: var(--spec-feature);
+		background: color-mix(in srgb, var(--spec-feature) 15%, transparent);
+	}
+
+	.legend-sep {
+		opacity: 0.4;
 	}
 
 	/* Kit sections */

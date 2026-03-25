@@ -257,7 +257,7 @@
 	}
 
 	.sidebar-bottom {
-		margin-top: auto;
+		margin-top: 24px;
 		display: flex;
 		flex-direction: column;
 		gap: 8px;
