@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    width: 1200px;
+    height: 630px;
+    background: #0F1318;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    padding: 60px 80px;
+  }
+
+  .title {
+    font-family: 'Instrument Sans', sans-serif;
+    font-weight: 700;
+    font-size: 52px;
+    color: #E6EDF3;
+    letter-spacing: -0.02em;
+  }
+
+  .subtitle {
+    font-family: 'Instrument Sans', sans-serif;
+    font-weight: 400;
+    font-size: 20px;
+    color: #6B7688;
+    letter-spacing: 0.04em;
+    margin-top: 10px;
+    margin-bottom: 28px;
+  }
+
+  .chart {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    width: 760px;
+  }
+
+  .row {
+    display: flex;
+    align-items: center;
+    height: 34px;
+  }
+
+  .label {
+    width: 160px;
+    text-align: right;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 15px;
+    font-weight: 500;
+    padding-right: 20px;
+    flex-shrink: 0;
+  }
+
+  .track {
+    position: relative;
+    flex: 1;
+    height: 34px;
+  }
+
+  .bar {
+    position: absolute;
+    height: 12px;
+    border-radius: 6px;
+    top: 11px;
+  }
+
+  .dot {
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    top: 10px;
+  }
+
+  .domain {
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 400;
+    font-size: 15px;
+    color: #4D5768;
+    letter-spacing: 0.06em;
+    margin-top: 20px;
+  }
+</style>
+</head>
+<body>
+  <div class="title">FujiLenses</div>
+  <div class="subtitle">Fujifilm X-Mount Lens Explorer</div>
+
+  <div class="chart">
+    <div class="row">
+      <div class="label" style="color: #7EB8F0;">8-16mm</div>
+      <div class="track"><div class="bar" style="left: 0; width: 100px; background: #7EB8F0;"></div></div>
+    </div>
+    <div class="row">
+      <div class="label" style="color: #7EB8F0;">18-55mm</div>
+      <div class="track"><div class="bar" style="left: 115px; width: 166px; background: #7EB8F0; opacity: 0.7;"></div></div>
+    </div>
+    <div class="row">
+      <div class="label" style="color: #C9A0FF;">23mm</div>
+      <div class="track"><div class="dot" style="left: 145px; background: #C9A0FF;"></div></div>
+    </div>
+    <div class="row">
+      <div class="label" style="color: #7EB8F0;">35mm</div>
+      <div class="track"><div class="dot" style="left: 210px; background: #7EB8F0;"></div></div>
+    </div>
+    <div class="row">
+      <div class="label" style="color: #FDBA74;">56mm</div>
+      <div class="track"><div class="dot" style="left: 280px; background: #FDBA74;"></div></div>
+    </div>
+    <div class="row">
+      <div class="label" style="color: #7EB8F0;">50-140mm</div>
+      <div class="track"><div class="bar" style="left: 264px; width: 158px; background: #7EB8F0; opacity: 0.5;"></div></div>
+    </div>
+  </div>
+
+  <div class="domain">fujilenses.com</div>
+</body>
+</html>
