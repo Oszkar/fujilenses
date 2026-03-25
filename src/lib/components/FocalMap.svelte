@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { scaleLog, scaleLinear } from 'd3-scale';
+	import { fade } from 'svelte/transition';
 	import type { Lens, ScaleType } from '$lib/types';
 	import { manufacturerColors } from '$lib/data';
 	import { getFFMultiplier } from '$lib/filters';
@@ -249,6 +250,7 @@
 		{@const inKit = kitSlugs.has(tooltip.lens.slug)}
 		<div
 			class="tooltip"
+			transition:fade={{ duration: 100 }}
 			style="left: {tooltip.x + 16}px; top: {tooltip.y - 20}px;"
 		>
 			{#if inKit}

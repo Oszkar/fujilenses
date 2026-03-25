@@ -1,7 +1,15 @@
 <script lang="ts">
+	import { flip } from 'svelte/animate';
+	import { fly, fade } from 'svelte/transition';
 	import type { Lens, SortField, SortDirection } from '$lib/types';
 	import { manufacturerColors, isNewLens } from '$lib/data';
 	import { getFFMultiplier } from '$lib/filters';
+
+	let hasEntered = $state(false);
+	$effect(() => {
+		// After first render, disable stagger for subsequent updates
+		hasEntered = true;
+	});
 
 	interface Props {
 		lenses: Lens[];
@@ -63,9 +71,13 @@
 			</tr>
 		</thead>
 		<tbody>
-			{#each lenses as lens (lens.slug)}
+			{#each lenses as lens, i (lens.slug)}
 				{@const inKit = kitSlugs.has(lens.slug)}
-				<tr class:kit-row={inKit}>
+				<tr
+					class:kit-row={inKit}
+					animate:flip={{ duration: 250 }}
+					in:fly={{ y: 8, duration: 150, delay: hasEntered ? 0 : Math.min(i, 8) * 30 }}
+				>
 					<!-- Maker badge -->
 					<td>
 						<span
