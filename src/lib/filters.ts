@@ -1,5 +1,17 @@
 import type { Lens, FilterState } from '$lib/types';
 
+export const defaultFilters: FilterState = {
+	view: 'table',
+	type: null,
+	mount: null,
+	mfr: [],
+	ap: null,
+	wr: false,
+	ois: false,
+	ar: false,
+	ffe: false
+};
+
 const FF_MULTIPLIER_XF = 1.5;
 const FF_MULTIPLIER_GF = 0.79;
 

@@ -1,30 +1,42 @@
 <script lang="ts">
 	import './layout.css';
+	import { goto } from '$app/navigation';
+	import { page } from '$app/state';
 	import NavBar from '$lib/components/NavBar.svelte';
 	import Sidebar from '$lib/components/Sidebar.svelte';
 	import Footer from '$lib/components/Footer.svelte';
 	import { allLenses } from '$lib/data';
 	import { getKit } from '$lib/kit';
+	import { parseFiltersFromURL, filtersToSearchParams, defaultFilters } from '$lib/filters';
 	import { browser } from '$app/environment';
+	import type { FilterState, ViewMode } from '$lib/types';
 
 	let { children } = $props();
 
-	let activeView = $state<'table' | 'map' | 'kit'>('table');
 	let kitCount = $state(0);
 
 	if (browser) {
 		kitCount = getKit().size;
 	}
 
-	function handleViewChange(view: 'table' | 'map' | 'kit') {
-		activeView = view;
+	let filters = $derived(browser ? parseFiltersFromURL(page.url.searchParams) : defaultFilters);
+
+	function updateFilters(updates: Partial<FilterState>) {
+		const next = { ...filters, ...updates };
+		const params = filtersToSearchParams(next);
+		const query = params.toString();
+		goto(query ? `?${query}` : '/', { replaceState: true, noScroll: true, keepFocus: true });
+	}
+
+	function handleViewChange(view: ViewMode) {
+		updateFilters({ view });
 	}
 </script>
 
 <div class="app-shell">
-	<NavBar {activeView} {kitCount} onViewChange={handleViewChange} />
+	<NavBar activeView={filters.view} {kitCount} onViewChange={handleViewChange} />
 	<div class="app-body">
-		<Sidebar {activeView} />
+		<Sidebar {filters} onFilterChange={updateFilters} />
 		<main class="content">
 			{@render children()}
 		</main>

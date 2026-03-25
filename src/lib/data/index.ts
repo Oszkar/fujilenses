@@ -11,3 +11,10 @@ export function getLensBySlug(slug: string): Lens | undefined {
 export function getManufacturers(): string[] {
 	return [...new Set(allLenses.map((l) => l.manufacturer))].sort();
 }
+
+export const manufacturerColors: Record<string, string> = {
+	Fujinon: 'var(--mfr-fujinon)',
+	Sigma: 'var(--mfr-sigma)',
+	Viltrox: 'var(--mfr-viltrox)',
+	Tamron: 'var(--mfr-tamron)'
+};

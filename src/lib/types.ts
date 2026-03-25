@@ -18,7 +18,7 @@ export interface Lens {
 	retailerUrl: string;
 }
 
-export type ViewMode = 'table' | 'map';
+export type ViewMode = 'table' | 'map' | 'kit';
 
 export type SortField = 'minFocalLength' | 'maxAperture' | 'weightGrams' | 'releaseYear';
 
