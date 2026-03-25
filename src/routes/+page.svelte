@@ -1,11 +1,42 @@
 <script lang="ts">
 	import { page } from '$app/state';
+	import { goto } from '$app/navigation';
 	import { browser } from '$app/environment';
 	import { allLenses } from '$lib/data';
-	import { parseFiltersFromURL, applyFilters, defaultFilters } from '$lib/filters';
+	import {
+		parseFiltersFromURL,
+		applyFilters,
+		sortLenses,
+		filtersToSearchParams,
+		defaultFilters
+	} from '$lib/filters';
+	import { getKitSlugs, toggleKitLens } from '$lib/kit.svelte';
+	import LensTable from '$lib/components/LensTable.svelte';
+	import type { SortField, FilterState } from '$lib/types';
 
 	let filters = $derived(browser ? parseFiltersFromURL(page.url.searchParams) : defaultFilters);
 	let filteredLenses = $derived(applyFilters(allLenses, filters));
+	let sortedLenses = $derived(sortLenses(filteredLenses, filters.sort, filters.sortDir));
+	let kitSlugs = $derived(getKitSlugs());
+
+	function updateFilters(updates: Partial<FilterState>) {
+		const next = { ...filters, ...updates };
+		const params = filtersToSearchParams(next);
+		const query = params.toString();
+		goto(query ? `?${query}` : '/', { replaceState: true, noScroll: true, keepFocus: true });
+	}
+
+	function handleSort(field: SortField) {
+		if (filters.sort === field) {
+			updateFilters({ sortDir: filters.sortDir === 'asc' ? 'desc' : 'asc' });
+		} else {
+			updateFilters({ sort: field, sortDir: 'asc' });
+		}
+	}
+
+	function handleToggleKit(slug: string) {
+		toggleKitLens(slug);
+	}
 </script>
 
 <svelte:head>
@@ -29,6 +60,16 @@
 	<div class="empty-state">
 		<p>No lenses match your filters</p>
 	</div>
+{:else}
+	<LensTable
+		lenses={sortedLenses}
+		sort={filters.sort}
+		sortDir={filters.sortDir}
+		ffe={filters.ffe}
+		{kitSlugs}
+		onSort={handleSort}
+		onToggleKit={handleToggleKit}
+	/>
 {/if}
 
 <style>

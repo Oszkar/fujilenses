@@ -34,4 +34,6 @@ export interface FilterState {
 	ois: boolean;
 	ar: boolean;
 	ffe: boolean;
+	sort: SortField;
+	sortDir: SortDirection;
 }

@@ -1,4 +1,4 @@
-import type { Lens, FilterState } from '$lib/types';
+import type { Lens, FilterState, SortField, SortDirection } from '$lib/types';
 
 export const defaultFilters: FilterState = {
 	view: 'table',
@@ -9,7 +9,9 @@ export const defaultFilters: FilterState = {
 	wr: false,
 	ois: false,
 	ar: false,
-	ffe: false
+	ffe: false,
+	sort: 'minFocalLength',
+	sortDir: 'asc'
 };
 
 const FF_MULTIPLIER_XF = 1.5;
@@ -33,7 +35,24 @@ export function applyFilters(lenses: Lens[], filters: FilterState): Lens[] {
 	});
 }
 
+export function sortLenses(lenses: Lens[], field: SortField, dir: SortDirection): Lens[] {
+	return [...lenses].sort((a, b) => {
+		const av = a[field];
+		const bv = b[field];
+		return dir === 'asc' ? av - bv : bv - av;
+	});
+}
+
+const validSortFields: SortField[] = ['minFocalLength', 'maxAperture', 'weightGrams', 'releaseYear'];
+
 export function parseFiltersFromURL(params: URLSearchParams): FilterState {
+	const sortRaw = params.get('sort');
+	const sort = validSortFields.includes(sortRaw as SortField)
+		? (sortRaw as SortField)
+		: 'minFocalLength';
+	const sortDirRaw = params.get('sortDir');
+	const sortDir: SortDirection = sortDirRaw === 'desc' ? 'desc' : 'asc';
+
 	return {
 		view: (params.get('view') as FilterState['view']) || 'table',
 		type: (params.get('type') as FilterState['type']) || null,
@@ -43,7 +62,9 @@ export function parseFiltersFromURL(params: URLSearchParams): FilterState {
 		wr: params.get('wr') === 'true',
 		ois: params.get('ois') === 'true',
 		ar: params.get('ar') === 'true',
-		ffe: params.get('ffe') === 'true'
+		ffe: params.get('ffe') === 'true',
+		sort,
+		sortDir
 	};
 }
 
@@ -58,5 +79,7 @@ export function filtersToSearchParams(filters: FilterState): URLSearchParams {
 	if (filters.ois) params.set('ois', 'true');
 	if (filters.ar) params.set('ar', 'true');
 	if (filters.ffe) params.set('ffe', 'true');
+	if (filters.sort !== 'minFocalLength') params.set('sort', filters.sort);
+	if (filters.sortDir !== 'asc') params.set('sortDir', filters.sortDir);
 	return params;
 }

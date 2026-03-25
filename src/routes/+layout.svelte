@@ -6,18 +6,14 @@
 	import Sidebar from '$lib/components/Sidebar.svelte';
 	import Footer from '$lib/components/Footer.svelte';
 	import { allLenses } from '$lib/data';
-	import { getKit } from '$lib/kit';
+	import { getKitCount } from '$lib/kit.svelte';
 	import { parseFiltersFromURL, filtersToSearchParams, defaultFilters } from '$lib/filters';
 	import { browser } from '$app/environment';
 	import type { FilterState, ViewMode } from '$lib/types';
 
 	let { children } = $props();
 
-	let kitCount = $state(0);
-
-	if (browser) {
-		kitCount = getKit().size;
-	}
+	let kitCount = $derived(getKitCount());
 
 	let filters = $derived(browser ? parseFiltersFromURL(page.url.searchParams) : defaultFilters);
 
