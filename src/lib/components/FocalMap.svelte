@@ -38,7 +38,8 @@
 		y: number;
 	} | null>(null);
 
-	let chartWidth = $derived(Math.max(containerWidth - LABEL_WIDTH - MARGIN.right, 200));
+	const MIN_CHART_WIDTH = 500;
+	let chartWidth = $derived(Math.max(containerWidth - LABEL_WIDTH - MARGIN.right, MIN_CHART_WIDTH));
 	let svgHeight = $derived(MARGIN.top + lenses.length * (ROW_HEIGHT + ROW_GAP) + MARGIN.bottom);
 
 	// Compute focal bounds with FF equivalent
