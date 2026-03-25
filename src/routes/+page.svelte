@@ -20,6 +20,15 @@
 	let sortedLenses = $derived(sortLenses(filteredLenses, filters.sort, filters.sortDir));
 	let kitSlugs = $derived(getKitSlugs());
 
+	// Kit view: filter all lenses to kit only, then apply sort
+	let kitLenses = $derived(
+		sortLenses(
+			allLenses.filter((l) => kitSlugs.has(l.slug)),
+			filters.sort,
+			filters.sortDir
+		)
+	);
+
 	function updateFilters(updates: Partial<FilterState>) {
 		const next = { ...filters, ...updates };
 		const params = filtersToSearchParams(next);
@@ -39,14 +48,21 @@
 		toggleKitLens(slug);
 	}
 
-	let pageTitle = $derived(
-		filters.view === 'map' ? 'Focal Range Map' : 'Lens Inventory'
-	);
+	let pageTitle = $derived.by(() => {
+		if (filters.view === 'kit') return 'My Kit';
+		if (filters.view === 'map') return 'Focal Range Map';
+		return 'Lens Inventory';
+	});
 
 	let pageSubtitle = $derived.by(() => {
-		const scaleLabel = filters.view === 'map'
-			? `${filters.scale === 'log' ? 'Logarithmic' : 'Linear'} scale`
-			: '';
+		if (filters.view === 'kit') {
+			if (kitLenses.length === 0) return '';
+			return `${kitLenses.length} ${kitLenses.length === 1 ? 'lens' : 'lenses'} in your kit`;
+		}
+		const scaleLabel =
+			filters.view === 'map'
+				? `${filters.scale === 'log' ? 'Logarithmic' : 'Linear'} scale`
+				: '';
 		const countLabel =
 			filteredLenses.length === allLenses.length
 				? `${allLenses.length} lenses`
@@ -64,9 +80,53 @@
 </svelte:head>
 
 <h1 class="page-heading">{pageTitle}</h1>
-<p class="page-subtitle">{pageSubtitle}</p>
+{#if pageSubtitle}
+	<p class="page-subtitle">{pageSubtitle}</p>
+{/if}
 
-{#if filteredLenses.length === 0}
+{#if filters.view === 'kit'}
+	<!-- My Kit view -->
+	{#if kitLenses.length === 0}
+		<div class="empty-state">
+			<div class="empty-content">
+				<svg width="40" height="40" viewBox="0 0 40 40" fill="none" class="empty-icon">
+					<rect x="6" y="10" width="28" height="22" rx="3" stroke="currentColor" stroke-width="1.5" />
+					<path d="M14 10V7a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v3" stroke="currentColor" stroke-width="1.5" />
+					<line x1="20" y1="18" x2="20" y2="26" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+					<line x1="16" y1="22" x2="24" y2="22" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+				</svg>
+				<p class="empty-title">Your kit is empty</p>
+				<p class="empty-hint">Add lenses from the Table or Map view to track your gear and see focal coverage.</p>
+			</div>
+		</div>
+	{:else}
+		<!-- Focal coverage map -->
+		<section class="kit-section">
+			<h2 class="section-heading">Focal Coverage</h2>
+			<FocalMap
+				lenses={kitLenses}
+				scale={filters.scale}
+				ffe={filters.ffe}
+				{kitSlugs}
+				onToggleKit={handleToggleKit}
+			/>
+		</section>
+
+		<!-- Kit lens list -->
+		<section class="kit-section">
+			<h2 class="section-heading">Lenses</h2>
+			<LensTable
+				lenses={kitLenses}
+				sort={filters.sort}
+				sortDir={filters.sortDir}
+				ffe={filters.ffe}
+				{kitSlugs}
+				onSort={handleSort}
+				onToggleKit={handleToggleKit}
+			/>
+		</section>
+	{/if}
+{:else if filteredLenses.length === 0}
 	<div class="empty-state">
 		<p>No lenses match your filters</p>
 	</div>
@@ -106,13 +166,54 @@
 		margin: 0 0 24px 0;
 	}
 
+	/* Kit sections */
+	.kit-section {
+		margin-bottom: 36px;
+	}
+
+	.section-heading {
+		font-family: var(--font-sans);
+		font-weight: 600;
+		font-size: 15px;
+		color: var(--text-secondary);
+		margin: 0 0 16px 0;
+	}
+
+	/* Empty states */
 	.empty-state {
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		padding: 48px 0;
+		padding: 64px 0;
+	}
+
+	.empty-content {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 12px;
+		max-width: 320px;
+		text-align: center;
+	}
+
+	.empty-icon {
+		color: var(--text-faint);
+		margin-bottom: 4px;
+	}
+
+	.empty-title {
 		font-family: var(--font-sans);
-		font-size: 14px;
+		font-weight: 600;
+		font-size: 16px;
+		color: var(--text-primary);
+		margin: 0;
+	}
+
+	.empty-hint {
+		font-family: var(--font-sans);
+		font-size: 13px;
 		color: var(--text-muted);
+		margin: 0;
+		line-height: 1.5;
 	}
 </style>
