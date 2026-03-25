@@ -280,7 +280,7 @@
 
 	.row-label {
 		font-family: var(--font-sans);
-		font-size: 12px;
+		font-size: calc(12px * var(--font-scale, 1));
 		fill: var(--text-secondary);
 	}
 

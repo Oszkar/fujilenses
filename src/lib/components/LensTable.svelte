@@ -134,7 +134,7 @@
 		width: 100%;
 		border-collapse: collapse;
 		font-family: var(--font-sans);
-		font-size: 14px;
+		font-size: calc(14px * var(--font-scale, 1));
 	}
 
 	/* Header */
@@ -209,7 +209,7 @@
 	/* Model link */
 	.model-link {
 		font-weight: 500;
-		font-size: 14px;
+		font-size: calc(14px * var(--font-scale, 1));
 		color: var(--text-primary);
 		text-decoration: none;
 		transition: color 150ms ease;
@@ -226,7 +226,7 @@
 	/* Mono data cells */
 	.mono {
 		font-family: var(--font-mono);
-		font-size: 13px;
+		font-size: calc(13px * var(--font-scale, 1));
 		color: var(--text-secondary);
 	}
 
