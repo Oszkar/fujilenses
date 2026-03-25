@@ -1,6 +1,6 @@
 import { allLenses } from '$lib/data';
 
-const SITE_URL = 'https://fujilenses.vercel.app';
+const SITE_URL = 'https://fujilenses.com';
 
 export const prerender = true;
 

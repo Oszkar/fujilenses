@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="static/favicon.png" alt="FujiLenses" width="64" height="64" />
+</p>
+
 # FujiLenses
 
 Interactive lens explorer for the Fujifilm X-mount ecosystem. Browse, filter, and compare lenses from Fujinon, Sigma, Viltrox, Tamron and more.
@@ -16,7 +20,10 @@ Interactive lens explorer for the Fujifilm X-mount ecosystem. Browse, filter, an
 - **Table view** — sortable by focal length, aperture, weight, year. Manufacturer color badges, spec badges (WR, OIS, LM), kit toggle.
 - **Focal map** — D3 log/linear-scale SVG showing focal ranges. Primes as circles, zooms as bars, color-coded by manufacturer. Hover tooltips.
 - **Filters** — manufacturer, lens type, features (WR, OIS, aperture ring), full-frame equivalent toggle. All filter state reflected in URL for bookmarking/sharing.
-- **My Kit** — mark lenses you own via localStorage. Kit lenses highlighted across both views.
+- **My Kit** — mark lenses you own via localStorage. Kit lenses highlighted across both views with focal coverage visualization.
+- **Lens detail pages** — deep-linkable spec cards with OG tags for every lens.
+- **Dark/light theme** and **font size (S/M/L)** — persisted in localStorage.
+- **Mobile responsive** — sidebar drawer, scrollable tables and maps.
 
 ## Lens Data
 

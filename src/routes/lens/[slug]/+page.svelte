@@ -40,11 +40,16 @@
 		name="description"
 		content="{lens.manufacturer} {lens.model} — {focalDisplay} f/{lens.maxAperture} {lens.mountType} mount lens."
 	/>
+	<link rel="canonical" href="https://fujilenses.com/lens/{lens.slug}" />
+	<meta property="og:type" content="website" />
+	<meta property="og:url" content="https://fujilenses.com/lens/{lens.slug}" />
 	<meta property="og:title" content="{lens.model} — FujiLenses" />
 	<meta
 		property="og:description"
 		content="{lens.manufacturer} {lens.model} — {focalDisplay} f/{lens.maxAperture}. {lens.weightGrams}g, {lens.releaseYear}."
 	/>
+	<meta property="og:image" content="https://fujilenses.com/og-image.png" />
+	<meta name="twitter:card" content="summary_large_image" />
 </svelte:head>
 
 <a href="/" class="back-link">&larr; Back to browse</a>

@@ -77,6 +77,16 @@
 		name="description"
 		content="Browse and compare Fujifilm X-mount lenses — Fujinon, Sigma, Viltrox, Tamron and more."
 	/>
+	<link rel="canonical" href="https://fujilenses.com" />
+	<meta property="og:type" content="website" />
+	<meta property="og:url" content="https://fujilenses.com" />
+	<meta property="og:title" content="FujiLenses — Fujifilm X-Mount Lens Explorer" />
+	<meta
+		property="og:description"
+		content="Browse and compare Fujifilm X-mount lenses — Fujinon, Sigma, Viltrox, Tamron and more."
+	/>
+	<meta property="og:image" content="https://fujilenses.com/og-image.png" />
+	<meta name="twitter:card" content="summary_large_image" />
 </svelte:head>
 
 <h1 class="page-heading">{pageTitle}</h1>
