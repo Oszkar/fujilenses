@@ -225,6 +225,21 @@
 	{#if filtersActive && !isKitView}
 		<button class="clear-btn" onclick={clearFilters}>Clear filters</button>
 	{/if}
+
+	<a
+		href="https://ko-fi.com/L3L31WMKE0"
+		target="_blank"
+		rel="noopener noreferrer"
+		class="kofi-btn"
+	>
+		<svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+			<path d="M5 12h2a4 4 0 0 0 4-4V6H5v6z" fill="currentColor" opacity="0.3" />
+			<path d="M3 5a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v3a6 6 0 0 1-6 6H7a6 6 0 0 1-6-6V5z" stroke="currentColor" stroke-width="1.5" />
+			<path d="M17 7h1a3 3 0 0 1 0 6h-1" stroke="currentColor" stroke-width="1.5" />
+			<path d="M6 18h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+		</svg>
+		Support on Ko-fi
+	</a>
 </aside>
 
 <style>
@@ -265,6 +280,37 @@
 	}
 
 	.clear-btn:focus-visible {
+		outline: 2px solid var(--accent);
+		outline-offset: 2px;
+	}
+
+	.kofi-btn {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 8px;
+		width: 100%;
+		padding: 8px;
+		border-radius: 6px;
+		border: 1px solid color-mix(in srgb, #72a4f2 30%, transparent);
+		background: color-mix(in srgb, #72a4f2 8%, transparent);
+		font-family: var(--font-sans);
+		font-weight: 500;
+		font-size: 12px;
+		color: #72a4f2;
+		text-decoration: none;
+		cursor: pointer;
+		transition:
+			background 150ms ease,
+			border-color 150ms ease;
+	}
+
+	.kofi-btn:hover {
+		background: color-mix(in srgb, #72a4f2 15%, transparent);
+		border-color: color-mix(in srgb, #72a4f2 50%, transparent);
+	}
+
+	.kofi-btn:focus-visible {
 		outline: 2px solid var(--accent);
 		outline-offset: 2px;
 	}
