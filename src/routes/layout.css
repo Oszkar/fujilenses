@@ -1,1 +1,122 @@
 @import 'tailwindcss';
+
+/* --- Font faces --- */
+
+@font-face {
+	font-family: 'Instrument Sans';
+	font-style: normal;
+	font-weight: 400 700;
+	font-display: swap;
+	src: url('/fonts/instrument-sans-latin.woff2') format('woff2');
+	unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+		U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+		U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+	font-family: 'Instrument Sans';
+	font-style: normal;
+	font-weight: 400 700;
+	font-display: swap;
+	src: url('/fonts/instrument-sans-latin-ext.woff2') format('woff2');
+	unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF,
+		U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020,
+		U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+@font-face {
+	font-family: 'JetBrains Mono';
+	font-style: normal;
+	font-weight: 400 500;
+	font-display: swap;
+	src: url('/fonts/jetbrains-mono-latin.woff2') format('woff2');
+	unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+		U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+		U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+	font-family: 'JetBrains Mono';
+	font-style: normal;
+	font-weight: 400 500;
+	font-display: swap;
+	src: url('/fonts/jetbrains-mono-latin-ext.woff2') format('woff2');
+	unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF,
+		U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020,
+		U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+/* --- Design tokens (dark mode default) --- */
+
+:root {
+	/* Backgrounds */
+	--bg-base: #0f1318;
+	--bg-surface: #161c24;
+	--bg-elevated: #1a2230;
+	--bg-accent: #1a2d42;
+	--border-subtle: #222a35;
+	--border-default: #2a323c;
+
+	/* Text */
+	--text-primary: #e6edf3;
+	--text-secondary: #9ba4b2;
+	--text-muted: #6b7688;
+	--text-faint: #4d5768;
+
+	/* Accent */
+	--accent: #60a5fa;
+	--accent-bright: #a8d4ff;
+
+	/* Manufacturer */
+	--mfr-fujinon: #7eb8f0;
+	--mfr-sigma: #c9a0ff;
+	--mfr-viltrox: #fdba74;
+	--mfr-tamron: #6ee7b7;
+
+	/* Semantic */
+	--kit: #4ade80;
+	--kit-bg: rgba(78, 205, 128, 0.08);
+	--spec-wr: #2dd4bf;
+	--spec-feature: #93c5fd;
+
+	/* Typography */
+	--font-sans: 'Instrument Sans', system-ui, sans-serif;
+	--font-mono: 'JetBrains Mono', ui-monospace, monospace;
+}
+
+/* --- Light mode --- */
+
+:root[data-theme='light'] {
+	--bg-base: #f5f7fa;
+	--bg-surface: #ffffff;
+	--bg-elevated: #ffffff;
+	--bg-accent: #e0edff;
+	--border-subtle: #e5e8ed;
+	--border-default: #cdd3dc;
+
+	--text-primary: #1a1e24;
+	--text-secondary: #4a5264;
+	--text-muted: #6b7688;
+	--text-faint: #9ba4b2;
+
+	--accent: #2563eb;
+	--accent-bright: #1d4ed8;
+
+	--mfr-fujinon: #3b82d6;
+	--mfr-sigma: #8b5cf6;
+	--mfr-viltrox: #d97706;
+	--mfr-tamron: #059669;
+
+	--kit: #16a34a;
+	--kit-bg: rgba(22, 163, 74, 0.08);
+	--spec-wr: #0d9488;
+	--spec-feature: #2563eb;
+}
+
+/* --- Base styles --- */
+
+body {
+	font-family: var(--font-sans);
+	background-color: var(--bg-base);
+	color: var(--text-primary);
+}

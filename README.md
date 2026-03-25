@@ -6,7 +6,7 @@ Interactive lens explorer for the Fujifilm X-mount ecosystem. Browse, filter, an
 
 - **SvelteKit** (static mode via `adapter-static`)
 - **Tailwind CSS v4**
-- **D3.js v7** (focal map visualization)
+- **d3-scale** (focal map axis math)
 - **TypeScript**
 - **pnpm**
 
