@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { getManufacturers, manufacturerColors } from '$lib/data';
+	import { hasActiveFilters } from '$lib/filters';
 	import type { FilterState } from '$lib/types';
 
 	interface Props {
@@ -11,6 +12,8 @@
 
 	const manufacturers = getManufacturers();
 
+	let filtersActive = $derived(hasActiveFilters(filters));
+
 	function toggleManufacturer(mfr: string) {
 		const key = mfr.toLowerCase();
 		const current = filters.mfr;
@@ -21,9 +24,25 @@
 	function isManufacturerActive(mfr: string): boolean {
 		return filters.mfr.length === 0 || filters.mfr.includes(mfr.toLowerCase());
 	}
+
+	function clearFilters() {
+		onFilterChange({
+			type: null,
+			mount: null,
+			mfr: [],
+			ap: null,
+			wr: false,
+			ois: false,
+			ar: false
+		});
+	}
 </script>
 
 <aside class="sidebar">
+	{#if filtersActive}
+		<button class="clear-btn" onclick={clearFilters}>Clear filters</button>
+	{/if}
+
 	<!-- Manufacturer -->
 	<div class="section">
 		<h3 class="section-header">Manufacturer</h3>
@@ -105,18 +124,41 @@
 	<!-- Display -->
 	<div class="section">
 		<h3 class="section-header">Display</h3>
-		<label class="toggle-row">
-			<span class="toggle-label">FF Equivalent</span>
-			<input
-				type="checkbox"
-				class="toggle"
-				checked={filters.ffe}
-				onchange={() => onFilterChange({ ffe: !filters.ffe })}
-			/>
-		</label>
+		<div class="toggle-list">
+			<label class="toggle-row">
+				<span class="toggle-label">FF Equivalent</span>
+				<input
+					type="checkbox"
+					class="toggle"
+					checked={filters.ffe}
+					onchange={() => onFilterChange({ ffe: !filters.ffe })}
+				/>
+			</label>
+		</div>
 	</div>
 
 	{#if filters.view === 'map'}
+		<!-- Scale (map only) -->
+		<div class="section">
+			<h3 class="section-header">Scale</h3>
+			<div class="segmented">
+				<button
+					class="seg-btn"
+					class:active={filters.scale === 'log'}
+					onclick={() => onFilterChange({ scale: 'log' })}
+				>
+					Log
+				</button>
+				<button
+					class="seg-btn"
+					class:active={filters.scale === 'linear'}
+					onclick={() => onFilterChange({ scale: 'linear' })}
+				>
+					Linear
+				</button>
+			</div>
+		</div>
+
 		<!-- Legend (map only) -->
 		<div class="section">
 			<h3 class="section-header">Legend</h3>
@@ -149,6 +191,34 @@
 		display: flex;
 		flex-direction: column;
 		gap: 24px;
+	}
+
+	.clear-btn {
+		width: 100%;
+		padding: 8px;
+		border-radius: 6px;
+		border: 1px solid var(--border-default);
+		background: transparent;
+		font-family: var(--font-sans);
+		font-weight: 500;
+		font-size: 12px;
+		color: var(--text-secondary);
+		cursor: pointer;
+		transition:
+			background 150ms ease,
+			color 150ms ease,
+			border-color 150ms ease;
+	}
+
+	.clear-btn:hover {
+		background: var(--bg-elevated);
+		color: var(--text-primary);
+		border-color: var(--text-muted);
+	}
+
+	.clear-btn:focus-visible {
+		outline: 2px solid var(--accent);
+		outline-offset: 2px;
 	}
 
 	.section-header {

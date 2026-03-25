@@ -1,4 +1,4 @@
-import type { Lens, FilterState, SortField, SortDirection } from '$lib/types';
+import type { Lens, FilterState, SortField, SortDirection, ScaleType } from '$lib/types';
 
 export const defaultFilters: FilterState = {
 	view: 'table',
@@ -11,7 +11,8 @@ export const defaultFilters: FilterState = {
 	ar: false,
 	ffe: false,
 	sort: 'minFocalLength',
-	sortDir: 'asc'
+	sortDir: 'asc',
+	scale: 'log'
 };
 
 const FF_MULTIPLIER_XF = 1.5;
@@ -43,7 +44,24 @@ export function sortLenses(lenses: Lens[], field: SortField, dir: SortDirection)
 	});
 }
 
-const validSortFields: SortField[] = ['minFocalLength', 'maxAperture', 'weightGrams', 'releaseYear'];
+export function hasActiveFilters(filters: FilterState): boolean {
+	return (
+		filters.type !== null ||
+		filters.mount !== null ||
+		filters.mfr.length > 0 ||
+		filters.ap !== null ||
+		filters.wr ||
+		filters.ois ||
+		filters.ar
+	);
+}
+
+const validSortFields: SortField[] = [
+	'minFocalLength',
+	'maxAperture',
+	'weightGrams',
+	'releaseYear'
+];
 
 export function parseFiltersFromURL(params: URLSearchParams): FilterState {
 	const sortRaw = params.get('sort');
@@ -52,6 +70,8 @@ export function parseFiltersFromURL(params: URLSearchParams): FilterState {
 		: 'minFocalLength';
 	const sortDirRaw = params.get('sortDir');
 	const sortDir: SortDirection = sortDirRaw === 'desc' ? 'desc' : 'asc';
+	const scaleRaw = params.get('scale');
+	const scale: ScaleType = scaleRaw === 'linear' ? 'linear' : 'log';
 
 	return {
 		view: (params.get('view') as FilterState['view']) || 'table',
@@ -64,7 +84,8 @@ export function parseFiltersFromURL(params: URLSearchParams): FilterState {
 		ar: params.get('ar') === 'true',
 		ffe: params.get('ffe') === 'true',
 		sort,
-		sortDir
+		sortDir,
+		scale
 	};
 }
 
@@ -81,5 +102,6 @@ export function filtersToSearchParams(filters: FilterState): URLSearchParams {
 	if (filters.ffe) params.set('ffe', 'true');
 	if (filters.sort !== 'minFocalLength') params.set('sort', filters.sort);
 	if (filters.sortDir !== 'asc') params.set('sortDir', filters.sortDir);
+	if (filters.scale !== 'log') params.set('scale', filters.scale);
 	return params;
 }

@@ -12,6 +12,7 @@
 	} from '$lib/filters';
 	import { getKitSlugs, toggleKitLens } from '$lib/kit.svelte';
 	import LensTable from '$lib/components/LensTable.svelte';
+	import FocalMap from '$lib/components/FocalMap.svelte';
 	import type { SortField, FilterState } from '$lib/types';
 
 	let filters = $derived(browser ? parseFiltersFromURL(page.url.searchParams) : defaultFilters);
@@ -37,6 +38,21 @@
 	function handleToggleKit(slug: string) {
 		toggleKitLens(slug);
 	}
+
+	let pageTitle = $derived(
+		filters.view === 'map' ? 'Focal Range Map' : 'Lens Inventory'
+	);
+
+	let pageSubtitle = $derived.by(() => {
+		const scaleLabel = filters.view === 'map'
+			? `${filters.scale === 'log' ? 'Logarithmic' : 'Linear'} scale`
+			: '';
+		const countLabel =
+			filteredLenses.length === allLenses.length
+				? `${allLenses.length} lenses`
+				: `${filteredLenses.length} of ${allLenses.length} lenses matching current filters`;
+		return filters.view === 'map' ? `${scaleLabel} · ${countLabel}` : countLabel;
+	});
 </script>
 
 <svelte:head>
@@ -47,19 +63,21 @@
 	/>
 </svelte:head>
 
-<h1 class="page-heading">Lens Inventory</h1>
-<p class="page-subtitle">
-	{#if filteredLenses.length === allLenses.length}
-		{allLenses.length} lenses
-	{:else}
-		{filteredLenses.length} of {allLenses.length} lenses matching current filters
-	{/if}
-</p>
+<h1 class="page-heading">{pageTitle}</h1>
+<p class="page-subtitle">{pageSubtitle}</p>
 
 {#if filteredLenses.length === 0}
 	<div class="empty-state">
 		<p>No lenses match your filters</p>
 	</div>
+{:else if filters.view === 'map'}
+	<FocalMap
+		lenses={sortedLenses}
+		scale={filters.scale}
+		ffe={filters.ffe}
+		{kitSlugs}
+		onToggleKit={handleToggleKit}
+	/>
 {:else}
 	<LensTable
 		lenses={sortedLenses}

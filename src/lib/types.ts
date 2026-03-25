@@ -24,6 +24,8 @@ export type SortField = 'minFocalLength' | 'maxAperture' | 'weightGrams' | 'rele
 
 export type SortDirection = 'asc' | 'desc';
 
+export type ScaleType = 'log' | 'linear';
+
 export interface FilterState {
 	view: ViewMode;
 	type: 'prime' | 'zoom' | null;
@@ -36,4 +38,5 @@ export interface FilterState {
 	ffe: boolean;
 	sort: SortField;
 	sortDir: SortDirection;
+	scale: ScaleType;
 }
