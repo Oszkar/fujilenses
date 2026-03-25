@@ -1,5 +1,5 @@
 <script lang="ts">
-	// TODO: FilterPanel, TableView, FocalMap components
+	import { allLenses } from '$lib/data';
 </script>
 
 <svelte:head>
@@ -10,8 +10,22 @@
 	/>
 </svelte:head>
 
-<main>
-	<h1>FujiLenses</h1>
-	<!-- TODO: FilterPanel -->
-	<!-- TODO: TableView / FocalMap (toggled by view mode) -->
-</main>
+<h1 class="page-heading">Lens Inventory</h1>
+<p class="page-subtitle">{allLenses.length} lenses matching current filters</p>
+
+<style>
+	.page-heading {
+		font-family: var(--font-sans);
+		font-weight: 600;
+		font-size: 22px;
+		color: var(--text-primary);
+		margin: 0 0 4px 0;
+	}
+
+	.page-subtitle {
+		font-family: var(--font-sans);
+		font-size: 13px;
+		color: var(--text-muted);
+		margin: 0 0 24px 0;
+	}
+</style>
