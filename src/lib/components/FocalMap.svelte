@@ -128,7 +128,7 @@
 	>
 		<defs>
 			<clipPath id="label-clip">
-				<rect x="0" y="0" width={LABEL_WIDTH - 16} height={svgHeight} />
+				<rect x="0" y="0" width={LABEL_WIDTH - 8} height={svgHeight} />
 			</clipPath>
 		</defs>
 
@@ -189,6 +189,7 @@
 				class="row-label"
 				class:kit-label={inKit}
 				clip-path="url(#label-clip)"
+				fill={inKit ? 'var(--kit)' : color}
 			>
 				{focalLabel(lens)}
 			</text>
@@ -296,11 +297,6 @@
 	.row-label {
 		font-family: var(--font-sans);
 		font-size: calc(12px * var(--font-scale, 1));
-		fill: var(--text-secondary);
-	}
-
-	.row-label.kit-label {
-		fill: var(--kit);
 	}
 
 	.lens-shape {

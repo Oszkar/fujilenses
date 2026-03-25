@@ -222,24 +222,25 @@
 		</div>
 	</div>
 
-	{#if filtersActive && !isKitView}
-		<button class="clear-btn" onclick={clearFilters}>Clear filters</button>
-	{/if}
-
-	<a
-		href="https://ko-fi.com/L3L31WMKE0"
-		target="_blank"
-		rel="noopener noreferrer"
-		class="kofi-btn"
-	>
-		<svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-			<path d="M5 12h2a4 4 0 0 0 4-4V6H5v6z" fill="currentColor" opacity="0.3" />
-			<path d="M3 5a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v3a6 6 0 0 1-6 6H7a6 6 0 0 1-6-6V5z" stroke="currentColor" stroke-width="1.5" />
-			<path d="M17 7h1a3 3 0 0 1 0 6h-1" stroke="currentColor" stroke-width="1.5" />
-			<path d="M6 18h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
-		</svg>
-		Support on Ko-fi
-	</a>
+	<div class="sidebar-bottom">
+		{#if filtersActive && !isKitView}
+			<button class="clear-btn" onclick={clearFilters}>Clear filters</button>
+		{/if}
+		<a
+			href="https://ko-fi.com/L3L31WMKE0"
+			target="_blank"
+			rel="noopener noreferrer"
+			class="kofi-btn"
+		>
+			<svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+				<path d="M5 12h2a4 4 0 0 0 4-4V6H5v6z" fill="currentColor" opacity="0.3" />
+				<path d="M3 5a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v3a6 6 0 0 1-6 6H7a6 6 0 0 1-6-6V5z" stroke="currentColor" stroke-width="1.5" />
+				<path d="M17 7h1a3 3 0 0 1 0 6h-1" stroke="currentColor" stroke-width="1.5" />
+				<path d="M6 18h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+			</svg>
+			Support on Ko-fi
+		</a>
+	</div>
 </aside>
 
 <style>
@@ -255,13 +256,19 @@
 		gap: 24px;
 	}
 
+	.sidebar-bottom {
+		margin-top: auto;
+		display: flex;
+		flex-direction: column;
+		gap: 8px;
+	}
+
 	.clear-btn {
 		width: 100%;
 		padding: 8px;
 		border-radius: 6px;
 		border: 1px solid var(--border-default);
 		background: transparent;
-		margin-top: auto;
 		font-family: var(--font-sans);
 		font-weight: 500;
 		font-size: 12px;
@@ -324,7 +331,7 @@
 	.section-header {
 		font-family: var(--font-sans);
 		font-weight: 500;
-		font-size: 11px;
+		font-size: calc(11px * var(--font-scale, 1));
 		text-transform: uppercase;
 		letter-spacing: 0.08em;
 		color: var(--text-muted);
@@ -379,7 +386,7 @@
 	.mfr-label {
 		font-family: var(--font-sans);
 		font-weight: 500;
-		font-size: 13px;
+		font-size: calc(13px * var(--font-scale, 1));
 		transition: color 150ms ease;
 	}
 
@@ -403,7 +410,7 @@
 		background: transparent;
 		font-family: var(--font-sans);
 		font-weight: 500;
-		font-size: 12px;
+		font-size: calc(12px * var(--font-scale, 1));
 		color: var(--text-muted);
 		cursor: pointer;
 		transition:
@@ -444,7 +451,7 @@
 
 	.toggle-label {
 		font-family: var(--font-sans);
-		font-size: 13px;
+		font-size: calc(13px * var(--font-scale, 1));
 		color: var(--text-secondary);
 	}
 

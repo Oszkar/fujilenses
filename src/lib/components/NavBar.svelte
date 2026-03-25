@@ -98,7 +98,7 @@
 		background: transparent;
 		font-family: var(--font-sans);
 		font-weight: 500;
-		font-size: 13px;
+		font-size: calc(13px * var(--font-scale, 1));
 		color: var(--text-muted);
 		cursor: pointer;
 		white-space: nowrap;
@@ -157,7 +157,7 @@
 		align-items: center;
 		gap: 8px;
 		font-family: var(--font-mono);
-		font-size: 12px;
+		font-size: calc(12px * var(--font-scale, 1));
 		color: var(--text-secondary);
 		flex-shrink: 0;
 	}

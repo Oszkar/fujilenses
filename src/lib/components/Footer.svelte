@@ -37,7 +37,7 @@
 		border-top: 1px solid var(--border-subtle);
 		font-family: var(--font-sans);
 		font-size: 12px;
-		color: var(--text-faint);
+		color: var(--text-muted);
 		position: sticky;
 		bottom: 0;
 		z-index: 10;
