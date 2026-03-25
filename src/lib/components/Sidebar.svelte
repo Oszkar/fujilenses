@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { getManufacturers, manufacturerColors } from '$lib/data';
+	import { getManufacturers, manufacturerColors, allLenses, getLensCountByManufacturer } from '$lib/data';
 	import { hasActiveFilters } from '$lib/filters';
 	import {
 		getTheme,
@@ -19,6 +19,7 @@
 	let { filters, onFilterChange }: Props = $props();
 
 	const manufacturers = getManufacturers();
+	const mfrCounts = getLensCountByManufacturer(allLenses);
 
 	let isKitView = $derived(filters.view === 'kit');
 	let filtersActive = $derived(hasActiveFilters(filters));
@@ -69,7 +70,7 @@
 							? manufacturerColors[mfr] ?? 'var(--text-primary)'
 							: 'var(--text-faint)'};"
 					>
-						{mfr}
+						{mfr} <span class="mfr-count">({mfrCounts.get(mfr) ?? 0})</span>
 					</span>
 				</button>
 			{/each}
@@ -334,6 +335,12 @@
 		font-weight: 500;
 		font-size: 13px;
 		transition: color 150ms ease;
+	}
+
+	.mfr-count {
+		font-weight: 400;
+		font-size: 11px;
+		opacity: 0.6;
 	}
 
 	/* Segmented control */

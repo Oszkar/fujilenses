@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { Lens, SortField, SortDirection } from '$lib/types';
-	import { manufacturerColors } from '$lib/data';
+	import { manufacturerColors, isNewLens } from '$lib/data';
 	import { getFFMultiplier } from '$lib/filters';
 
 	interface Props {
@@ -84,6 +84,9 @@
 						<a href="/lens/{lens.slug}" class="model-link" class:kit-text={inKit}>
 							{lens.model}
 						</a>
+						{#if isNewLens(lens)}
+							<span class="new-badge">NEW</span>
+						{/if}
 					</td>
 
 					<!-- Focal Length -->
@@ -221,6 +224,21 @@
 
 	.model-link.kit-text {
 		color: var(--kit);
+	}
+
+	/* New badge */
+	.new-badge {
+		display: inline-block;
+		margin-left: 8px;
+		padding: 1px 6px;
+		border-radius: 3px;
+		font-family: var(--font-mono);
+		font-weight: 500;
+		font-size: 10px;
+		text-transform: uppercase;
+		color: var(--accent);
+		background: color-mix(in srgb, var(--accent) 15%, transparent);
+		vertical-align: middle;
 	}
 
 	/* Mono data cells */

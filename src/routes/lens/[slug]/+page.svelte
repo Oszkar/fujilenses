@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { PageData } from './$types';
-	import { manufacturerColors } from '$lib/data';
+	import { manufacturerColors, isNewLens } from '$lib/data';
 	import { getFFMultiplier } from '$lib/filters';
 	import { getKitSlugs, toggleKitLens } from '$lib/kit.svelte';
 
@@ -53,7 +53,12 @@
 	<!-- Left column -->
 	<div class="detail-hero">
 		<span class="mount-label" style="color: {mfrColor};">{mountLabel}</span>
-		<h1 class="model-name">{lens.model}</h1>
+		<h1 class="model-name">
+			{lens.model}
+			{#if isNewLens(lens)}
+				<span class="new-badge">NEW</span>
+			{/if}
+		</h1>
 
 		<div class="key-stats">
 			<div class="stat">
@@ -185,6 +190,19 @@
 		color: var(--text-primary);
 		margin: 8px 0 24px 0;
 		line-height: 1.1;
+	}
+
+	.new-badge {
+		display: inline-block;
+		padding: 2px 8px;
+		border-radius: 4px;
+		font-family: var(--font-mono);
+		font-weight: 500;
+		font-size: 12px;
+		text-transform: uppercase;
+		color: var(--accent);
+		background: color-mix(in srgb, var(--accent) 15%, transparent);
+		vertical-align: middle;
 	}
 
 	.key-stats {
