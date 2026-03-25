@@ -159,6 +159,8 @@
 		onToggleKit={handleToggleKit}
 	/>
 	<div class="table-legend">
+		<span class="legend-badge mf">MF</span> Manual Focus
+		<span class="legend-sep">&middot;</span>
 		<span class="legend-badge wr">WR</span> Weather Resistant
 		<span class="legend-sep">&middot;</span>
 		<span class="legend-badge feature">OIS</span> Optical Image Stabilization
@@ -203,6 +205,11 @@
 		font-weight: 500;
 		font-size: 10px;
 		text-transform: uppercase;
+	}
+
+	.legend-badge.mf {
+		color: var(--text-muted);
+		background: color-mix(in srgb, var(--text-muted) 15%, transparent);
 	}
 
 	.legend-badge.wr {

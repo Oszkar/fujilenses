@@ -115,6 +115,9 @@
 
 					<!-- Specs badges -->
 					<td class="specs">
+						{#if !lens.autofocus}
+							<span class="spec-badge mf">MF</span>
+						{/if}
 						{#if lens.weatherResistant}
 							<span class="spec-badge wr">WR</span>
 						{/if}
@@ -279,6 +282,11 @@
 		font-weight: 500;
 		font-size: 10px;
 		text-transform: uppercase;
+	}
+
+	.spec-badge.mf {
+		color: var(--text-muted);
+		background: color-mix(in srgb, var(--text-muted) 15%, transparent);
 	}
 
 	.spec-badge.wr {

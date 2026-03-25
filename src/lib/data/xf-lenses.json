@@ -16,7 +16,8 @@
     "weightGrams": 215,
     "approxPriceUSD": 0,
     "priceUpdatedYear": 0,
-    "retailerUrl": ""
+    "retailerUrl": "",
+    "autofocus": true
   },
   {
     "slug": "xf-14mm-f28-r",
@@ -35,7 +36,8 @@
     "weightGrams": 235,
     "approxPriceUSD": 0,
     "priceUpdatedYear": 0,
-    "retailerUrl": ""
+    "retailerUrl": "",
+    "autofocus": true
   },
   {
     "slug": "xf-16mm-f14-wr",
@@ -54,7 +56,8 @@
     "weightGrams": 375,
     "approxPriceUSD": 0,
     "priceUpdatedYear": 0,
-    "retailerUrl": ""
+    "retailerUrl": "",
+    "autofocus": true
   },
   {
     "slug": "xf-16mm-f28-wr",
@@ -73,7 +76,8 @@
     "weightGrams": 155,
     "approxPriceUSD": 0,
     "priceUpdatedYear": 0,
-    "retailerUrl": ""
+    "retailerUrl": "",
+    "autofocus": true
   },
   {
     "slug": "xf-18mm-f14-lm-wr",
@@ -92,7 +96,8 @@
     "weightGrams": 370,
     "approxPriceUSD": 0,
     "priceUpdatedYear": 0,
-    "retailerUrl": ""
+    "retailerUrl": "",
+    "autofocus": true
   },
   {
     "slug": "xf-18mm-f20-r",
@@ -111,7 +116,8 @@
     "weightGrams": 116,
     "approxPriceUSD": 0,
     "priceUpdatedYear": 0,
-    "retailerUrl": ""
+    "retailerUrl": "",
+    "autofocus": true
   },
   {
     "slug": "xf-23mm-f14-r",
@@ -130,7 +136,8 @@
     "weightGrams": 300,
     "approxPriceUSD": 0,
     "priceUpdatedYear": 0,
-    "retailerUrl": ""
+    "retailerUrl": "",
+    "autofocus": true
   },
   {
     "slug": "xf-23mm-f14-lm-wr",
@@ -149,7 +156,8 @@
     "weightGrams": 375,
     "approxPriceUSD": 0,
     "priceUpdatedYear": 0,
-    "retailerUrl": ""
+    "retailerUrl": "",
+    "autofocus": true
   },
   {
     "slug": "xf-23mm-f20-wr",
@@ -168,7 +176,8 @@
     "weightGrams": 180,
     "approxPriceUSD": 0,
     "priceUpdatedYear": 0,
-    "retailerUrl": ""
+    "retailerUrl": "",
+    "autofocus": true
   },
   {
     "slug": "xf-23mm-f28-wr",
@@ -187,7 +196,8 @@
     "weightGrams": 90,
     "approxPriceUSD": 0,
     "priceUpdatedYear": 0,
-    "retailerUrl": ""
+    "retailerUrl": "",
+    "autofocus": true
   },
   {
     "slug": "xf-27mm-f28",
@@ -206,7 +216,8 @@
     "weightGrams": 78,
     "approxPriceUSD": 0,
     "priceUpdatedYear": 0,
-    "retailerUrl": ""
+    "retailerUrl": "",
+    "autofocus": true
   },
   {
     "slug": "xf-27mm-f28-wr",
@@ -225,7 +236,8 @@
     "weightGrams": 84,
     "approxPriceUSD": 0,
     "priceUpdatedYear": 0,
-    "retailerUrl": ""
+    "retailerUrl": "",
+    "autofocus": true
   },
   {
     "slug": "xf-30mm-f28-lm-wr-macro",
@@ -244,7 +256,8 @@
     "weightGrams": 195,
     "approxPriceUSD": 0,
     "priceUpdatedYear": 0,
-    "retailerUrl": ""
+    "retailerUrl": "",
+    "autofocus": true
   },
   {
     "slug": "xf-33mm-f14-lm-wr",
@@ -263,7 +276,8 @@
     "weightGrams": 360,
     "approxPriceUSD": 0,
     "priceUpdatedYear": 0,
-    "retailerUrl": ""
+    "retailerUrl": "",
+    "autofocus": true
   },
   {
     "slug": "xf-35mm-f14-r",
@@ -282,7 +296,8 @@
     "weightGrams": 187,
     "approxPriceUSD": 0,
     "priceUpdatedYear": 0,
-    "retailerUrl": ""
+    "retailerUrl": "",
+    "autofocus": true
   },
   {
     "slug": "xf-35mm-f20-wr",
@@ -301,7 +316,8 @@
     "weightGrams": 170,
     "approxPriceUSD": 0,
     "priceUpdatedYear": 0,
-    "retailerUrl": ""
+    "retailerUrl": "",
+    "autofocus": true
   },
   {
     "slug": "xf-50mm-f10-wr",
@@ -320,7 +336,8 @@
     "weightGrams": 845,
     "approxPriceUSD": 0,
     "priceUpdatedYear": 0,
-    "retailerUrl": ""
+    "retailerUrl": "",
+    "autofocus": true
   },
   {
     "slug": "xf-50mm-f20-wr",
@@ -339,7 +356,8 @@
     "weightGrams": 200,
     "approxPriceUSD": 0,
     "priceUpdatedYear": 0,
-    "retailerUrl": ""
+    "retailerUrl": "",
+    "autofocus": true
   },
   {
     "slug": "xf-56mm-f12-r",
@@ -358,7 +376,8 @@
     "weightGrams": 405,
     "approxPriceUSD": 0,
     "priceUpdatedYear": 0,
-    "retailerUrl": ""
+    "retailerUrl": "",
+    "autofocus": true
   },
   {
     "slug": "xf-56mm-f12-apd",
@@ -377,7 +396,8 @@
     "weightGrams": 405,
     "approxPriceUSD": 0,
     "priceUpdatedYear": 0,
-    "retailerUrl": ""
+    "retailerUrl": "",
+    "autofocus": true
   },
   {
     "slug": "xf-56mm-f12-wr",
@@ -396,7 +416,8 @@
     "weightGrams": 445,
     "approxPriceUSD": 0,
     "priceUpdatedYear": 0,
-    "retailerUrl": ""
+    "retailerUrl": "",
+    "autofocus": true
   },
   {
     "slug": "xf-60mm-f24-macro",
@@ -415,7 +436,8 @@
     "weightGrams": 215,
     "approxPriceUSD": 0,
     "priceUpdatedYear": 0,
-    "retailerUrl": ""
+    "retailerUrl": "",
+    "autofocus": true
   },
   {
     "slug": "xf-80mm-f28-lm-ois-wr-macro",
@@ -434,7 +456,8 @@
     "weightGrams": 750,
     "approxPriceUSD": 0,
     "priceUpdatedYear": 0,
-    "retailerUrl": ""
+    "retailerUrl": "",
+    "autofocus": true
   },
   {
     "slug": "xf-90mm-f20-lm-wr",
@@ -453,7 +476,8 @@
     "weightGrams": 540,
     "approxPriceUSD": 0,
     "priceUpdatedYear": 0,
-    "retailerUrl": ""
+    "retailerUrl": "",
+    "autofocus": true
   },
   {
     "slug": "xf-200mm-f20-lm-ois-wr",
@@ -472,7 +496,8 @@
     "weightGrams": 2265,
     "approxPriceUSD": 0,
     "priceUpdatedYear": 0,
-    "retailerUrl": ""
+    "retailerUrl": "",
+    "autofocus": true
   },
   {
     "slug": "xf-500mm-f56-lm-ois-wr",
@@ -491,7 +516,8 @@
     "weightGrams": 1335,
     "approxPriceUSD": 0,
     "priceUpdatedYear": 0,
-    "retailerUrl": ""
+    "retailerUrl": "",
+    "autofocus": true
   },
   {
     "slug": "xf-8-16mm-f28-lm-wr",
@@ -510,7 +536,8 @@
     "weightGrams": 805,
     "approxPriceUSD": 0,
     "priceUpdatedYear": 0,
-    "retailerUrl": ""
+    "retailerUrl": "",
+    "autofocus": true
   },
   {
     "slug": "xf-10-24mm-f40-ois",
@@ -529,7 +556,8 @@
     "weightGrams": 410,
     "approxPriceUSD": 0,
     "priceUpdatedYear": 0,
-    "retailerUrl": ""
+    "retailerUrl": "",
+    "autofocus": true
   },
   {
     "slug": "xf-10-24mm-f40-ois-wr",
@@ -548,7 +576,8 @@
     "weightGrams": 385,
     "approxPriceUSD": 0,
     "priceUpdatedYear": 0,
-    "retailerUrl": ""
+    "retailerUrl": "",
+    "autofocus": true
   },
   {
     "slug": "xf-16-50mm-f28-lm-wr",
@@ -567,7 +596,8 @@
     "weightGrams": 240,
     "approxPriceUSD": 0,
     "priceUpdatedYear": 0,
-    "retailerUrl": ""
+    "retailerUrl": "",
+    "autofocus": true
   },
   {
     "slug": "xf-16-55mm-f28-lm-wr",
@@ -586,7 +616,8 @@
     "weightGrams": 655,
     "approxPriceUSD": 0,
     "priceUpdatedYear": 0,
-    "retailerUrl": ""
+    "retailerUrl": "",
+    "autofocus": true
   },
   {
     "slug": "xf-16-55mm-f28-lm-wr-ii",
@@ -605,7 +636,8 @@
     "weightGrams": 410,
     "approxPriceUSD": 0,
     "priceUpdatedYear": 0,
-    "retailerUrl": ""
+    "retailerUrl": "",
+    "autofocus": true
   },
   {
     "slug": "xf-16-80mm-f40-ois-wr",
@@ -624,7 +656,8 @@
     "weightGrams": 440,
     "approxPriceUSD": 0,
     "priceUpdatedYear": 0,
-    "retailerUrl": ""
+    "retailerUrl": "",
+    "autofocus": true
   },
   {
     "slug": "xf-18-55mm-f28-lm-ois",
@@ -643,7 +676,8 @@
     "weightGrams": 310,
     "approxPriceUSD": 0,
     "priceUpdatedYear": 0,
-    "retailerUrl": ""
+    "retailerUrl": "",
+    "autofocus": true
   },
   {
     "slug": "xf-18-120mm-f40-lm-pz-wr",
@@ -662,7 +696,8 @@
     "weightGrams": 460,
     "approxPriceUSD": 0,
     "priceUpdatedYear": 0,
-    "retailerUrl": ""
+    "retailerUrl": "",
+    "autofocus": true
   },
   {
     "slug": "xf-18-135mm-f35-lm-ois-wr",
@@ -681,7 +716,8 @@
     "weightGrams": 490,
     "approxPriceUSD": 0,
     "priceUpdatedYear": 0,
-    "retailerUrl": ""
+    "retailerUrl": "",
+    "autofocus": true
   },
   {
     "slug": "xf-50-140mm-f28-lm-ois-wr",
@@ -700,7 +736,8 @@
     "weightGrams": 995,
     "approxPriceUSD": 0,
     "priceUpdatedYear": 0,
-    "retailerUrl": ""
+    "retailerUrl": "",
+    "autofocus": true
   },
   {
     "slug": "xf-55-200mm-f35-lm-ois",
@@ -719,7 +756,8 @@
     "weightGrams": 580,
     "approxPriceUSD": 0,
     "priceUpdatedYear": 0,
-    "retailerUrl": ""
+    "retailerUrl": "",
+    "autofocus": true
   },
   {
     "slug": "xf-70-300mm-f40-lm-ois-wr",
@@ -738,7 +776,8 @@
     "weightGrams": 580,
     "approxPriceUSD": 0,
     "priceUpdatedYear": 0,
-    "retailerUrl": ""
+    "retailerUrl": "",
+    "autofocus": true
   },
   {
     "slug": "xf-100-400mm-f45-lm-ois-wr",
@@ -757,7 +796,8 @@
     "weightGrams": 1375,
     "approxPriceUSD": 0,
     "priceUpdatedYear": 0,
-    "retailerUrl": ""
+    "retailerUrl": "",
+    "autofocus": true
   },
   {
     "slug": "xf-150-600mm-f56-lm-ois-wr",
@@ -776,7 +816,8 @@
     "weightGrams": 1605,
     "approxPriceUSD": 0,
     "priceUpdatedYear": 0,
-    "retailerUrl": ""
+    "retailerUrl": "",
+    "autofocus": true
   },
   {
     "slug": "xc-35mm-f20",
@@ -795,7 +836,8 @@
     "weightGrams": 130,
     "approxPriceUSD": 0,
     "priceUpdatedYear": 0,
-    "retailerUrl": ""
+    "retailerUrl": "",
+    "autofocus": true
   },
   {
     "slug": "xc-13-33mm-f35-ois",
@@ -814,7 +856,8 @@
     "weightGrams": 130,
     "approxPriceUSD": 0,
     "priceUpdatedYear": 0,
-    "retailerUrl": ""
+    "retailerUrl": "",
+    "autofocus": true
   },
   {
     "slug": "xc-15-45mm-f35-ois-pz",
@@ -833,7 +876,8 @@
     "weightGrams": 136,
     "approxPriceUSD": 0,
     "priceUpdatedYear": 0,
-    "retailerUrl": ""
+    "retailerUrl": "",
+    "autofocus": true
   },
   {
     "slug": "xc-16-50mm-f35-ois",
@@ -852,7 +896,8 @@
     "weightGrams": 195,
     "approxPriceUSD": 0,
     "priceUpdatedYear": 0,
-    "retailerUrl": ""
+    "retailerUrl": "",
+    "autofocus": true
   },
   {
     "slug": "xc-16-50mm-f35-ois-ii",
@@ -871,7 +916,8 @@
     "weightGrams": 195,
     "approxPriceUSD": 0,
     "priceUpdatedYear": 0,
-    "retailerUrl": ""
+    "retailerUrl": "",
+    "autofocus": true
   },
   {
     "slug": "xc-50-230mm-f45-ois",
@@ -890,7 +936,8 @@
     "weightGrams": 375,
     "approxPriceUSD": 0,
     "priceUpdatedYear": 0,
-    "retailerUrl": ""
+    "retailerUrl": "",
+    "autofocus": true
   },
   {
     "slug": "xc-50-230mm-f45-ois-ii",
@@ -909,6 +956,7 @@
     "weightGrams": 375,
     "approxPriceUSD": 0,
     "priceUpdatedYear": 0,
-    "retailerUrl": ""
+    "retailerUrl": "",
+    "autofocus": true
   }
 ]

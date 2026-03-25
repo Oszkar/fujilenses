@@ -43,7 +43,8 @@
 			ap: null,
 			wr: false,
 			ois: false,
-			ar: false
+			ar: false,
+			af: false
 		});
 	}
 </script>
@@ -122,6 +123,15 @@
 					class="toggle"
 					checked={filters.ar}
 					onchange={() => onFilterChange({ ar: !filters.ar })}
+				/>
+			</label>
+			<label class="toggle-row">
+				<span class="toggle-label">Autofocus</span>
+				<input
+					type="checkbox"
+					class="toggle"
+					checked={filters.af}
+					onchange={() => onFilterChange({ af: !filters.af })}
 				/>
 			</label>
 		</div>

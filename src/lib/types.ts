@@ -10,6 +10,7 @@ export interface Lens {
 	imageStabilization: boolean;
 	weatherResistant: boolean;
 	apertureRing: boolean;
+	autofocus: boolean;
 	linearMotor: boolean;
 	releaseYear: number;
 	weightGrams: number;
@@ -35,6 +36,7 @@ export interface FilterState {
 	wr: boolean;
 	ois: boolean;
 	ar: boolean;
+	af: boolean;
 	ffe: boolean;
 	sort: SortField;
 	sortDir: SortDirection;

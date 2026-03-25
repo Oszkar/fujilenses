@@ -19,6 +19,7 @@ Each lens entry must conform to the `Lens` interface in `src/lib/types.ts`:
   "minFocalLength": 35,
   "maxFocalLength": 35,
   "maxAperture": 1.4,
+  "autofocus": true,
   "imageStabilization": false,
   "weatherResistant": false,
   "apertureRing": true,

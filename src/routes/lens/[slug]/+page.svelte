@@ -97,6 +97,13 @@
 
 		<div class="spec-grid">
 			<div class="spec-item">
+				<span class="spec-label">Focus</span>
+				<span class="spec-val">
+					<span class="spec-indicator" class:yes={lens.autofocus}></span>
+					{lens.autofocus ? 'Autofocus' : 'Manual Focus'}
+				</span>
+			</div>
+			<div class="spec-item">
 				<span class="spec-label">Aperture Ring</span>
 				<span class="spec-val">
 					<span class="spec-indicator" class:yes={lens.apertureRing}></span>

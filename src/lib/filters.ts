@@ -9,6 +9,7 @@ export const defaultFilters: FilterState = {
 	wr: false,
 	ois: false,
 	ar: false,
+	af: false,
 	ffe: false,
 	sort: 'minFocalLength',
 	sortDir: 'asc',
@@ -32,6 +33,7 @@ export function applyFilters(lenses: Lens[], filters: FilterState): Lens[] {
 		if (filters.wr && !lens.weatherResistant) return false;
 		if (filters.ois && !lens.imageStabilization) return false;
 		if (filters.ar && !lens.apertureRing) return false;
+		if (filters.af && !lens.autofocus) return false;
 		return true;
 	});
 }
@@ -52,7 +54,8 @@ export function hasActiveFilters(filters: FilterState): boolean {
 		filters.ap !== null ||
 		filters.wr ||
 		filters.ois ||
-		filters.ar
+		filters.ar ||
+		filters.af
 	);
 }
 
@@ -82,6 +85,7 @@ export function parseFiltersFromURL(params: URLSearchParams): FilterState {
 		wr: params.get('wr') === 'true',
 		ois: params.get('ois') === 'true',
 		ar: params.get('ar') === 'true',
+		af: params.get('af') === 'true',
 		ffe: params.get('ffe') === 'true',
 		sort,
 		sortDir,
@@ -99,6 +103,7 @@ export function filtersToSearchParams(filters: FilterState): URLSearchParams {
 	if (filters.wr) params.set('wr', 'true');
 	if (filters.ois) params.set('ois', 'true');
 	if (filters.ar) params.set('ar', 'true');
+	if (filters.af) params.set('af', 'true');
 	if (filters.ffe) params.set('ffe', 'true');
 	if (filters.sort !== 'minFocalLength') params.set('sort', filters.sort);
 	if (filters.sortDir !== 'asc') params.set('sortDir', filters.sortDir);

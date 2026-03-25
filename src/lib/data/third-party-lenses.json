@@ -16,7 +16,8 @@
     "weightGrams": 235,
     "approxPriceUSD": 0,
     "priceUpdatedYear": 0,
-    "retailerUrl": ""
+    "retailerUrl": "",
+    "autofocus": true
   },
   {
     "slug": "sigma-15mm-f14",
@@ -35,7 +36,8 @@
     "weightGrams": 225,
     "approxPriceUSD": 0,
     "priceUpdatedYear": 0,
-    "retailerUrl": ""
+    "retailerUrl": "",
+    "autofocus": true
   },
   {
     "slug": "sigma-16mm-f14",
@@ -54,7 +56,8 @@
     "weightGrams": 405,
     "approxPriceUSD": 0,
     "priceUpdatedYear": 0,
-    "retailerUrl": ""
+    "retailerUrl": "",
+    "autofocus": true
   },
   {
     "slug": "sigma-23mm-f14",
@@ -73,7 +76,8 @@
     "weightGrams": 335,
     "approxPriceUSD": 0,
     "priceUpdatedYear": 0,
-    "retailerUrl": ""
+    "retailerUrl": "",
+    "autofocus": true
   },
   {
     "slug": "sigma-30mm-f14",
@@ -92,7 +96,8 @@
     "weightGrams": 275,
     "approxPriceUSD": 0,
     "priceUpdatedYear": 0,
-    "retailerUrl": ""
+    "retailerUrl": "",
+    "autofocus": true
   },
   {
     "slug": "sigma-56mm-f14",
@@ -111,7 +116,8 @@
     "weightGrams": 280,
     "approxPriceUSD": 0,
     "priceUpdatedYear": 0,
-    "retailerUrl": ""
+    "retailerUrl": "",
+    "autofocus": true
   },
   {
     "slug": "sigma-10-18mm-f28",
@@ -130,7 +136,8 @@
     "weightGrams": 250,
     "approxPriceUSD": 0,
     "priceUpdatedYear": 0,
-    "retailerUrl": ""
+    "retailerUrl": "",
+    "autofocus": true
   },
   {
     "slug": "sigma-16-300mm-f35",
@@ -149,7 +156,8 @@
     "weightGrams": 615,
     "approxPriceUSD": 0,
     "priceUpdatedYear": 0,
-    "retailerUrl": ""
+    "retailerUrl": "",
+    "autofocus": true
   },
   {
     "slug": "sigma-17-40mm-f18",
@@ -168,7 +176,8 @@
     "weightGrams": 530,
     "approxPriceUSD": 0,
     "priceUpdatedYear": 0,
-    "retailerUrl": ""
+    "retailerUrl": "",
+    "autofocus": true
   },
   {
     "slug": "sigma-18-50mm-f28",
@@ -187,7 +196,8 @@
     "weightGrams": 285,
     "approxPriceUSD": 0,
     "priceUpdatedYear": 0,
-    "retailerUrl": ""
+    "retailerUrl": "",
+    "autofocus": true
   },
   {
     "slug": "sigma-100-400mm-f50",
@@ -197,7 +207,7 @@
     "lensType": "Zoom",
     "minFocalLength": 100,
     "maxFocalLength": 400,
-    "maxAperture": 5.0,
+    "maxAperture": 5,
     "imageStabilization": true,
     "weatherResistant": true,
     "apertureRing": false,
@@ -206,7 +216,8 @@
     "weightGrams": 1135,
     "approxPriceUSD": 0,
     "priceUpdatedYear": 0,
-    "retailerUrl": ""
+    "retailerUrl": "",
+    "autofocus": true
   },
   {
     "slug": "tamron-11-20mm-f28",
@@ -225,7 +236,8 @@
     "weightGrams": 335,
     "approxPriceUSD": 0,
     "priceUpdatedYear": 0,
-    "retailerUrl": ""
+    "retailerUrl": "",
+    "autofocus": true
   },
   {
     "slug": "tamron-17-70mm-f28",
@@ -244,7 +256,8 @@
     "weightGrams": 525,
     "approxPriceUSD": 0,
     "priceUpdatedYear": 0,
-    "retailerUrl": ""
+    "retailerUrl": "",
+    "autofocus": true
   },
   {
     "slug": "tamron-18-300mm-f35",
@@ -263,7 +276,8 @@
     "weightGrams": 620,
     "approxPriceUSD": 0,
     "priceUpdatedYear": 0,
-    "retailerUrl": ""
+    "retailerUrl": "",
+    "autofocus": true
   },
   {
     "slug": "tamron-150-500mm-f50",
@@ -273,7 +287,7 @@
     "lensType": "Zoom",
     "minFocalLength": 150,
     "maxFocalLength": 500,
-    "maxAperture": 5.0,
+    "maxAperture": 5,
     "imageStabilization": true,
     "weatherResistant": true,
     "apertureRing": false,
@@ -282,6 +296,7 @@
     "weightGrams": 1725,
     "approxPriceUSD": 0,
     "priceUpdatedYear": 0,
-    "retailerUrl": ""
+    "retailerUrl": "",
+    "autofocus": true
   }
 ]
