@@ -15,14 +15,20 @@
 	let { lenses, scale, ffe, kitSlugs, onToggleKit }: Props = $props();
 
 	// Layout constants
-	const MARGIN = { top: 40, right: 40, bottom: 20, left: 0 };
 	const ROW_HEIGHT = 28;
 	const ROW_GAP = 4;
 	const BAR_HEIGHT = 8;
 	const DOT_RADIUS = 5;
-	const LABEL_WIDTH = 220;
 
 	let containerWidth = $state(800);
+
+	let MARGIN = $derived({
+		top: 40,
+		right: containerWidth < 600 ? 16 : 40,
+		bottom: 20,
+		left: 0
+	});
+	let LABEL_WIDTH = $derived(containerWidth < 600 ? 140 : 220);
 	let containerEl: HTMLDivElement | undefined = $state();
 
 	// Tooltip state

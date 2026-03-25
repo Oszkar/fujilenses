@@ -23,4 +23,11 @@
 		font-size: 12px;
 		color: var(--text-faint);
 	}
+
+	@media (max-width: 1023px) {
+		.footer {
+			padding: 12px 16px;
+			font-size: 11px;
+		}
+	}
 </style>

@@ -14,6 +14,7 @@
 	let { children } = $props();
 
 	let kitCount = $derived(getKitCount());
+	let drawerOpen = $state(false);
 
 	let filters = $derived(browser ? parseFiltersFromURL(page.url.searchParams) : defaultFilters);
 
@@ -27,12 +28,46 @@
 	function handleViewChange(view: ViewMode) {
 		updateFilters({ view });
 	}
+
+	function toggleDrawer() {
+		drawerOpen = !drawerOpen;
+	}
+
+	function closeDrawer() {
+		drawerOpen = false;
+	}
 </script>
 
 <div class="app-shell">
-	<NavBar activeView={filters.view} {kitCount} onViewChange={handleViewChange} />
+	<NavBar
+		activeView={filters.view}
+		{kitCount}
+		onViewChange={handleViewChange}
+		onToggleDrawer={toggleDrawer}
+	/>
 	<div class="app-body">
-		<Sidebar {filters} onFilterChange={updateFilters} />
+		<!-- Desktop sidebar -->
+		<div class="sidebar-desktop">
+			<Sidebar {filters} onFilterChange={updateFilters} />
+		</div>
+
+		<!-- Mobile drawer overlay -->
+		{#if drawerOpen}
+			<!-- svelte-ignore a11y_no_static_element_interactions -->
+			<div class="drawer-overlay" onclick={closeDrawer} onkeydown={() => {}}></div>
+			<div class="drawer">
+				<div class="drawer-header">
+					<span class="drawer-title">Filters</span>
+					<button class="drawer-close" onclick={closeDrawer} aria-label="Close filters">
+						<svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+							<path d="M4 4l10 10M14 4L4 14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+						</svg>
+					</button>
+				</div>
+				<Sidebar {filters} onFilterChange={updateFilters} />
+			</div>
+		{/if}
+
 		<main class="content">
 			{@render children()}
 		</main>
@@ -51,11 +86,106 @@
 		display: flex;
 		flex: 1;
 		overflow: hidden;
+		position: relative;
+	}
+
+	.sidebar-desktop {
+		display: contents;
 	}
 
 	.content {
 		flex: 1;
 		padding: 24px 36px;
 		overflow-y: auto;
+	}
+
+	/* Drawer (mobile only) */
+	.drawer-overlay {
+		display: none;
+	}
+
+	.drawer {
+		display: none;
+	}
+
+	.drawer-header {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		padding: 16px 20px;
+		border-bottom: 1px solid var(--border-subtle);
+	}
+
+	.drawer-title {
+		font-family: var(--font-sans);
+		font-weight: 600;
+		font-size: 15px;
+		color: var(--text-primary);
+	}
+
+	.drawer-close {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 32px;
+		height: 32px;
+		border-radius: 6px;
+		border: none;
+		background: transparent;
+		color: var(--text-secondary);
+		cursor: pointer;
+		transition:
+			background 150ms ease,
+			color 150ms ease;
+	}
+
+	.drawer-close:hover {
+		background: var(--bg-elevated);
+		color: var(--text-primary);
+	}
+
+	.drawer-close:focus-visible {
+		outline: 2px solid var(--accent);
+		outline-offset: 2px;
+	}
+
+	@media (max-width: 1023px) {
+		.sidebar-desktop {
+			display: none;
+		}
+
+		.content {
+			padding: 16px;
+		}
+
+		.drawer-overlay {
+			display: block;
+			position: fixed;
+			inset: 0;
+			background: rgba(0, 0, 0, 0.5);
+			z-index: 40;
+		}
+
+		.drawer {
+			display: flex;
+			flex-direction: column;
+			position: fixed;
+			top: 0;
+			left: 0;
+			bottom: 0;
+			width: 280px;
+			max-width: 85vw;
+			background: var(--bg-surface);
+			border-right: 1px solid var(--border-subtle);
+			z-index: 50;
+			overflow-y: auto;
+		}
+
+		/* Override sidebar width inside drawer */
+		.drawer :global(.sidebar) {
+			width: 100%;
+			min-width: 0;
+			border-right: none;
+		}
 	}
 </style>
