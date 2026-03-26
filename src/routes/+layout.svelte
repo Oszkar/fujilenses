@@ -1,10 +1,8 @@
 <script lang="ts">
 	import './layout.css';
-	import { inject } from '@vercel/analytics';
 	import { goto } from '$app/navigation';
 	import { page } from '$app/state';
 
-	inject({ mode: 'auto' });
 	import NavBar from '$lib/components/NavBar.svelte';
 	import Sidebar from '$lib/components/Sidebar.svelte';
 	import Footer from '$lib/components/Footer.svelte';
