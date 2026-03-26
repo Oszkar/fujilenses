@@ -29,6 +29,21 @@
 		)
 	);
 
+	// Filter sizes for kit view — distinct sizes sorted, with lens count per size
+	let kitFilterSizes = $derived.by(() => {
+		const sizeMap = new Map<number, string[]>();
+		for (const lens of kitLenses) {
+			if (lens.filterDiameterMm > 0) {
+				const list = sizeMap.get(lens.filterDiameterMm) ?? [];
+				list.push(lens.model);
+				sizeMap.set(lens.filterDiameterMm, list);
+			}
+		}
+		return [...sizeMap.entries()]
+			.sort((a, b) => a[0] - b[0])
+			.map(([size, lenses]) => ({ size, count: lenses.length, lenses }));
+	});
+
 	function updateFilters(updates: Partial<FilterState>) {
 		const next = { ...filters, ...updates };
 		const params = filtersToSearchParams(next);
@@ -121,6 +136,21 @@
 				onToggleKit={handleToggleKit}
 			/>
 		</section>
+
+		<!-- Filter sizes -->
+		{#if kitFilterSizes.length > 0}
+			<section class="kit-section">
+				<h2 class="section-heading">Filter Sizes</h2>
+				<div class="filter-sizes">
+					{#each kitFilterSizes as { size, count, lenses: sizeLenses } (size)}
+						<div class="filter-size-chip" title={sizeLenses.join(', ')}>
+							<span class="filter-size-value">&oslash;{size}mm</span>
+							<span class="filter-size-count">{count} {count === 1 ? 'lens' : 'lenses'}</span>
+						</div>
+					{/each}
+				</div>
+			</section>
+		{/if}
 
 		<!-- Kit lens list -->
 		<section class="kit-section">
@@ -224,6 +254,38 @@
 
 	.legend-sep {
 		opacity: 0.4;
+	}
+
+	/* Filter sizes */
+	.filter-sizes {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 8px;
+	}
+
+	.filter-size-chip {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 2px;
+		padding: 8px 16px;
+		border-radius: 8px;
+		background: var(--bg-surface);
+		border: 1px solid var(--border-subtle);
+		cursor: default;
+	}
+
+	.filter-size-value {
+		font-family: var(--font-mono);
+		font-weight: 500;
+		font-size: 14px;
+		color: var(--text-primary);
+	}
+
+	.filter-size-count {
+		font-family: var(--font-sans);
+		font-size: 11px;
+		color: var(--text-muted);
 	}
 
 	/* Kit sections */
