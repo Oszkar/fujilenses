@@ -30,5 +30,6 @@ export const manufacturerColors: Record<string, string> = {
 	Fujinon: 'var(--mfr-fujinon)',
 	Sigma: 'var(--mfr-sigma)',
 	Viltrox: 'var(--mfr-viltrox)',
-	Tamron: 'var(--mfr-tamron)'
+	Tamron: 'var(--mfr-tamron)',
+	Sirui: 'var(--mfr-sirui)'
 };
