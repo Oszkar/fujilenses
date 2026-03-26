@@ -17,20 +17,20 @@
 	let { lenses, scale, ffe, kitSlugs, onToggleKit }: Props = $props();
 
 	// Layout constants
-	const ROW_HEIGHT = 28;
-	const ROW_GAP = 4;
 	const BAR_HEIGHT = 8;
 	const DOT_RADIUS = 5;
 
 	let containerWidth = $state(800);
 
+	let ROW_HEIGHT = $derived(containerWidth < 600 ? 26 : 28);
+	let ROW_GAP = $derived(containerWidth < 600 ? 3 : 4);
 	let MARGIN = $derived({
 		top: 40,
 		right: containerWidth < 600 ? 16 : 40,
 		bottom: 20,
 		left: 0
 	});
-	let LABEL_WIDTH = $derived(Math.round((containerWidth < 600 ? 140 : 220) * getFontScale()));
+	let LABEL_WIDTH = $derived(Math.round((containerWidth < 600 ? 180 : 240) * getFontScale()));
 	let containerEl: HTMLDivElement | undefined = $state();
 
 	// Tooltip state

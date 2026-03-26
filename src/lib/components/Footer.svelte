@@ -56,8 +56,9 @@
 
 	.feedback-btn {
 		background: none;
-		border: none;
-		padding: 0;
+		border: 1px solid var(--border-default);
+		border-radius: 4px;
+		padding: 2px 8px;
 		color: var(--text-muted);
 		font-family: var(--font-sans);
 		font-size: 12px;

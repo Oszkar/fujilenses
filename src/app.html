@@ -11,6 +11,7 @@
 		<script>
 			(function() {
 				var t = localStorage.getItem('fujilenses-theme');
+				if (!t && window.matchMedia('(prefers-color-scheme: light)').matches) t = 'light';
 				if (t) document.documentElement.setAttribute('data-theme', t);
 				var s = localStorage.getItem('fujilenses-font-size');
 				var map = { s: '0.875', m: '1', l: '1.125' };

@@ -12,9 +12,14 @@ const fontScaleMap: Record<FontSize, number> = {
 	l: 1.125
 };
 
+function getSystemTheme(): Theme {
+	if (!browser) return 'dark';
+	return window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+}
+
 function loadTheme(): Theme {
 	if (!browser) return 'dark';
-	return (localStorage.getItem(THEME_KEY) as Theme) || 'dark';
+	return (localStorage.getItem(THEME_KEY) as Theme) || getSystemTheme();
 }
 
 function loadFontSize(): FontSize {
