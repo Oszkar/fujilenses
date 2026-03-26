@@ -18,6 +18,8 @@
 
 	let kitCount = $derived(getKitCount());
 	let drawerOpen = $state(false);
+	let drawerEl: HTMLDivElement | undefined = $state();
+	let previousActiveElement: HTMLElement | null = null;
 
 	let filters = $derived(browser ? parseFiltersFromURL(page.url.searchParams) : defaultFilters);
 
@@ -39,6 +41,62 @@
 	function closeDrawer() {
 		drawerOpen = false;
 	}
+
+	function getDrawerFocusableElements(): HTMLElement[] {
+		if (!drawerEl) return [];
+		return Array.from(
+			drawerEl.querySelectorAll<HTMLElement>(
+				'button:not([disabled]), input:not([disabled]), textarea:not([disabled]), select:not([disabled]), a[href], [tabindex]:not([tabindex="-1"])'
+			)
+		).filter((element) => !element.hasAttribute('disabled') && element.getAttribute('aria-hidden') !== 'true');
+	}
+
+	function handleDrawerKeydown(event: KeyboardEvent) {
+		if (event.key === 'Escape') {
+			event.preventDefault();
+			closeDrawer();
+			return;
+		}
+
+		if (event.key !== 'Tab') return;
+
+		const focusable = getDrawerFocusableElements();
+		if (focusable.length === 0) {
+			event.preventDefault();
+			drawerEl?.focus();
+			return;
+		}
+
+		const first = focusable[0];
+		const last = focusable[focusable.length - 1];
+		const active = document.activeElement;
+
+		if (event.shiftKey) {
+			if (active === first || active === drawerEl) {
+				event.preventDefault();
+				last.focus();
+			}
+		} else if (active === last) {
+			event.preventDefault();
+			first.focus();
+		}
+	}
+
+	$effect(() => {
+		if (!drawerOpen) return;
+
+		previousActiveElement = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+
+		queueMicrotask(() => {
+			const focusable = getDrawerFocusableElements();
+			(focusable[0] ?? drawerEl)?.focus();
+		});
+
+		return () => {
+			previousActiveElement?.focus();
+			previousActiveElement = null;
+		};
+	});
 </script>
 
 <div class="app-shell">
@@ -56,11 +114,18 @@
 
 		<!-- Mobile drawer overlay -->
 		{#if drawerOpen}
-			<!-- svelte-ignore a11y_no_static_element_interactions -->
-			<div class="drawer-overlay" onclick={closeDrawer} onkeydown={() => {}}></div>
-			<div class="drawer">
+			<button type="button" class="drawer-overlay" onclick={closeDrawer} aria-label="Close filters"></button>
+			<div
+				class="drawer"
+				role="dialog"
+				aria-modal="true"
+				aria-labelledby="drawer-title"
+				tabindex="-1"
+				bind:this={drawerEl}
+				onkeydown={handleDrawerKeydown}
+			>
 				<div class="drawer-header">
-					<span class="drawer-title">Filters</span>
+					<h2 class="drawer-title" id="drawer-title">Filters</h2>
 					<button class="drawer-close" onclick={closeDrawer} aria-label="Close filters">
 						<svg width="18" height="18" viewBox="0 0 18 18" fill="none">
 							<path d="M4 4l10 10M14 4L4 14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />

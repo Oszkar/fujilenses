@@ -13,6 +13,8 @@
 	let submitting = $state(false);
 	let submitted = $state(false);
 	let error = $state('');
+	let popoverEl: HTMLDivElement | undefined = $state();
+	let previousActiveElement: HTMLElement | null = null;
 
 	const categories: { value: Category; label: string; description: string }[] = [
 		{ value: 'data', label: 'Incorrect data', description: 'Wrong specs, missing lens, typo' },
@@ -63,16 +65,79 @@
 		// Reset after close animation
 		setTimeout(reset, 200);
 	}
+
+	function getFocusableElements(): HTMLElement[] {
+		if (!popoverEl) return [];
+		return Array.from(
+			popoverEl.querySelectorAll<HTMLElement>(
+				'button:not([disabled]), textarea:not([disabled]), input:not([disabled]), select:not([disabled]), a[href], [tabindex]:not([tabindex="-1"])'
+			)
+		).filter((element) => !element.hasAttribute('disabled') && element.getAttribute('aria-hidden') !== 'true');
+	}
+
+	function handleKeydown(event: KeyboardEvent) {
+		if (event.key === 'Escape') {
+			event.preventDefault();
+			handleClose();
+			return;
+		}
+
+		if (event.key !== 'Tab') return;
+
+		const focusable = getFocusableElements();
+		if (focusable.length === 0) {
+			event.preventDefault();
+			popoverEl?.focus();
+			return;
+		}
+
+		const first = focusable[0];
+		const last = focusable[focusable.length - 1];
+		const active = document.activeElement;
+
+		if (event.shiftKey) {
+			if (active === first || active === popoverEl) {
+				event.preventDefault();
+				last.focus();
+			}
+		} else if (active === last) {
+			event.preventDefault();
+			first.focus();
+		}
+	}
+
+	$effect(() => {
+		if (!open) return;
+
+		previousActiveElement = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+
+		queueMicrotask(() => {
+			const focusable = getFocusableElements();
+			(focusable[0] ?? popoverEl)?.focus();
+		});
+
+		return () => {
+			previousActiveElement?.focus();
+			previousActiveElement = null;
+		};
+	});
 </script>
 
 {#if open}
-	<!-- svelte-ignore a11y_no_static_element_interactions -->
-	<div class="overlay" onclick={handleClose} onkeydown={() => {}}></div>
-	<div class="popover" role="dialog" aria-label="Send feedback">
+	<button type="button" class="overlay" onclick={handleClose} aria-label="Close feedback dialog"></button>
+	<div
+		class="popover"
+		role="dialog"
+		aria-modal="true"
+		aria-labelledby="feedback-popover-title"
+		tabindex="-1"
+		bind:this={popoverEl}
+		onkeydown={handleKeydown}
+	>
 		<div class="popover-header">
-			<span class="popover-title">
+			<h2 class="popover-title" id="feedback-popover-title">
 				{submitted ? 'Thanks!' : 'Send Feedback'}
-			</span>
+			</h2>
 			<button class="close-btn" onclick={handleClose} aria-label="Close">
 				<svg width="16" height="16" viewBox="0 0 16 16" fill="none">
 					<path d="M4 4l8 8M12 4L4 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />

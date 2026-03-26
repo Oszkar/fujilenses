@@ -108,6 +108,10 @@
 		}
 	}
 
+	function handleToggle(lens: Lens) {
+		onToggleKit(lens.slug);
+	}
+
 	$effect(() => {
 		if (!containerEl) return;
 		const observer = new ResizeObserver((entries) => {
@@ -197,7 +201,6 @@
 
 			<!-- Focal range visualization -->
 			{#if lens.lensType === 'Prime'}
-				<!-- svelte-ignore a11y_no_static_element_interactions -->
 				<circle
 					cx={LABEL_WIDTH + xScale(focal.min)}
 					cy={y + ROW_HEIGHT / 2}
@@ -207,6 +210,8 @@
 					tabindex="0"
 					role="button"
 					aria-label="{lens.manufacturer} {lens.model}"
+					aria-pressed={inKit}
+					onclick={() => handleToggle(lens)}
 					onmouseenter={(e) => showTooltip(lens, e)}
 					onmouseleave={hideTooltip}
 					onfocus={(e) =>
@@ -218,7 +223,6 @@
 					onkeydown={(e) => handleKeydown(lens, e)}
 				/>
 			{:else}
-				<!-- svelte-ignore a11y_no_static_element_interactions -->
 				<rect
 					x={LABEL_WIDTH + xScale(focal.min)}
 					y={y + ROW_HEIGHT / 2 - BAR_HEIGHT / 2}
@@ -230,6 +234,8 @@
 					tabindex="0"
 					role="button"
 					aria-label="{lens.manufacturer} {lens.model}"
+					aria-pressed={inKit}
+					onclick={() => handleToggle(lens)}
 					onmouseenter={(e) => showTooltip(lens, e)}
 					onmouseleave={hideTooltip}
 					onfocus={(e) =>

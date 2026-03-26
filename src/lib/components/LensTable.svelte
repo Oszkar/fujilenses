@@ -57,12 +57,25 @@
 						<th
 							class="sortable"
 							class:active={sort === col.key}
-							onclick={() => onSort(col.key!)}
+							aria-sort={sort === col.key
+								? sortDir === 'asc'
+									? 'ascending'
+									: 'descending'
+								: 'none'}
 						>
-							<span>{col.label}</span>
-							{#if sort === col.key}
-								<span class="sort-arrow">{sortDir === 'asc' ? '▲' : '▼'}</span>
-							{/if}
+							<button
+								type="button"
+								class="sort-button"
+								onclick={() => onSort(col.key!)}
+								aria-label={sort === col.key
+									? `Sort by ${col.label} ${sortDir === 'asc' ? 'descending' : 'ascending'}`
+									: `Sort by ${col.label} ascending`}
+							>
+								<span>{col.label}</span>
+								{#if sort === col.key}
+									<span class="sort-arrow" aria-hidden="true">{sortDir === 'asc' ? '▲' : '▼'}</span>
+								{/if}
+							</button>
 						</th>
 					{:else}
 						<th>{col.label}</th>
@@ -169,9 +182,22 @@
 		user-select: none;
 	}
 
-	th.sortable {
+	.sort-button {
+		display: inline-flex;
+		align-items: center;
+		gap: 6px;
+		padding: 0;
+		border: none;
+		background: transparent;
+		color: inherit;
+		font: inherit;
 		cursor: pointer;
-		transition: color 150ms ease;
+	}
+
+	.sort-button:focus-visible {
+		outline: 2px solid var(--accent);
+		outline-offset: 2px;
+		border-radius: 4px;
 	}
 
 	th.sortable:hover {
