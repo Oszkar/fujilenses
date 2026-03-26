@@ -26,6 +26,7 @@ Each lens entry must conform to the `Lens` interface in `src/lib/types.ts`:
   "linearMotor": false,
   "releaseYear": 2012,
   "weightGrams": 187,
+  "filterDiameterMm": 52,
   "approxPriceUSD": 0,
   "priceUpdatedYear": 0,
   "retailerUrl": ""

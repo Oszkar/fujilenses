@@ -17,7 +17,8 @@
     "approxPriceUSD": 0,
     "priceUpdatedYear": 0,
     "retailerUrl": "",
-    "autofocus": true
+    "autofocus": true,
+    "filterDiameterMm": 62
   },
   {
     "slug": "xf-14mm-f28-r",
@@ -37,7 +38,8 @@
     "approxPriceUSD": 0,
     "priceUpdatedYear": 0,
     "retailerUrl": "",
-    "autofocus": true
+    "autofocus": true,
+    "filterDiameterMm": 58
   },
   {
     "slug": "xf-16mm-f14-wr",
@@ -57,7 +59,8 @@
     "approxPriceUSD": 0,
     "priceUpdatedYear": 0,
     "retailerUrl": "",
-    "autofocus": true
+    "autofocus": true,
+    "filterDiameterMm": 67
   },
   {
     "slug": "xf-16mm-f28-wr",
@@ -77,7 +80,8 @@
     "approxPriceUSD": 0,
     "priceUpdatedYear": 0,
     "retailerUrl": "",
-    "autofocus": true
+    "autofocus": true,
+    "filterDiameterMm": 49
   },
   {
     "slug": "xf-18mm-f14-lm-wr",
@@ -97,7 +101,8 @@
     "approxPriceUSD": 0,
     "priceUpdatedYear": 0,
     "retailerUrl": "",
-    "autofocus": true
+    "autofocus": true,
+    "filterDiameterMm": 62
   },
   {
     "slug": "xf-18mm-f20-r",
@@ -117,7 +122,8 @@
     "approxPriceUSD": 0,
     "priceUpdatedYear": 0,
     "retailerUrl": "",
-    "autofocus": true
+    "autofocus": true,
+    "filterDiameterMm": 52
   },
   {
     "slug": "xf-23mm-f14-r",
@@ -137,7 +143,8 @@
     "approxPriceUSD": 0,
     "priceUpdatedYear": 0,
     "retailerUrl": "",
-    "autofocus": true
+    "autofocus": true,
+    "filterDiameterMm": 62
   },
   {
     "slug": "xf-23mm-f14-lm-wr",
@@ -157,7 +164,8 @@
     "approxPriceUSD": 0,
     "priceUpdatedYear": 0,
     "retailerUrl": "",
-    "autofocus": true
+    "autofocus": true,
+    "filterDiameterMm": 58
   },
   {
     "slug": "xf-23mm-f20-wr",
@@ -177,7 +185,8 @@
     "approxPriceUSD": 0,
     "priceUpdatedYear": 0,
     "retailerUrl": "",
-    "autofocus": true
+    "autofocus": true,
+    "filterDiameterMm": 43
   },
   {
     "slug": "xf-23mm-f28-wr",
@@ -197,7 +206,8 @@
     "approxPriceUSD": 0,
     "priceUpdatedYear": 0,
     "retailerUrl": "",
-    "autofocus": true
+    "autofocus": true,
+    "filterDiameterMm": 39
   },
   {
     "slug": "xf-27mm-f28",
@@ -217,7 +227,8 @@
     "approxPriceUSD": 0,
     "priceUpdatedYear": 0,
     "retailerUrl": "",
-    "autofocus": true
+    "autofocus": true,
+    "filterDiameterMm": 39
   },
   {
     "slug": "xf-27mm-f28-wr",
@@ -237,7 +248,8 @@
     "approxPriceUSD": 0,
     "priceUpdatedYear": 0,
     "retailerUrl": "",
-    "autofocus": true
+    "autofocus": true,
+    "filterDiameterMm": 39
   },
   {
     "slug": "xf-30mm-f28-lm-wr-macro",
@@ -257,7 +269,8 @@
     "approxPriceUSD": 0,
     "priceUpdatedYear": 0,
     "retailerUrl": "",
-    "autofocus": true
+    "autofocus": true,
+    "filterDiameterMm": 43
   },
   {
     "slug": "xf-33mm-f14-lm-wr",
@@ -277,7 +290,8 @@
     "approxPriceUSD": 0,
     "priceUpdatedYear": 0,
     "retailerUrl": "",
-    "autofocus": true
+    "autofocus": true,
+    "filterDiameterMm": 58
   },
   {
     "slug": "xf-35mm-f14-r",
@@ -297,7 +311,8 @@
     "approxPriceUSD": 0,
     "priceUpdatedYear": 0,
     "retailerUrl": "",
-    "autofocus": true
+    "autofocus": true,
+    "filterDiameterMm": 52
   },
   {
     "slug": "xf-35mm-f20-wr",
@@ -317,7 +332,8 @@
     "approxPriceUSD": 0,
     "priceUpdatedYear": 0,
     "retailerUrl": "",
-    "autofocus": true
+    "autofocus": true,
+    "filterDiameterMm": 43
   },
   {
     "slug": "xf-50mm-f10-wr",
@@ -337,7 +353,8 @@
     "approxPriceUSD": 0,
     "priceUpdatedYear": 0,
     "retailerUrl": "",
-    "autofocus": true
+    "autofocus": true,
+    "filterDiameterMm": 77
   },
   {
     "slug": "xf-50mm-f20-wr",
@@ -357,7 +374,8 @@
     "approxPriceUSD": 0,
     "priceUpdatedYear": 0,
     "retailerUrl": "",
-    "autofocus": true
+    "autofocus": true,
+    "filterDiameterMm": 46
   },
   {
     "slug": "xf-56mm-f12-r",
@@ -377,7 +395,8 @@
     "approxPriceUSD": 0,
     "priceUpdatedYear": 0,
     "retailerUrl": "",
-    "autofocus": true
+    "autofocus": true,
+    "filterDiameterMm": 62
   },
   {
     "slug": "xf-56mm-f12-apd",
@@ -397,7 +416,8 @@
     "approxPriceUSD": 0,
     "priceUpdatedYear": 0,
     "retailerUrl": "",
-    "autofocus": true
+    "autofocus": true,
+    "filterDiameterMm": 62
   },
   {
     "slug": "xf-56mm-f12-wr",
@@ -417,7 +437,8 @@
     "approxPriceUSD": 0,
     "priceUpdatedYear": 0,
     "retailerUrl": "",
-    "autofocus": true
+    "autofocus": true,
+    "filterDiameterMm": 67
   },
   {
     "slug": "xf-60mm-f24-macro",
@@ -437,7 +458,8 @@
     "approxPriceUSD": 0,
     "priceUpdatedYear": 0,
     "retailerUrl": "",
-    "autofocus": true
+    "autofocus": true,
+    "filterDiameterMm": 39
   },
   {
     "slug": "xf-80mm-f28-lm-ois-wr-macro",
@@ -457,7 +479,8 @@
     "approxPriceUSD": 0,
     "priceUpdatedYear": 0,
     "retailerUrl": "",
-    "autofocus": true
+    "autofocus": true,
+    "filterDiameterMm": 62
   },
   {
     "slug": "xf-90mm-f20-lm-wr",
@@ -477,7 +500,8 @@
     "approxPriceUSD": 0,
     "priceUpdatedYear": 0,
     "retailerUrl": "",
-    "autofocus": true
+    "autofocus": true,
+    "filterDiameterMm": 62
   },
   {
     "slug": "xf-200mm-f20-lm-ois-wr",
@@ -497,7 +521,8 @@
     "approxPriceUSD": 0,
     "priceUpdatedYear": 0,
     "retailerUrl": "",
-    "autofocus": true
+    "autofocus": true,
+    "filterDiameterMm": 105
   },
   {
     "slug": "xf-500mm-f56-lm-ois-wr",
@@ -517,7 +542,8 @@
     "approxPriceUSD": 0,
     "priceUpdatedYear": 0,
     "retailerUrl": "",
-    "autofocus": true
+    "autofocus": true,
+    "filterDiameterMm": 95
   },
   {
     "slug": "xf-8-16mm-f28-lm-wr",
@@ -537,7 +563,8 @@
     "approxPriceUSD": 0,
     "priceUpdatedYear": 0,
     "retailerUrl": "",
-    "autofocus": true
+    "autofocus": true,
+    "filterDiameterMm": 0
   },
   {
     "slug": "xf-10-24mm-f40-ois",
@@ -557,7 +584,8 @@
     "approxPriceUSD": 0,
     "priceUpdatedYear": 0,
     "retailerUrl": "",
-    "autofocus": true
+    "autofocus": true,
+    "filterDiameterMm": 72
   },
   {
     "slug": "xf-10-24mm-f40-ois-wr",
@@ -577,7 +605,8 @@
     "approxPriceUSD": 0,
     "priceUpdatedYear": 0,
     "retailerUrl": "",
-    "autofocus": true
+    "autofocus": true,
+    "filterDiameterMm": 72
   },
   {
     "slug": "xf-16-50mm-f28-lm-wr",
@@ -597,7 +626,8 @@
     "approxPriceUSD": 0,
     "priceUpdatedYear": 0,
     "retailerUrl": "",
-    "autofocus": true
+    "autofocus": true,
+    "filterDiameterMm": 58
   },
   {
     "slug": "xf-16-55mm-f28-lm-wr",
@@ -617,7 +647,8 @@
     "approxPriceUSD": 0,
     "priceUpdatedYear": 0,
     "retailerUrl": "",
-    "autofocus": true
+    "autofocus": true,
+    "filterDiameterMm": 77
   },
   {
     "slug": "xf-16-55mm-f28-lm-wr-ii",
@@ -637,7 +668,8 @@
     "approxPriceUSD": 0,
     "priceUpdatedYear": 0,
     "retailerUrl": "",
-    "autofocus": true
+    "autofocus": true,
+    "filterDiameterMm": 72
   },
   {
     "slug": "xf-16-80mm-f40-ois-wr",
@@ -657,7 +689,8 @@
     "approxPriceUSD": 0,
     "priceUpdatedYear": 0,
     "retailerUrl": "",
-    "autofocus": true
+    "autofocus": true,
+    "filterDiameterMm": 72
   },
   {
     "slug": "xf-18-55mm-f28-lm-ois",
@@ -677,7 +710,8 @@
     "approxPriceUSD": 0,
     "priceUpdatedYear": 0,
     "retailerUrl": "",
-    "autofocus": true
+    "autofocus": true,
+    "filterDiameterMm": 58
   },
   {
     "slug": "xf-18-120mm-f40-lm-pz-wr",
@@ -697,7 +731,8 @@
     "approxPriceUSD": 0,
     "priceUpdatedYear": 0,
     "retailerUrl": "",
-    "autofocus": true
+    "autofocus": true,
+    "filterDiameterMm": 72
   },
   {
     "slug": "xf-18-135mm-f35-lm-ois-wr",
@@ -717,7 +752,8 @@
     "approxPriceUSD": 0,
     "priceUpdatedYear": 0,
     "retailerUrl": "",
-    "autofocus": true
+    "autofocus": true,
+    "filterDiameterMm": 67
   },
   {
     "slug": "xf-50-140mm-f28-lm-ois-wr",
@@ -737,7 +773,8 @@
     "approxPriceUSD": 0,
     "priceUpdatedYear": 0,
     "retailerUrl": "",
-    "autofocus": true
+    "autofocus": true,
+    "filterDiameterMm": 72
   },
   {
     "slug": "xf-55-200mm-f35-lm-ois",
@@ -757,7 +794,8 @@
     "approxPriceUSD": 0,
     "priceUpdatedYear": 0,
     "retailerUrl": "",
-    "autofocus": true
+    "autofocus": true,
+    "filterDiameterMm": 62
   },
   {
     "slug": "xf-70-300mm-f40-lm-ois-wr",
@@ -777,7 +815,8 @@
     "approxPriceUSD": 0,
     "priceUpdatedYear": 0,
     "retailerUrl": "",
-    "autofocus": true
+    "autofocus": true,
+    "filterDiameterMm": 67
   },
   {
     "slug": "xf-100-400mm-f45-lm-ois-wr",
@@ -797,7 +836,8 @@
     "approxPriceUSD": 0,
     "priceUpdatedYear": 0,
     "retailerUrl": "",
-    "autofocus": true
+    "autofocus": true,
+    "filterDiameterMm": 77
   },
   {
     "slug": "xf-150-600mm-f56-lm-ois-wr",
@@ -817,7 +857,8 @@
     "approxPriceUSD": 0,
     "priceUpdatedYear": 0,
     "retailerUrl": "",
-    "autofocus": true
+    "autofocus": true,
+    "filterDiameterMm": 82
   },
   {
     "slug": "xc-35mm-f20",
@@ -837,7 +878,8 @@
     "approxPriceUSD": 0,
     "priceUpdatedYear": 0,
     "retailerUrl": "",
-    "autofocus": true
+    "autofocus": true,
+    "filterDiameterMm": 43
   },
   {
     "slug": "xc-13-33mm-f35-ois",
@@ -857,7 +899,8 @@
     "approxPriceUSD": 0,
     "priceUpdatedYear": 0,
     "retailerUrl": "",
-    "autofocus": true
+    "autofocus": true,
+    "filterDiameterMm": 49
   },
   {
     "slug": "xc-15-45mm-f35-ois-pz",
@@ -877,7 +920,8 @@
     "approxPriceUSD": 0,
     "priceUpdatedYear": 0,
     "retailerUrl": "",
-    "autofocus": true
+    "autofocus": true,
+    "filterDiameterMm": 52
   },
   {
     "slug": "xc-16-50mm-f35-ois",
@@ -897,7 +941,8 @@
     "approxPriceUSD": 0,
     "priceUpdatedYear": 0,
     "retailerUrl": "",
-    "autofocus": true
+    "autofocus": true,
+    "filterDiameterMm": 58
   },
   {
     "slug": "xc-16-50mm-f35-ois-ii",
@@ -917,7 +962,8 @@
     "approxPriceUSD": 0,
     "priceUpdatedYear": 0,
     "retailerUrl": "",
-    "autofocus": true
+    "autofocus": true,
+    "filterDiameterMm": 58
   },
   {
     "slug": "xc-50-230mm-f45-ois",
@@ -937,7 +983,8 @@
     "approxPriceUSD": 0,
     "priceUpdatedYear": 0,
     "retailerUrl": "",
-    "autofocus": true
+    "autofocus": true,
+    "filterDiameterMm": 58
   },
   {
     "slug": "xc-50-230mm-f45-ois-ii",
@@ -957,6 +1004,7 @@
     "approxPriceUSD": 0,
     "priceUpdatedYear": 0,
     "retailerUrl": "",
-    "autofocus": true
+    "autofocus": true,
+    "filterDiameterMm": 58
   }
 ]

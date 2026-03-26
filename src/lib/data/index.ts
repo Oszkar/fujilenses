@@ -31,5 +31,6 @@ export const manufacturerColors: Record<string, string> = {
 	Sigma: 'var(--mfr-sigma)',
 	Viltrox: 'var(--mfr-viltrox)',
 	Tamron: 'var(--mfr-tamron)',
-	Sirui: 'var(--mfr-sirui)'
+	Sirui: 'var(--mfr-sirui)',
+	'Voigtländer': 'var(--mfr-voigtlander)'
 };

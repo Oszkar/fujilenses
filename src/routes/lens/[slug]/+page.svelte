@@ -147,6 +147,12 @@
 				<span class="spec-label">Lens Type</span>
 				<span class="spec-val">{lens.lensType}</span>
 			</div>
+			{#if lens.filterDiameterMm > 0}
+				<div class="spec-item">
+					<span class="spec-label">Filter Size</span>
+					<span class="spec-val">&oslash;{lens.filterDiameterMm}mm</span>
+				</div>
+			{/if}
 		</div>
 
 		<button

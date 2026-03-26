@@ -17,7 +17,8 @@
     "approxPriceUSD": 0,
     "priceUpdatedYear": 0,
     "retailerUrl": "",
-    "autofocus": true
+    "autofocus": true,
+    "filterDiameterMm": 62
   },
   {
     "slug": "sigma-15mm-f14",
@@ -37,7 +38,8 @@
     "approxPriceUSD": 0,
     "priceUpdatedYear": 0,
     "retailerUrl": "",
-    "autofocus": true
+    "autofocus": true,
+    "filterDiameterMm": 58
   },
   {
     "slug": "sigma-16mm-f14",
@@ -57,7 +59,8 @@
     "approxPriceUSD": 0,
     "priceUpdatedYear": 0,
     "retailerUrl": "",
-    "autofocus": true
+    "autofocus": true,
+    "filterDiameterMm": 67
   },
   {
     "slug": "sigma-23mm-f14",
@@ -77,7 +80,8 @@
     "approxPriceUSD": 0,
     "priceUpdatedYear": 0,
     "retailerUrl": "",
-    "autofocus": true
+    "autofocus": true,
+    "filterDiameterMm": 52
   },
   {
     "slug": "sigma-30mm-f14",
@@ -97,7 +101,8 @@
     "approxPriceUSD": 0,
     "priceUpdatedYear": 0,
     "retailerUrl": "",
-    "autofocus": true
+    "autofocus": true,
+    "filterDiameterMm": 52
   },
   {
     "slug": "sigma-56mm-f14",
@@ -117,7 +122,8 @@
     "approxPriceUSD": 0,
     "priceUpdatedYear": 0,
     "retailerUrl": "",
-    "autofocus": true
+    "autofocus": true,
+    "filterDiameterMm": 55
   },
   {
     "slug": "sigma-10-18mm-f28",
@@ -137,7 +143,8 @@
     "approxPriceUSD": 0,
     "priceUpdatedYear": 0,
     "retailerUrl": "",
-    "autofocus": true
+    "autofocus": true,
+    "filterDiameterMm": 67
   },
   {
     "slug": "sigma-16-300mm-f35",
@@ -157,7 +164,8 @@
     "approxPriceUSD": 0,
     "priceUpdatedYear": 0,
     "retailerUrl": "",
-    "autofocus": true
+    "autofocus": true,
+    "filterDiameterMm": 67
   },
   {
     "slug": "sigma-17-40mm-f18",
@@ -177,7 +185,8 @@
     "approxPriceUSD": 0,
     "priceUpdatedYear": 0,
     "retailerUrl": "",
-    "autofocus": true
+    "autofocus": true,
+    "filterDiameterMm": 67
   },
   {
     "slug": "sigma-18-50mm-f28",
@@ -197,7 +206,8 @@
     "approxPriceUSD": 0,
     "priceUpdatedYear": 0,
     "retailerUrl": "",
-    "autofocus": true
+    "autofocus": true,
+    "filterDiameterMm": 55
   },
   {
     "slug": "sigma-100-400mm-f50",
@@ -217,7 +227,8 @@
     "approxPriceUSD": 0,
     "priceUpdatedYear": 0,
     "retailerUrl": "",
-    "autofocus": true
+    "autofocus": true,
+    "filterDiameterMm": 67
   },
   {
     "slug": "tamron-11-20mm-f28",
@@ -237,7 +248,8 @@
     "approxPriceUSD": 0,
     "priceUpdatedYear": 0,
     "retailerUrl": "",
-    "autofocus": true
+    "autofocus": true,
+    "filterDiameterMm": 67
   },
   {
     "slug": "tamron-17-70mm-f28",
@@ -257,7 +269,8 @@
     "approxPriceUSD": 0,
     "priceUpdatedYear": 0,
     "retailerUrl": "",
-    "autofocus": true
+    "autofocus": true,
+    "filterDiameterMm": 67
   },
   {
     "slug": "tamron-18-300mm-f35",
@@ -277,7 +290,8 @@
     "approxPriceUSD": 0,
     "priceUpdatedYear": 0,
     "retailerUrl": "",
-    "autofocus": true
+    "autofocus": true,
+    "filterDiameterMm": 67
   },
   {
     "slug": "tamron-150-500mm-f50",
@@ -297,7 +311,8 @@
     "approxPriceUSD": 0,
     "priceUpdatedYear": 0,
     "retailerUrl": "",
-    "autofocus": true
+    "autofocus": true,
+    "filterDiameterMm": 82
   },
   {
     "slug": "sirui-sniper-16mm-f12",
@@ -317,7 +332,8 @@
     "weightGrams": 386,
     "approxPriceUSD": 0,
     "priceUpdatedYear": 0,
-    "retailerUrl": ""
+    "retailerUrl": "",
+    "filterDiameterMm": 58
   },
   {
     "slug": "sirui-sniper-23mm-f12",
@@ -337,7 +353,8 @@
     "weightGrams": 380,
     "approxPriceUSD": 0,
     "priceUpdatedYear": 0,
-    "retailerUrl": ""
+    "retailerUrl": "",
+    "filterDiameterMm": 58
   },
   {
     "slug": "sirui-sniper-33mm-f12",
@@ -357,7 +374,8 @@
     "weightGrams": 398,
     "approxPriceUSD": 0,
     "priceUpdatedYear": 0,
-    "retailerUrl": ""
+    "retailerUrl": "",
+    "filterDiameterMm": 58
   },
   {
     "slug": "sirui-sniper-56mm-f12",
@@ -377,7 +395,8 @@
     "weightGrams": 419,
     "approxPriceUSD": 0,
     "priceUpdatedYear": 0,
-    "retailerUrl": ""
+    "retailerUrl": "",
+    "filterDiameterMm": 58
   },
   {
     "slug": "sirui-sniper-75mm-f12",
@@ -397,7 +416,8 @@
     "weightGrams": 466,
     "approxPriceUSD": 0,
     "priceUpdatedYear": 0,
-    "retailerUrl": ""
+    "retailerUrl": "",
+    "filterDiameterMm": 67
   },
   {
     "slug": "sirui-aurora-35mm-f14",
@@ -417,7 +437,8 @@
     "weightGrams": 490,
     "approxPriceUSD": 0,
     "priceUpdatedYear": 0,
-    "retailerUrl": ""
+    "retailerUrl": "",
+    "filterDiameterMm": 62
   },
   {
     "slug": "sirui-aurora-85mm-f14",
@@ -435,6 +456,154 @@
     "linearMotor": false,
     "releaseYear": 2024,
     "weightGrams": 540,
+    "approxPriceUSD": 0,
+    "priceUpdatedYear": 0,
+    "retailerUrl": "",
+    "filterDiameterMm": 67
+  },
+  {
+    "slug": "voigtlander-color-skopar-18mm-f28",
+    "manufacturer": "Voigtländer",
+    "model": "COLOR-SKOPAR 18mm F2.8 Aspherical",
+    "mountType": "XF",
+    "lensType": "Prime",
+    "minFocalLength": 18,
+    "maxFocalLength": 18,
+    "maxAperture": 2.8,
+    "autofocus": false,
+    "imageStabilization": false,
+    "weatherResistant": false,
+    "apertureRing": true,
+    "linearMotor": false,
+    "releaseYear": 2024,
+    "weightGrams": 115,
+    "filterDiameterMm": 43,
+    "approxPriceUSD": 0,
+    "priceUpdatedYear": 0,
+    "retailerUrl": ""
+  },
+  {
+    "slug": "voigtlander-nokton-23mm-f12",
+    "manufacturer": "Voigtländer",
+    "model": "NOKTON 23mm F1.2 Aspherical",
+    "mountType": "XF",
+    "lensType": "Prime",
+    "minFocalLength": 23,
+    "maxFocalLength": 23,
+    "maxAperture": 1.2,
+    "autofocus": false,
+    "imageStabilization": false,
+    "weatherResistant": false,
+    "apertureRing": true,
+    "linearMotor": false,
+    "releaseYear": 2022,
+    "weightGrams": 219,
+    "filterDiameterMm": 46,
+    "approxPriceUSD": 0,
+    "priceUpdatedYear": 0,
+    "retailerUrl": ""
+  },
+  {
+    "slug": "voigtlander-ultron-27mm-f2",
+    "manufacturer": "Voigtländer",
+    "model": "ULTRON 27mm F2",
+    "mountType": "XF",
+    "lensType": "Prime",
+    "minFocalLength": 27,
+    "maxFocalLength": 27,
+    "maxAperture": 2.0,
+    "autofocus": false,
+    "imageStabilization": false,
+    "weatherResistant": false,
+    "apertureRing": true,
+    "linearMotor": false,
+    "releaseYear": 2023,
+    "weightGrams": 120,
+    "filterDiameterMm": 43,
+    "approxPriceUSD": 0,
+    "priceUpdatedYear": 0,
+    "retailerUrl": ""
+  },
+  {
+    "slug": "voigtlander-nokton-35mm-f09",
+    "manufacturer": "Voigtländer",
+    "model": "NOKTON 35mm F0.9 Aspherical",
+    "mountType": "XF",
+    "lensType": "Prime",
+    "minFocalLength": 35,
+    "maxFocalLength": 35,
+    "maxAperture": 0.9,
+    "autofocus": false,
+    "imageStabilization": false,
+    "weatherResistant": false,
+    "apertureRing": true,
+    "linearMotor": false,
+    "releaseYear": 2023,
+    "weightGrams": 492,
+    "filterDiameterMm": 62,
+    "approxPriceUSD": 0,
+    "priceUpdatedYear": 0,
+    "retailerUrl": ""
+  },
+  {
+    "slug": "voigtlander-nokton-35mm-f12",
+    "manufacturer": "Voigtländer",
+    "model": "NOKTON 35mm F1.2",
+    "mountType": "XF",
+    "lensType": "Prime",
+    "minFocalLength": 35,
+    "maxFocalLength": 35,
+    "maxAperture": 1.2,
+    "autofocus": false,
+    "imageStabilization": false,
+    "weatherResistant": false,
+    "apertureRing": true,
+    "linearMotor": false,
+    "releaseYear": 2021,
+    "weightGrams": 196,
+    "filterDiameterMm": 46,
+    "approxPriceUSD": 0,
+    "priceUpdatedYear": 0,
+    "retailerUrl": ""
+  },
+  {
+    "slug": "voigtlander-macro-apo-ultron-35mm-f2",
+    "manufacturer": "Voigtländer",
+    "model": "MACRO APO-ULTRON 35mm F2",
+    "mountType": "XF",
+    "lensType": "Prime",
+    "minFocalLength": 35,
+    "maxFocalLength": 35,
+    "maxAperture": 2.0,
+    "autofocus": false,
+    "imageStabilization": false,
+    "weatherResistant": false,
+    "apertureRing": true,
+    "linearMotor": false,
+    "releaseYear": 2022,
+    "weightGrams": 265,
+    "filterDiameterMm": 49,
+    "approxPriceUSD": 0,
+    "priceUpdatedYear": 0,
+    "retailerUrl": ""
+  },
+  {
+    "slug": "voigtlander-nokton-50mm-f12",
+    "manufacturer": "Voigtländer",
+    "model": "NOKTON 50mm F1.2",
+    "mountType": "XF",
+    "lensType": "Prime",
+    "minFocalLength": 50,
+    "maxFocalLength": 50,
+    "maxAperture": 1.2,
+    "autofocus": false,
+    "imageStabilization": false,
+    "weatherResistant": false,
+    "apertureRing": true,
+    "linearMotor": false,
+    "releaseYear": 2023,
+    "weightGrams": 290,
+    "filterDiameterMm": 52,
     "approxPriceUSD": 0,
     "priceUpdatedYear": 0,
     "retailerUrl": ""

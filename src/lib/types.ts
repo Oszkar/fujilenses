@@ -14,6 +14,7 @@ export interface Lens {
 	linearMotor: boolean;
 	releaseYear: number;
 	weightGrams: number;
+	filterDiameterMm: number;
 	approxPriceUSD: number;
 	priceUpdatedYear: number;
 	retailerUrl: string;
