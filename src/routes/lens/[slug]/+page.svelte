@@ -248,6 +248,7 @@
 		font-weight: 500;
 		font-size: 22px;
 		color: var(--text-primary);
+		letter-spacing: -0.02em;
 	}
 
 	.photo-placeholder {
@@ -284,8 +285,19 @@
 		display: flex;
 		flex-direction: column;
 		gap: 4px;
-		padding: 12px 0;
+		padding: 12px 8px;
 		border-bottom: 1px solid var(--border-subtle);
+	}
+
+	.spec-item:nth-child(4n+3),
+	.spec-item:nth-child(4n+4) {
+		background: var(--bg-surface);
+		border-radius: 4px;
+	}
+
+	/* Fix orphan: when odd number of items, last item gets full width */
+	.spec-item:last-child:nth-child(odd) {
+		grid-column: 1 / -1;
 	}
 
 	.spec-label {

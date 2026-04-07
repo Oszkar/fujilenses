@@ -134,6 +134,7 @@
 				ffe={filters.ffe}
 				{kitSlugs}
 				onToggleKit={handleToggleKit}
+				showHeatmap={true}
 			/>
 		</section>
 
@@ -213,6 +214,13 @@
 		font-size: 13px;
 		color: var(--text-muted);
 		margin: 0 0 24px 0;
+	}
+
+	@media (max-width: 1023px) {
+		.page-subtitle {
+			padding-bottom: 16px;
+			border-bottom: 1px solid var(--border-subtle);
+		}
 	}
 
 	/* Table legend */

@@ -56,7 +56,7 @@
 		align-items: center;
 		justify-content: space-between;
 		background: var(--bg-surface);
-		border-bottom: 1px solid var(--border-subtle);
+		box-shadow: inset 0 -1px 0 0 var(--border-subtle);
 		padding: 18px 40px;
 		font-family: var(--font-sans);
 		gap: 12px;

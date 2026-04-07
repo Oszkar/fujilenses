@@ -5,6 +5,7 @@
 	import { manufacturerColors } from '$lib/data';
 	import { getFFMultiplier } from '$lib/filters';
 	import { getFontScale } from '$lib/preferences.svelte';
+	import { computeCoverageSegments, segmentsToGradientStops, detectGaps } from '$lib/coverage';
 
 	interface Props {
 		lenses: Lens[];
@@ -12,20 +13,29 @@
 		ffe: boolean;
 		kitSlugs: Set<string>;
 		onToggleKit: (slug: string) => void;
+		showHeatmap?: boolean;
 	}
 
-	let { lenses, scale, ffe, kitSlugs, onToggleKit }: Props = $props();
+	let { lenses, scale, ffe, kitSlugs, onToggleKit, showHeatmap = false }: Props = $props();
+
+	// Component-scoped unique ID prefix
+	const uid = Math.random().toString(36).slice(2, 8);
 
 	// Layout constants
 	const BAR_HEIGHT = 8;
 	const DOT_RADIUS = 5;
+	const HEATMAP_HEIGHT = 24;
+	const GAP_MIN_PX = 40;
 
 	let containerWidth = $state(800);
+	let scrollWidth = $state(0);
+	let clientWidth = $state(0);
+	let hasOverflow = $derived(scrollWidth > clientWidth);
 
 	let ROW_HEIGHT = $derived(containerWidth < 600 ? 26 : 28);
 	let ROW_GAP = $derived(containerWidth < 600 ? 3 : 4);
 	let MARGIN = $derived({
-		top: 40,
+		top: showHeatmap && lenses.length >= 2 ? 40 + HEATMAP_HEIGHT + 14 : 40,
 		right: containerWidth < 600 ? 16 : 40,
 		bottom: 20,
 		left: 0
@@ -74,6 +84,18 @@
 		return xScale.ticks(8).filter((t: number) => t > 0);
 	});
 
+	// Heatmap coverage data (sweep line)
+	let coverageSegments = $derived(showHeatmap ? computeCoverageSegments(lenses, ffe) : []);
+	let heatmapStops = $derived.by(() => {
+		if (coverageSegments.length === 0) return [];
+		return segmentsToGradientStops(coverageSegments, xScale, chartWidth);
+	});
+	let heatmapGaps = $derived.by(() => {
+		if (coverageSegments.length === 0) return [];
+		return detectGaps(coverageSegments, xScale, GAP_MIN_PX);
+	});
+	let showHeatmapStrip = $derived(showHeatmap && lenses.length >= 2 && heatmapStops.length > 0);
+
 	function rowY(index: number): number {
 		return MARGIN.top + index * (ROW_HEIGHT + ROW_GAP);
 	}
@@ -90,11 +112,14 @@
 	}
 
 	function showTooltip(lens: Lens, event: MouseEvent) {
-		tooltip = {
-			lens,
-			x: event.clientX,
-			y: event.clientY
-		};
+		let x = event.clientX;
+		let y = event.clientY;
+		// Boundary detection: flip tooltip if it would clip viewport
+		if (typeof window !== 'undefined') {
+			if (x + 296 > window.innerWidth) x = Math.max(0, x - 296);
+			if (y - 20 < 0) y = Math.min(y + 40, window.innerHeight - 200);
+		}
+		tooltip = { lens, x, y };
 	}
 
 	function hideTooltip() {
@@ -117,6 +142,8 @@
 		const observer = new ResizeObserver((entries) => {
 			for (const entry of entries) {
 				containerWidth = entry.contentRect.width;
+				scrollWidth = containerEl?.scrollWidth ?? 0;
+				clientWidth = containerEl?.clientWidth ?? 0;
 			}
 		});
 		observer.observe(containerEl);
@@ -124,7 +151,7 @@
 	});
 </script>
 
-<div class="focal-map" bind:this={containerEl}>
+<div class="focal-map" class:has-overflow={hasOverflow} bind:this={containerEl}>
 	<svg
 		width={LABEL_WIDTH + chartWidth + MARGIN.right}
 		height={svgHeight}
@@ -132,10 +159,34 @@
 		aria-label="Focal length range map"
 	>
 		<defs>
-			<clipPath id="label-clip">
+			<clipPath id="{uid}-label-clip">
 				<rect x="0" y="0" width={LABEL_WIDTH - 8} height={svgHeight} />
 			</clipPath>
+			{#if showHeatmapStrip}
+				<linearGradient id="{uid}-coverage-gradient">
+					{#each heatmapStops as stop, i (i)}
+						<stop offset={stop.offset} stop-color="var(--accent)" stop-opacity={stop.opacity} />
+					{/each}
+				</linearGradient>
+			{/if}
 		</defs>
+
+		<!-- Wide / Tele axis labels -->
+		<text
+			x={LABEL_WIDTH + 4}
+			y={MARGIN.top - 28}
+			class="axis-context-label"
+		>
+			WIDE
+		</text>
+		<text
+			x={LABEL_WIDTH + chartWidth - 4}
+			y={MARGIN.top - 28}
+			text-anchor="end"
+			class="axis-context-label"
+		>
+			TELE
+		</text>
 
 		<!-- Axis ticks -->
 		{#each ticks as tick (tick)}
@@ -157,6 +208,33 @@
 				{tick}mm
 			</text>
 		{/each}
+
+		<!-- Coverage heatmap strip -->
+		{#if showHeatmapStrip}
+			<g aria-label="Kit focal coverage density">
+				<desc>Coverage density visualization showing where kit lenses overlap</desc>
+				<rect
+					x={LABEL_WIDTH}
+					y={MARGIN.top - HEATMAP_HEIGHT - 4}
+					width={chartWidth}
+					height={HEATMAP_HEIGHT}
+					rx="4"
+					fill="url(#{uid}-coverage-gradient)"
+				/>
+				<!-- Gap markers -->
+				{#each heatmapGaps as gap, gi (gi)}
+					<line
+						x1={LABEL_WIDTH + gap.x}
+						y1={MARGIN.top - 6}
+						x2={LABEL_WIDTH + gap.x + gap.width}
+						y2={MARGIN.top - 6}
+						stroke="var(--text-faint)"
+						stroke-width="1"
+						stroke-dasharray="4 2"
+					/>
+				{/each}
+			</g>
+		{/if}
 
 		<!-- Lens rows -->
 		{#each lenses as lens, i (lens.slug)}
@@ -193,7 +271,7 @@
 				dominant-baseline="central"
 				class="row-label"
 				class:kit-label={inKit}
-				clip-path="url(#label-clip)"
+				clip-path="url(#{uid}-label-clip)"
 				fill={inKit ? 'var(--kit)' : color}
 			>
 				{focalLabel(lens)}
@@ -206,7 +284,7 @@
 					cy={y + ROW_HEIGHT / 2}
 					r={DOT_RADIUS}
 					fill={color}
-					class="lens-shape"
+					class="lens-shape prime-shape"
 					tabindex="0"
 					role="button"
 					aria-label="{lens.manufacturer} {lens.model}"
@@ -292,6 +370,11 @@
 		overflow-x: auto;
 	}
 
+	.focal-map.has-overflow {
+		mask-image: linear-gradient(to right, black 90%, transparent 100%);
+		-webkit-mask-image: linear-gradient(to right, black 90%, transparent 100%);
+	}
+
 	svg {
 		display: block;
 	}
@@ -302,6 +385,14 @@
 		fill: var(--text-faint);
 	}
 
+	.axis-context-label {
+		font-family: var(--font-sans);
+		font-size: 10px;
+		text-transform: uppercase;
+		letter-spacing: 0.1em;
+		fill: var(--text-faint);
+	}
+
 	.row-label {
 		font-family: var(--font-sans);
 		font-size: calc(12px * var(--font-scale, 1));
@@ -309,12 +400,24 @@
 
 	.lens-shape {
 		cursor: pointer;
-		transition: opacity 150ms ease;
+		opacity: 0.85;
+		transform-box: fill-box;
+		transform-origin: center;
+	}
+
+	@media (prefers-reduced-motion: no-preference) {
+		.lens-shape {
+			transition: opacity 150ms ease, transform 150ms ease;
+		}
 	}
 
 	.lens-shape:hover,
 	.lens-shape:focus-visible {
-		opacity: 0.8;
+		opacity: 1;
+	}
+
+	.lens-shape.prime-shape:hover {
+		transform: scale(1.15);
 	}
 
 	.lens-shape:focus-visible {

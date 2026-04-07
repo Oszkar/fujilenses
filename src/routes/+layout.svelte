@@ -2,6 +2,7 @@
 	import './layout.css';
 	import { goto } from '$app/navigation';
 	import { page } from '$app/state';
+	import { fly, fade } from 'svelte/transition';
 
 	import NavBar from '$lib/components/NavBar.svelte';
 	import Sidebar from '$lib/components/Sidebar.svelte';
@@ -112,9 +113,10 @@
 
 		<!-- Mobile drawer overlay -->
 		{#if drawerOpen}
-			<button type="button" class="drawer-overlay" onclick={closeDrawer} aria-label="Close filters"></button>
+			<button type="button" class="drawer-overlay" onclick={closeDrawer} aria-label="Close filters" transition:fade={{ duration: 250 }}></button>
 			<div
 				class="drawer"
+				transition:fly={{ x: -280, duration: 250 }}
 				role="dialog"
 				aria-modal="true"
 				aria-labelledby="drawer-title"
@@ -145,7 +147,9 @@
 	.app-shell {
 		display: flex;
 		flex-direction: column;
-		min-height: 100vh;
+		height: 100vh;
+		height: 100dvh;
+		overflow: hidden;
 	}
 
 	.app-body {

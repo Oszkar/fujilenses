@@ -73,7 +73,9 @@
 							>
 								<span>{col.label}</span>
 								{#if sort === col.key}
-									<span class="sort-arrow" aria-hidden="true">{sortDir === 'asc' ? '▲' : '▼'}</span>
+									<svg class="sort-chevron" class:desc={sortDir === 'desc'} width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+										<path d="M3 7.5L6 4.5L9 7.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+									</svg>
 								{/if}
 							</button>
 						</th>
@@ -158,18 +160,30 @@
 
 <style>
 	.table-wrap {
-		overflow-x: auto;
+		/* overflow-x only on mobile — on desktop it creates a scroll container
+		   that traps position:sticky and prevents the header from sticking */
+	}
+
+	@media (max-width: 1023px) {
+		.table-wrap {
+			overflow-x: auto;
+		}
 	}
 
 	.lens-table {
 		width: 100%;
-		border-collapse: collapse;
+		border-collapse: separate;
+		border-spacing: 0;
 		font-family: var(--font-sans);
 		font-size: calc(14px * var(--font-scale, 1));
 	}
 
-	/* Header */
+	/* Header — sticky must be on th, not thead (Chrome/Firefox don't support sticky thead) */
 	thead th {
+		position: sticky;
+		top: 0;
+		z-index: 5;
+		background: var(--bg-base);
 		padding: 8px 12px;
 		text-align: left;
 		font-weight: 500;
@@ -180,6 +194,8 @@
 		border-bottom: 1px solid var(--border-subtle);
 		white-space: nowrap;
 		user-select: none;
+		/* Shadow masks scrolled content visible above the stuck header */
+		box-shadow: 0 -24px 0 0 var(--bg-base);
 	}
 
 	.sort-button {
@@ -208,25 +224,44 @@
 		color: var(--accent);
 	}
 
-	.sort-arrow {
-		font-size: 9px;
+	.sort-chevron {
 		margin-left: 4px;
+		flex-shrink: 0;
 	}
 
-	/* Body rows */
+	@media (prefers-reduced-motion: no-preference) {
+		.sort-chevron {
+			transition: transform 200ms ease;
+		}
+	}
+
+	.sort-chevron.desc {
+		transform: rotate(180deg);
+	}
+
+	/* Body rows — border on td, not tr (border-collapse: separate ignores tr borders) */
 	tbody tr {
-		border-bottom: 1px solid var(--border-subtle);
-		transition: background 150ms ease;
+	}
+
+	@media (prefers-reduced-motion: no-preference) {
+		tbody tr {
+			transition: background 150ms ease, transform 150ms ease;
+		}
 	}
 
 	tbody tr:hover {
 		background: var(--bg-elevated);
 	}
 
+	tbody tr.kit-row:hover {
+		transform: translateX(2px);
+	}
+
 	tbody td {
 		padding: 10px 12px;
 		vertical-align: middle;
 		white-space: nowrap;
+		border-bottom: 1px solid var(--border-subtle);
 	}
 
 	/* Kit row highlight */
@@ -293,17 +328,18 @@
 		color: var(--text-faint);
 	}
 
-	/* Spec badges */
+	/* Spec badges — use inline display so the td participates in normal
+	   table row height/border rendering (display:flex breaks border alignment
+	   in border-collapse:separate mode) */
 	.specs {
-		display: flex;
-		gap: 4px;
-		align-items: center;
+		white-space: nowrap;
 	}
 
 	.spec-badge {
 		display: inline-block;
 		padding: 1px 6px;
 		border-radius: 3px;
+		margin-right: 4px;
 		font-family: var(--font-mono);
 		font-weight: 500;
 		font-size: 10px;
@@ -360,14 +396,26 @@
 		font-size: 12px;
 		color: var(--text-faint);
 		cursor: pointer;
+		opacity: 0;
 		transition:
 			color 150ms ease,
-			background 150ms ease;
+			background 150ms ease,
+			opacity 150ms ease;
+	}
+
+	tbody tr:hover .kit-add {
+		opacity: 1;
 	}
 
 	.kit-add:hover {
 		color: var(--text-secondary);
 		background: var(--bg-elevated);
+	}
+
+	@media (max-width: 1023px) {
+		.kit-add {
+			opacity: 1;
+		}
 	}
 
 	.kit-add:focus-visible,
