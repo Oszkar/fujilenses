@@ -15,6 +15,7 @@ export interface Lens {
 	releaseYear: number;
 	weightGrams: number;
 	filterDiameterMm: number;
+	filterViaAdapter?: boolean;
 	approxPriceUSD: number;
 	priceUpdatedYear: number;
 	retailerUrl: string;

@@ -3,7 +3,7 @@
 Lens data lives in JSON files under `src/lib/data/`:
 
 - `xf-lenses.json` — Fujinon XF, XC, and GF mount lenses
-- `third-party-lenses.json` — Sigma, Viltrox, Tamron, and other third-party X-mount lenses
+- `third-party-lenses.json` — Sigma, Viltrox, Tamron, Sirui, Voigtländer, TTArtisan, and other third-party X-mount lenses
 
 ## Adding a Lens
 
@@ -43,6 +43,10 @@ Slugs follow `{mount}-{focal}-f{aperture}-{suffix}`:
 - Suffix: short Fujifilm model suffix if part of official name (`r`, `wr`, `lm`); omit for third-party unless needed for disambiguation
 
 **Slugs must be unique.** The build will fail if duplicates are detected.
+
+## Optional Fields
+
+- `filterViaAdapter` (boolean) — add and set to `true` only when the filter size refers to a threaded adapter included with the lens, not a native front thread (e.g. TTArtisan 10mm F2). Omit otherwise. The UI shows the filter size with an asterisk and a footnote.
 
 ## Fields Not Yet in Use
 

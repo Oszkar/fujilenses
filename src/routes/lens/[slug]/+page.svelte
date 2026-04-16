@@ -150,10 +150,18 @@
 			{#if lens.filterDiameterMm > 0}
 				<div class="spec-item">
 					<span class="spec-label">Filter Size</span>
-					<span class="spec-val">&oslash;{lens.filterDiameterMm}mm</span>
+					<span class="spec-val">
+						&oslash;{lens.filterDiameterMm}mm{#if lens.filterViaAdapter}<span class="spec-asterisk">*</span>{/if}
+					</span>
 				</div>
 			{/if}
 		</div>
+
+		{#if lens.filterViaAdapter}
+			<p class="spec-footnote">
+				*Filter attaches via included adapter, not a native front thread.
+			</p>
+		{/if}
 
 		<button
 			class="kit-btn"
@@ -329,6 +337,19 @@
 
 	.spec-indicator.yes {
 		background: var(--kit);
+	}
+
+	.spec-asterisk {
+		color: var(--text-muted);
+		margin-left: 1px;
+	}
+
+	.spec-footnote {
+		font-family: var(--font-sans);
+		font-size: 11px;
+		color: var(--text-muted);
+		margin-top: 12px;
+		line-height: 1.5;
 	}
 
 	.kit-btn {
