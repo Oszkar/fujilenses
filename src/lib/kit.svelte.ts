@@ -41,3 +41,18 @@ export function toggleKitLens(slug: string): void {
 export function isInKit(slug: string): boolean {
 	return kitSlugs.has(slug);
 }
+
+/** Merge an array of slugs into the kit. Returns the number of newly added lenses. */
+export function mergeIntoKit(slugs: string[]): number {
+	const next = new Set(kitSlugs);
+	let added = 0;
+	for (const slug of slugs) {
+		if (!next.has(slug)) {
+			next.add(slug);
+			added++;
+		}
+	}
+	saveKit(next);
+	kitSlugs = next;
+	return added;
+}

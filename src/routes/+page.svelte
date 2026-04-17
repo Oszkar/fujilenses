@@ -10,10 +10,11 @@
 		filtersToSearchParams,
 		defaultFilters
 	} from '$lib/filters';
-	import { getKitSlugs, toggleKitLens } from '$lib/kit.svelte';
+	import { getKitSlugs, toggleKitLens, mergeIntoKit } from '$lib/kit.svelte';
+	import { getLensBySlug } from '$lib/data';
 	import LensTable from '$lib/components/LensTable.svelte';
 	import FocalMap from '$lib/components/FocalMap.svelte';
-	import type { SortField, FilterState } from '$lib/types';
+	import type { SortField, FilterState, Lens } from '$lib/types';
 
 	let filters = $derived(browser ? parseFiltersFromURL(page.url.searchParams) : defaultFilters);
 	let filteredLenses = $derived(applyFilters(allLenses, filters));
@@ -57,6 +58,87 @@
 			}));
 	});
 
+	// --- Shared kit ---
+	let sharedKitParam = $derived(browser ? page.url.searchParams.get('skit') : null);
+	let sharedKitLenses = $derived.by((): Lens[] => {
+		if (!sharedKitParam) return [];
+		const slugs = sharedKitParam.split(',').filter(Boolean);
+		const lenses: Lens[] = [];
+		for (const slug of slugs) {
+			const lens = getLensBySlug(slug);
+			if (lens) lenses.push(lens);
+		}
+		return lenses;
+	});
+	let isSharedView = $derived(sharedKitLenses.length > 0);
+	let sharedKitSorted = $derived(
+		sortLenses(sharedKitLenses, filters.sort, filters.sortDir)
+	);
+
+	// Filter sizes for shared kit — same logic as own kit
+	let sharedFilterSizes = $derived.by(() => {
+		if (!isSharedView) return [];
+		const sizeMap = new Map<number, { models: string[]; hasAdapter: boolean }>();
+		for (const lens of sharedKitLenses) {
+			if (lens.filterDiameterMm > 0) {
+				const entry = sizeMap.get(lens.filterDiameterMm) ?? { models: [], hasAdapter: false };
+				entry.models.push(lens.model);
+				if (lens.filterViaAdapter) entry.hasAdapter = true;
+				sizeMap.set(lens.filterDiameterMm, entry);
+			}
+		}
+		return [...sizeMap.entries()]
+			.sort((a, b) => a[0] - b[0])
+			.map(([size, { models, hasAdapter }]) => ({
+				size,
+				count: models.length,
+				lenses: models,
+				hasAdapter
+			}));
+	});
+
+	// Share button state
+	let shareCopied = $state(false);
+	let shareCopiedTimer: ReturnType<typeof setTimeout> | null = null;
+
+	function handleShareKit() {
+		if (!browser || kitLenses.length === 0) return;
+		const slugs = kitLenses.map((l) => l.slug).join(',');
+		const url = `${window.location.origin}?skit=${slugs}`;
+		navigator.clipboard.writeText(url).then(() => {
+			shareCopied = true;
+			if (shareCopiedTimer) clearTimeout(shareCopiedTimer);
+			shareCopiedTimer = setTimeout(() => {
+				shareCopied = false;
+			}, 2000);
+		});
+	}
+
+	let importFeedback = $state('');
+	let importFeedbackTimer: ReturnType<typeof setTimeout> | null = null;
+
+	function handleImportSharedKit() {
+		if (sharedKitLenses.length === 0) return;
+		const slugs = sharedKitLenses.map((l) => l.slug);
+		const added = mergeIntoKit(slugs);
+		const already = slugs.length - added;
+		if (added > 0 && already > 0) {
+			importFeedback = `${added} ${added === 1 ? 'lens' : 'lenses'} added (${already} already in kit)`;
+		} else if (added > 0) {
+			importFeedback = `${added} ${added === 1 ? 'lens' : 'lenses'} added to your kit`;
+		} else {
+			importFeedback = 'All lenses already in your kit';
+		}
+		if (importFeedbackTimer) clearTimeout(importFeedbackTimer);
+		importFeedbackTimer = setTimeout(() => {
+			goto('?view=kit', { replaceState: true });
+		}, 1500);
+	}
+
+	function dismissSharedKit() {
+		goto('/', { replaceState: true });
+	}
+
 	function updateFilters(updates: Partial<FilterState>) {
 		const next = { ...filters, ...updates };
 		const params = filtersToSearchParams(next);
@@ -98,12 +180,16 @@
 	});
 
 	let pageTitle = $derived.by(() => {
+		if (isSharedView) return 'Shared Kit';
 		if (filters.view === 'kit') return 'My Kit';
 		if (filters.view === 'map') return 'Focal Range Map';
 		return 'Lens Inventory';
 	});
 
 	let pageSubtitle = $derived.by(() => {
+		if (isSharedView) {
+			return `${sharedKitLenses.length} ${sharedKitLenses.length === 1 ? 'lens' : 'lenses'}`;
+		}
 		if (filters.view === 'kit') {
 			if (kitLenses.length === 0) return '';
 			return `${kitLenses.length} ${kitLenses.length === 1 ? 'lens' : 'lenses'} in your kit`;
@@ -138,125 +224,236 @@
 	<meta name="twitter:card" content="summary_large_image" />
 </svelte:head>
 
-<h1 class="page-heading">{pageTitle}</h1>
-{#if pageSubtitle}
-	<p class="page-subtitle">{pageSubtitle}</p>
-{/if}
-
-{#if filters.view !== 'kit' && focalRange}
-	<div class="active-chips">
-		<button class="active-chip" onclick={clearFocalRange} aria-label="Clear focal range filter">
-			<span class="active-chip-label">Focal {focalRangeLabel}</span>
-			<span class="active-chip-x" aria-hidden="true">×</span>
+{#if !isSharedView && filters.view === 'kit' && kitLenses.length > 0}
+	<div class="page-heading-row">
+		<div>
+			<h1 class="page-heading">{pageTitle}</h1>
+			{#if pageSubtitle}
+				<p class="page-subtitle">{pageSubtitle}</p>
+			{/if}
+		</div>
+		<button class="share-btn" onclick={handleShareKit}>
+			{#if shareCopied}
+				<svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+					<path d="M3 7l3 3 5-6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+				</svg>
+				Link copied!
+			{:else}
+				<svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+					<path d="M5 9.5a2.5 2.5 0 0 1 0-5h1M9 4.5a2.5 2.5 0 0 1 0 5H8" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" />
+					<path d="M4.5 7h5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" />
+				</svg>
+				Share kit
+			{/if}
 		</button>
 	</div>
+{:else}
+	<h1 class="page-heading">{pageTitle}</h1>
+	{#if pageSubtitle}
+		<p class="page-subtitle">{pageSubtitle}</p>
+	{/if}
 {/if}
 
-{#if filters.view === 'kit'}
-	<!-- My Kit view -->
-	{#if kitLenses.length === 0}
-		<div class="empty-state">
-			<div class="empty-content">
-				<svg width="40" height="40" viewBox="0 0 40 40" fill="none" class="empty-icon">
-					<rect x="6" y="10" width="28" height="22" rx="3" stroke="currentColor" stroke-width="1.5" />
-					<path d="M14 10V7a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v3" stroke="currentColor" stroke-width="1.5" />
-					<line x1="20" y1="18" x2="20" y2="26" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
-					<line x1="16" y1="22" x2="24" y2="22" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
-				</svg>
-				<p class="empty-title">Your kit is empty</p>
-				<p class="empty-hint">Add lenses from the Table or Map view to track your gear and see focal coverage.</p>
-			</div>
+{#if isSharedView}
+	<!-- Shared kit view -->
+	<div class="shared-banner">
+		<div class="shared-banner-text">
+			<svg width="16" height="16" viewBox="0 0 16 16" fill="none" class="shared-banner-icon">
+				<path d="M4 8h8M8 4v8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+				<rect x="1" y="1" width="14" height="14" rx="3" stroke="currentColor" stroke-width="1.5" />
+			</svg>
+			<span>Someone shared this kit with you</span>
 		</div>
-	{:else}
-		<!-- Focal coverage map -->
+		<div class="shared-banner-actions">
+			{#if importFeedback}
+				<span class="shared-feedback">{importFeedback}</span>
+			{:else}
+				<button class="shared-btn primary" onclick={handleImportSharedKit}>
+					Add all to my kit
+				</button>
+			{/if}
+			<button class="shared-btn dismiss" onclick={dismissSharedKit} aria-label="Dismiss shared kit">
+				Dismiss
+			</button>
+		</div>
+	</div>
+
+	{#if sharedKitLenses.length >= 2}
 		<section class="kit-section">
 			<h2 class="section-heading">Focal Coverage</h2>
 			<FocalMap
-				lenses={kitLenses}
+				lenses={sharedKitSorted}
 				scale={filters.scale}
 				ffe={filters.ffe}
 				{kitSlugs}
 				onToggleKit={handleToggleKit}
 				showHeatmap={true}
-				onGapClick={handleGapClick}
-			/>
-			{#if kitLenses.length >= 2}
-				<p class="gap-hint">Click a hatched region to browse lenses that cover the gap.</p>
-			{/if}
-		</section>
-
-		<!-- Filter sizes -->
-		{#if kitFilterSizes.length > 0}
-			<section class="kit-section">
-				<h2 class="section-heading">Filter Sizes</h2>
-				<div class="filter-sizes">
-					{#each kitFilterSizes as { size, count, lenses: sizeLenses, hasAdapter } (size)}
-						<div class="filter-size-chip" title={sizeLenses.join(', ')}>
-							<span class="filter-size-value"
-								>&oslash;{size}mm{#if hasAdapter}<span class="filter-size-asterisk"
-										>*</span
-									>{/if}</span
-							>
-							<span class="filter-size-count">{count} {count === 1 ? 'lens' : 'lenses'}</span>
-						</div>
-					{/each}
-				</div>
-				{#if kitFilterSizes.some((s) => s.hasAdapter)}
-					<p class="filter-size-footnote">
-						*Includes a lens that accepts this size only via an adapter, not a native front thread.
-					</p>
-				{/if}
-			</section>
-		{/if}
-
-		<!-- Kit lens list -->
-		<section class="kit-section">
-			<h2 class="section-heading">Lenses</h2>
-			<LensTable
-				lenses={kitLenses}
-				sort={filters.sort}
-				sortDir={filters.sortDir}
-				ffe={filters.ffe}
-				{kitSlugs}
-				onSort={handleSort}
-				onToggleKit={handleToggleKit}
 			/>
 		</section>
 	{/if}
-{:else if filteredLenses.length === 0}
-	<div class="empty-state">
-		<p>No lenses match your filters</p>
-	</div>
-{:else if filters.view === 'map'}
-	<FocalMap
-		lenses={sortedLenses}
-		scale={filters.scale}
-		ffe={filters.ffe}
-		{kitSlugs}
-		onToggleKit={handleToggleKit}
-	/>
+
+	{#if sharedFilterSizes.length > 0}
+		<section class="kit-section">
+			<h2 class="section-heading">Filter Sizes</h2>
+			<div class="filter-sizes">
+				{#each sharedFilterSizes as { size, count, lenses: sizeLenses, hasAdapter } (size)}
+					<div class="filter-size-chip" title={sizeLenses.join(', ')}>
+						<span class="filter-size-value"
+							>&oslash;{size}mm{#if hasAdapter}<span class="filter-size-asterisk">*</span>{/if}</span
+						>
+						<span class="filter-size-count">{count} {count === 1 ? 'lens' : 'lenses'}</span>
+					</div>
+				{/each}
+			</div>
+			{#if sharedFilterSizes.some((s) => s.hasAdapter)}
+				<p class="filter-size-footnote">
+					*Includes a lens that accepts this size only via an adapter, not a native front thread.
+				</p>
+			{/if}
+		</section>
+	{/if}
+
+	<section class="kit-section">
+		<h2 class="section-heading">Lenses</h2>
+		<LensTable
+			lenses={sharedKitSorted}
+			sort={filters.sort}
+			sortDir={filters.sortDir}
+			ffe={filters.ffe}
+			{kitSlugs}
+			onSort={handleSort}
+			onToggleKit={handleToggleKit}
+		/>
+	</section>
 {:else}
-	<LensTable
-		lenses={sortedLenses}
-		sort={filters.sort}
-		sortDir={filters.sortDir}
-		ffe={filters.ffe}
-		{kitSlugs}
-		onSort={handleSort}
-		onToggleKit={handleToggleKit}
-	/>
-	<div class="table-legend">
-		<span class="legend-badge mf">MF</span> Manual Focus
-		<span class="legend-sep">&middot;</span>
-		<span class="legend-badge wr">WR</span> Weather Resistant
-		<span class="legend-sep">&middot;</span>
-		<span class="legend-badge feature">OIS</span> Optical Image Stabilization
-		<span class="legend-sep">&middot;</span>
-		<span class="legend-badge feature">LM</span> Linear Motor
-	</div>
+	<!-- Normal views -->
+	{#if filters.view !== 'kit' && focalRange}
+		<div class="active-chips">
+			<button class="active-chip" onclick={clearFocalRange} aria-label="Clear focal range filter">
+				<span class="active-chip-label">Focal {focalRangeLabel}</span>
+				<span class="active-chip-x" aria-hidden="true">×</span>
+			</button>
+		</div>
+	{/if}
+
+	{#if filters.view === 'kit'}
+		{#if kitLenses.length === 0}
+			<div class="empty-state">
+				<div class="empty-content">
+					<svg width="40" height="40" viewBox="0 0 40 40" fill="none" class="empty-icon">
+						<rect x="6" y="10" width="28" height="22" rx="3" stroke="currentColor" stroke-width="1.5" />
+						<path d="M14 10V7a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v3" stroke="currentColor" stroke-width="1.5" />
+						<line x1="20" y1="18" x2="20" y2="26" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+						<line x1="16" y1="22" x2="24" y2="22" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+					</svg>
+					<p class="empty-title">Your kit is empty</p>
+					<p class="empty-hint">Add lenses from the Table or Map view to track your gear and see focal coverage.</p>
+				</div>
+			</div>
+		{:else}
+			<section class="kit-section">
+				<h2 class="section-heading">Focal Coverage</h2>
+				<FocalMap
+					lenses={kitLenses}
+					scale={filters.scale}
+					ffe={filters.ffe}
+					{kitSlugs}
+					onToggleKit={handleToggleKit}
+					showHeatmap={true}
+					onGapClick={handleGapClick}
+				/>
+				{#if kitLenses.length >= 2}
+					<p class="gap-hint">Click a hatched region to browse lenses that cover the gap.</p>
+				{/if}
+			</section>
+
+			{#if kitFilterSizes.length > 0}
+				<section class="kit-section">
+					<h2 class="section-heading">Filter Sizes</h2>
+					<div class="filter-sizes">
+						{#each kitFilterSizes as { size, count, lenses: sizeLenses, hasAdapter } (size)}
+							<div class="filter-size-chip" title={sizeLenses.join(', ')}>
+								<span class="filter-size-value"
+									>&oslash;{size}mm{#if hasAdapter}<span class="filter-size-asterisk"
+											>*</span
+										>{/if}</span
+								>
+								<span class="filter-size-count">{count} {count === 1 ? 'lens' : 'lenses'}</span>
+							</div>
+						{/each}
+					</div>
+					{#if kitFilterSizes.some((s) => s.hasAdapter)}
+						<p class="filter-size-footnote">
+							*Includes a lens that accepts this size only via an adapter, not a native front thread.
+						</p>
+					{/if}
+				</section>
+			{/if}
+
+			<section class="kit-section">
+				<h2 class="section-heading">Lenses</h2>
+				<LensTable
+					lenses={kitLenses}
+					sort={filters.sort}
+					sortDir={filters.sortDir}
+					ffe={filters.ffe}
+					{kitSlugs}
+					onSort={handleSort}
+					onToggleKit={handleToggleKit}
+				/>
+			</section>
+		{/if}
+	{:else if filteredLenses.length === 0}
+		<div class="empty-state">
+			<p>No lenses match your filters</p>
+		</div>
+	{:else if filters.view === 'map'}
+		<FocalMap
+			lenses={sortedLenses}
+			scale={filters.scale}
+			ffe={filters.ffe}
+			{kitSlugs}
+			onToggleKit={handleToggleKit}
+		/>
+	{:else}
+		<LensTable
+			lenses={sortedLenses}
+			sort={filters.sort}
+			sortDir={filters.sortDir}
+			ffe={filters.ffe}
+			{kitSlugs}
+			onSort={handleSort}
+			onToggleKit={handleToggleKit}
+		/>
+		<div class="table-legend">
+			<span class="legend-badge mf">MF</span> Manual Focus
+			<span class="legend-sep">&middot;</span>
+			<span class="legend-badge wr">WR</span> Weather Resistant
+			<span class="legend-sep">&middot;</span>
+			<span class="legend-badge feature">OIS</span> Optical Image Stabilization
+			<span class="legend-sep">&middot;</span>
+			<span class="legend-badge feature">LM</span> Linear Motor
+		</div>
+	{/if}
 {/if}
 
 <style>
+	.page-heading-row {
+		display: flex;
+		align-items: flex-start;
+		justify-content: space-between;
+		gap: 16px;
+		margin-bottom: 24px;
+	}
+
+	.page-heading-row .page-heading {
+		margin-bottom: 4px;
+	}
+
+	.page-heading-row .page-subtitle {
+		margin-bottom: 0;
+	}
+
 	.page-heading {
 		font-family: var(--font-sans);
 		font-weight: 600;
@@ -425,6 +622,135 @@
 		color: var(--text-muted);
 		margin-top: 10px;
 		line-height: 1.5;
+	}
+
+	/* Shared kit banner */
+	.shared-banner {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 16px;
+		padding: 12px 16px;
+		border-radius: 8px;
+		background: color-mix(in srgb, var(--accent) 8%, transparent);
+		border: 1px solid color-mix(in srgb, var(--accent) 20%, transparent);
+		margin-bottom: 24px;
+	}
+
+	.shared-banner-text {
+		display: flex;
+		align-items: center;
+		gap: 10px;
+		font-family: var(--font-sans);
+		font-size: 13px;
+		font-weight: 500;
+		color: var(--text-primary);
+	}
+
+	.shared-banner-icon {
+		color: var(--accent);
+		flex-shrink: 0;
+	}
+
+	.shared-banner-actions {
+		display: flex;
+		align-items: center;
+		gap: 8px;
+		flex-shrink: 0;
+	}
+
+	.shared-btn {
+		padding: 6px 14px;
+		border-radius: 6px;
+		font-family: var(--font-sans);
+		font-size: 12px;
+		font-weight: 500;
+		cursor: pointer;
+		border: none;
+		white-space: nowrap;
+	}
+
+	.shared-btn.primary {
+		background: var(--accent);
+		color: var(--bg-base);
+	}
+
+	@media (prefers-reduced-motion: no-preference) {
+		.shared-btn {
+			transition: opacity 150ms ease, background 150ms ease;
+		}
+	}
+
+	.shared-btn.primary:hover {
+		opacity: 0.9;
+	}
+
+	.shared-btn.primary:focus-visible {
+		outline: 2px solid var(--accent);
+		outline-offset: 2px;
+	}
+
+	.shared-btn.dismiss {
+		background: transparent;
+		color: var(--text-muted);
+	}
+
+	.shared-btn.dismiss:hover {
+		color: var(--text-primary);
+		background: color-mix(in srgb, var(--text-muted) 10%, transparent);
+	}
+
+	.shared-btn.dismiss:focus-visible {
+		outline: 2px solid var(--accent);
+		outline-offset: 2px;
+	}
+
+	.shared-feedback {
+		font-family: var(--font-sans);
+		font-size: 12px;
+		font-weight: 500;
+		color: var(--kit);
+	}
+
+	@media (max-width: 1023px) {
+		.shared-banner {
+			flex-direction: column;
+			align-items: flex-start;
+		}
+	}
+
+	/* Share button (Kit view header) */
+	.share-btn {
+		display: inline-flex;
+		align-items: center;
+		gap: 6px;
+		padding: 5px 12px;
+		border-radius: 6px;
+		border: 1px solid var(--border-default);
+		background: transparent;
+		color: var(--text-secondary);
+		font-family: var(--font-sans);
+		font-size: 11px;
+		font-weight: 500;
+		cursor: pointer;
+		white-space: nowrap;
+	}
+
+	@media (prefers-reduced-motion: no-preference) {
+		.share-btn {
+			transition: color 150ms ease, border-color 150ms ease, background 150ms ease;
+		}
+	}
+
+	.share-btn:hover {
+		color: var(--text-primary);
+		border-color: var(--text-muted);
+		background: var(--bg-elevated);
+	}
+
+	.share-btn:focus-visible {
+		outline: 2px solid var(--accent);
+		outline-offset: 2px;
 	}
 
 	/* Kit sections */
