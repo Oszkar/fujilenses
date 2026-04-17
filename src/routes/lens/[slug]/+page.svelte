@@ -3,10 +3,20 @@
 	import { manufacturerColors, isNewLens } from '$lib/data';
 	import { getFFMultiplier } from '$lib/filters';
 	import { getKitSlugs, toggleKitLens } from '$lib/kit.svelte';
+	import { browser } from '$app/environment';
+	import { onMount } from 'svelte';
 
 	let { data }: { data: PageData } = $props();
 	let lens = $derived(data.lens);
 	let similarLenses = $derived(data.similarLenses);
+	let hasReviews = $derived(lens.reviews && lens.reviews.length > 0);
+
+	// Register lite-youtube web component (client-side only)
+	onMount(async () => {
+		if (!customElements.get('lite-youtube')) {
+			await import('lite-youtube-embed');
+		}
+	});
 	let kitSlugs = $derived(getKitSlugs());
 	let inKit = $derived(kitSlugs.has(lens.slug));
 
@@ -36,6 +46,9 @@
 </script>
 
 <svelte:head>
+	{#if hasReviews}
+		<link rel="stylesheet" href="/lite-yt-embed.css" />
+	{/if}
 	<title>{lens.model} — FujiLenses</title>
 	<meta
 		name="description"
@@ -177,6 +190,23 @@
 		</button>
 	</div>
 </div>
+
+{#if hasReviews}
+	<section class="reviews-section">
+		<h2 class="reviews-heading">Reviews</h2>
+		<div class="reviews-list">
+			{#each lens.reviews as review (review.videoId)}
+				<div class="review-card">
+					<lite-youtube videoid={review.videoId} playlabel="Play: {review.title}"></lite-youtube>
+					<div class="review-meta">
+						<span class="review-title">{review.title}</span>
+						<span class="review-channel">{review.channel}</span>
+					</div>
+				</div>
+			{/each}
+		</div>
+	</section>
+{/if}
 
 {#if similarLenses.length > 0}
 	<section class="also-consider">
@@ -443,6 +473,22 @@
 			height: 200px;
 		}
 
+		.reviews-list {
+			display: flex;
+			overflow-x: auto;
+			scroll-snap-type: x mandatory;
+			-webkit-overflow-scrolling: touch;
+			gap: 12px;
+			grid-template-columns: none;
+		}
+
+		.review-card {
+			min-width: 280px;
+			max-width: 320px;
+			flex-shrink: 0;
+			scroll-snap-align: start;
+		}
+
 		.also-list {
 			display: flex;
 			overflow-x: auto;
@@ -458,6 +504,69 @@
 			flex-shrink: 0;
 			scroll-snap-align: start;
 		}
+	}
+
+	/* Reviews */
+	.reviews-section {
+		margin-top: 48px;
+		padding-top: 32px;
+		border-top: 1px solid var(--border-subtle);
+	}
+
+	.reviews-heading {
+		font-family: var(--font-sans);
+		font-weight: 600;
+		font-size: 16px;
+		color: var(--text-primary);
+		margin: 0 0 16px 0;
+	}
+
+	.reviews-list {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+		gap: 16px;
+	}
+
+	.review-card {
+		display: flex;
+		flex-direction: column;
+		gap: 10px;
+		border-radius: 8px;
+		overflow: hidden;
+		background: var(--bg-surface);
+		border: 1px solid var(--border-subtle);
+	}
+
+	.review-card :global(lite-youtube) {
+		width: 100%;
+		max-width: 100%;
+		aspect-ratio: 16 / 9;
+		border-radius: 0;
+	}
+
+	.review-meta {
+		display: flex;
+		flex-direction: column;
+		gap: 2px;
+		padding: 0 12px 12px;
+	}
+
+	.review-title {
+		font-family: var(--font-sans);
+		font-weight: 500;
+		font-size: 13px;
+		color: var(--text-primary);
+		line-height: 1.3;
+		display: -webkit-box;
+		-webkit-line-clamp: 2;
+		-webkit-box-orient: vertical;
+		overflow: hidden;
+	}
+
+	.review-channel {
+		font-family: var(--font-sans);
+		font-size: 11px;
+		color: var(--text-muted);
 	}
 
 	/* Also Consider */

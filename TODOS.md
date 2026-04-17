@@ -29,6 +29,11 @@
 **Size:** S — link that builds a URL with `fmin`/`fmax` centered on the lens's focal length.
 **Depends on:** "Also Consider" section (shipped), gap-to-browse fmin/fmax filtering (shipped).
 
+### Affiliate / purchase links (deferred until traffic justifies)
+**What:** Populate `retailerUrl` and `approxPriceUSD` fields. Add "Check price" button on detail pages and optional price column in table. Use Geniuslink for geo-targeted affiliate links (routes visitors to their country's Amazon/B&H store).
+**Why deferred:** At ~7 visitors/week (as of 2026-04-17), affiliate revenue would be near-zero even with perfect conversion. Affiliate links don't drive traffic — they monetize it. Better to invest in traffic-driving features first (YouTube embeds, comparison view, quiz for SEO). Revisit when traffic reaches 100+/week, at which point Geniuslink setup is a one-afternoon task since data fields are already stubbed.
+**Recommended approach when ready:** Geniuslink ($6/mo) + Amazon Associates + B&H affiliate program. Best geo-targeting, 0% commission share. Amazon PA-API deprecated April 2026 — use Creators API instead.
+
 ### Named shared kits
 **What:** Add optional `name` URL param to shareable kit URLs (`?skit=slug1,slug2&name=Travel+kit`). Display the name in the shared kit banner heading instead of generic "Shared Kit".
 **Why:** Lets users title their kit shares ("Bob's travel setup", "Portrait kit under $2k"), adds personality. Deferred from initial shareable-kit implementation to keep scope tight.

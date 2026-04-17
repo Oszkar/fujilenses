@@ -16,6 +16,7 @@ export interface Lens {
 	weightGrams: number;
 	filterDiameterMm: number;
 	filterViaAdapter?: boolean;
+	reviews?: { videoId: string; title: string; channel: string }[];
 	approxPriceUSD: number;
 	priceUpdatedYear: number;
 	retailerUrl: string;

@@ -396,7 +396,10 @@
     "priceUpdatedYear": 0,
     "retailerUrl": "",
     "autofocus": true,
-    "filterDiameterMm": 62
+    "filterDiameterMm": 62,
+    "reviews": [
+      { "videoId": "L7CkQ9aMlzo", "title": "Fujinon XF 56mm F1.2 R Review", "channel": "Dustin Abbott" }
+    ]
   },
   {
     "slug": "xf-56mm-f12-apd",
