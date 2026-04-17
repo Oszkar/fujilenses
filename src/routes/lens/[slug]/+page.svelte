@@ -6,6 +6,7 @@
 
 	let { data }: { data: PageData } = $props();
 	let lens = $derived(data.lens);
+	let similarLenses = $derived(data.similarLenses);
 	let kitSlugs = $derived(getKitSlugs());
 	let inKit = $derived(kitSlugs.has(lens.slug));
 
@@ -176,6 +177,36 @@
 		</button>
 	</div>
 </div>
+
+{#if similarLenses.length > 0}
+	<section class="also-consider">
+		<h2 class="also-heading">Also Consider</h2>
+		<div class="also-list">
+			{#each similarLenses as similar (similar.slug)}
+				{@const simColor = manufacturerColors[similar.manufacturer] ?? 'var(--text-muted)'}
+				{@const simFocal = similar.minFocalLength === similar.maxFocalLength
+					? `${similar.minFocalLength}mm`
+					: `${similar.minFocalLength}–${similar.maxFocalLength}mm`}
+				<a href="/lens/{similar.slug}" class="also-card">
+					<span
+						class="also-mfr"
+						style="background: {simColor}; color: var(--bg-base);"
+					>
+						{similar.manufacturer}
+					</span>
+					<span class="also-model">{similar.model}</span>
+					<span class="also-specs">
+						<span>{simFocal}</span>
+						<span class="also-sep">&middot;</span>
+						<span>f/{similar.maxAperture}</span>
+						<span class="also-sep">&middot;</span>
+						<span>{similar.weightGrams}g</span>
+					</span>
+				</a>
+			{/each}
+		</div>
+	</section>
+{/if}
 
 <style>
 	.back-link {
@@ -411,5 +442,90 @@
 		.photo-placeholder {
 			height: 200px;
 		}
+
+		.also-list {
+			grid-template-columns: 1fr;
+		}
+	}
+
+	/* Also Consider */
+	.also-consider {
+		margin-top: 48px;
+		padding-top: 32px;
+		border-top: 1px solid var(--border-subtle);
+	}
+
+	.also-heading {
+		font-family: var(--font-sans);
+		font-weight: 600;
+		font-size: 16px;
+		color: var(--text-primary);
+		margin: 0 0 16px 0;
+	}
+
+	.also-list {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 12px;
+	}
+
+	.also-card {
+		display: flex;
+		flex-direction: column;
+		gap: 8px;
+		padding: 16px;
+		border-radius: 8px;
+		background: var(--bg-surface);
+		border: 1px solid var(--border-subtle);
+		text-decoration: none;
+		color: inherit;
+	}
+
+	@media (prefers-reduced-motion: no-preference) {
+		.also-card {
+			transition: border-color 150ms ease, background 150ms ease;
+		}
+	}
+
+	.also-card:hover {
+		border-color: var(--accent);
+		background: var(--bg-elevated);
+	}
+
+	.also-card:focus-visible {
+		outline: 2px solid var(--accent);
+		outline-offset: 2px;
+	}
+
+	.also-mfr {
+		display: inline-block;
+		align-self: flex-start;
+		padding: 2px 8px;
+		border-radius: 3px;
+		font-family: var(--font-mono);
+		font-weight: 500;
+		font-size: 10px;
+		text-transform: uppercase;
+		letter-spacing: 0.02em;
+	}
+
+	.also-model {
+		font-family: var(--font-sans);
+		font-weight: 500;
+		font-size: 14px;
+		color: var(--text-primary);
+	}
+
+	.also-specs {
+		display: flex;
+		align-items: center;
+		gap: 6px;
+		font-family: var(--font-mono);
+		font-size: 12px;
+		color: var(--text-muted);
+	}
+
+	.also-sep {
+		opacity: 0.4;
 	}
 </style>

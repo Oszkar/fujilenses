@@ -13,6 +13,22 @@
 **Design unknowns:** How to present a combination (stacked rows? a secondary tab?) without bloating the Table. Budget/weight ranking once price data is populated.
 **Depends on:** gap-to-browse v1 (shipped).
 
+### Filter-diameter-match filter
+**What:** Add a sidebar toggle: "Show only lenses matching my kit's filter threads." Computes the distinct filter sizes in the user's kit and filters the lens list to only those sizes.
+**Why:** Photographers buy to avoid carrying extra step-up rings. A user with 67mm filters immediately wants to know which other lenses fit.
+**Size:** S — data exists (`filterDiameterMm`), pure UI glue.
+
+### Kit weight budget
+**What:** Show a running weight total in the Kit tab header. Optionally let user set a "travel target" (e.g. 1500g) that visually flags when the kit exceeds it.
+**Why:** Travel and street photographers constantly trade reach for pack weight.
+**Size:** S — all weight data present.
+
+### "See all similar" link on lens detail pages
+**What:** Add a "See all similar" link below the "Also Consider" section that navigates to the Table view pre-filtered to a focal range around the current lens (reuses existing `fmin`/`fmax` params).
+**Why:** "Also Consider" shows the top 3 most similar lenses. Users who want to explore more options need a path to the full filtered catalog without manually setting filters.
+**Size:** S — link that builds a URL with `fmin`/`fmax` centered on the lens's focal length.
+**Depends on:** "Also Consider" section (shipped), gap-to-browse fmin/fmax filtering (shipped).
+
 ### Named shared kits
 **What:** Add optional `name` URL param to shareable kit URLs (`?skit=slug1,slug2&name=Travel+kit`). Display the name in the shared kit banner heading instead of generic "Shared Kit".
 **Why:** Lets users title their kit shares ("Bob's travel setup", "Portrait kit under $2k"), adds personality. Deferred from initial shareable-kit implementation to keep scope tight.
