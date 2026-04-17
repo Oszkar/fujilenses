@@ -17,7 +17,14 @@
 
 	let filters = $derived(browser ? parseFiltersFromURL(page.url.searchParams) : defaultFilters);
 	let filteredLenses = $derived(applyFilters(allLenses, filters));
-	let sortedLenses = $derived(sortLenses(filteredLenses, filters.sort, filters.sortDir));
+	let focalRange = $derived(
+		filters.fmin !== null && filters.fmax !== null
+			? { fmin: filters.fmin, fmax: filters.fmax }
+			: null
+	);
+	let sortedLenses = $derived(
+		sortLenses(filteredLenses, filters.sort, filters.sortDir, focalRange)
+	);
 	let kitSlugs = $derived(getKitSlugs());
 
 	// Kit view: filter all lenses to kit only, then apply sort
@@ -69,6 +76,27 @@
 		toggleKitLens(slug);
 	}
 
+	// XF only for now — heatmap gaps are computed in XF space (FFE mult 1.5× when FFE on).
+	// When FFE is on, gap focals are equiv mm; convert back to native before storing.
+	function handleGapClick(gap: { focalStart: number; focalEnd: number }) {
+		const mult = filters.ffe ? 1.5 : 1;
+		const fmin = Math.round(gap.focalStart / mult);
+		const fmax = Math.round(gap.focalEnd / mult);
+		updateFilters({ fmin, fmax, view: 'table' });
+	}
+
+	function clearFocalRange() {
+		updateFilters({ fmin: null, fmax: null });
+	}
+
+	let focalRangeLabel = $derived.by(() => {
+		if (filters.fmin === null || filters.fmax === null) return '';
+		if (filters.ffe) {
+			return `${Math.round(filters.fmin * 1.5)}–${Math.round(filters.fmax * 1.5)}mm equiv`;
+		}
+		return `${filters.fmin}–${filters.fmax}mm`;
+	});
+
 	let pageTitle = $derived.by(() => {
 		if (filters.view === 'kit') return 'My Kit';
 		if (filters.view === 'map') return 'Focal Range Map';
@@ -115,6 +143,15 @@
 	<p class="page-subtitle">{pageSubtitle}</p>
 {/if}
 
+{#if filters.view !== 'kit' && focalRange}
+	<div class="active-chips">
+		<button class="active-chip" onclick={clearFocalRange} aria-label="Clear focal range filter">
+			<span class="active-chip-label">Focal {focalRangeLabel}</span>
+			<span class="active-chip-x" aria-hidden="true">×</span>
+		</button>
+	</div>
+{/if}
+
 {#if filters.view === 'kit'}
 	<!-- My Kit view -->
 	{#if kitLenses.length === 0}
@@ -141,7 +178,11 @@
 				{kitSlugs}
 				onToggleKit={handleToggleKit}
 				showHeatmap={true}
+				onGapClick={handleGapClick}
 			/>
+			{#if kitLenses.length >= 2}
+				<p class="gap-hint">Click a hatched region to browse lenses that cover the gap.</p>
+			{/if}
 		</section>
 
 		<!-- Filter sizes -->
@@ -231,6 +272,61 @@
 		margin: 0 0 24px 0;
 	}
 
+	.active-chips {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 8px;
+		margin: 0 0 16px 0;
+		position: relative;
+		z-index: 6;
+	}
+
+	.active-chip {
+		display: inline-flex;
+		align-items: center;
+		gap: 8px;
+		padding: 6px 8px 6px 14px;
+		border-radius: 999px;
+		background: color-mix(in srgb, var(--accent) 12%, transparent);
+		border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+		color: var(--accent);
+		font-family: var(--font-sans);
+		font-size: 12px;
+		font-weight: 500;
+		cursor: pointer;
+		min-height: 34px;
+	}
+
+	@media (prefers-reduced-motion: no-preference) {
+		.active-chip {
+			transition: background 150ms ease, border-color 150ms ease;
+		}
+	}
+
+	.active-chip:hover,
+	.active-chip:focus-visible {
+		background: color-mix(in srgb, var(--accent) 20%, transparent);
+		border-color: color-mix(in srgb, var(--accent) 50%, transparent);
+	}
+
+	.active-chip:focus-visible {
+		outline: 2px solid var(--accent);
+		outline-offset: 2px;
+	}
+
+	.active-chip-x {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: 20px;
+		height: 20px;
+		border-radius: 50%;
+		font-size: 14px;
+		line-height: 1;
+		background: color-mix(in srgb, var(--accent) 25%, transparent);
+	}
+
+
 	@media (max-width: 1023px) {
 		.page-subtitle {
 			padding-bottom: 16px;
@@ -309,6 +405,13 @@
 		font-family: var(--font-sans);
 		font-size: 11px;
 		color: var(--text-muted);
+	}
+
+	.gap-hint {
+		font-family: var(--font-sans);
+		font-size: 11px;
+		color: var(--text-muted);
+		margin: 8px 0 0 0;
 	}
 
 	.filter-size-asterisk {

@@ -15,6 +15,8 @@ export interface GradientStop {
 export interface GapMarker {
 	x: number; // pixel position
 	width: number; // pixel width
+	focalStart: number;
+	focalEnd: number;
 }
 
 // Bumped up from 0.08/0.20/0.35 — the original values were too subtle
@@ -135,7 +137,7 @@ export function detectGaps(
 			const x = scaleFunc(seg.focalStart);
 			const width = scaleFunc(seg.focalEnd) - x;
 			if (width >= minGapPx) {
-				gaps.push({ x, width });
+				gaps.push({ x, width, focalStart: seg.focalStart, focalEnd: seg.focalEnd });
 			}
 		}
 	}

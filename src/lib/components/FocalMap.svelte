@@ -14,9 +14,18 @@
 		kitSlugs: Set<string>;
 		onToggleKit: (slug: string) => void;
 		showHeatmap?: boolean;
+		onGapClick?: (gap: { focalStart: number; focalEnd: number }) => void;
 	}
 
-	let { lenses, scale, ffe, kitSlugs, onToggleKit, showHeatmap = false }: Props = $props();
+	let {
+		lenses,
+		scale,
+		ffe,
+		kitSlugs,
+		onToggleKit,
+		showHeatmap = false,
+		onGapClick
+	}: Props = $props();
 
 	// Component-scoped unique ID prefix
 	const uid = Math.random().toString(36).slice(2, 8);
@@ -162,6 +171,15 @@
 			<clipPath id="{uid}-label-clip">
 				<rect x="0" y="0" width={LABEL_WIDTH - 8} height={svgHeight} />
 			</clipPath>
+			<pattern
+				id="{uid}-gap-stripes"
+				width="6"
+				height="6"
+				patternUnits="userSpaceOnUse"
+				patternTransform="rotate(45)"
+			>
+				<line x1="0" y1="0" x2="0" y2="6" stroke="var(--text-faint)" stroke-width="1" stroke-opacity="0.3" />
+			</pattern>
 			{#if showHeatmapStrip}
 				<linearGradient id="{uid}-coverage-gradient">
 					{#each heatmapStops as stop, i (i)}
@@ -223,15 +241,80 @@
 				/>
 				<!-- Gap markers -->
 				{#each heatmapGaps as gap, gi (gi)}
-					<line
-						x1={LABEL_WIDTH + gap.x}
-						y1={MARGIN.top - 6}
-						x2={LABEL_WIDTH + gap.x + gap.width}
-						y2={MARGIN.top - 6}
-						stroke="var(--text-faint)"
-						stroke-width="1"
-						stroke-dasharray="4 2"
-					/>
+					{@const gapMin = Math.round(gap.focalStart)}
+					{@const gapMax = Math.round(gap.focalEnd)}
+					{@const gapCenterX = LABEL_WIDTH + gap.x + gap.width / 2}
+					{@const gapTopY = MARGIN.top - HEATMAP_HEIGHT - 4}
+					{#if onGapClick}
+						<g
+							class="gap-marker interactive"
+							role="button"
+							tabindex="0"
+							aria-label="Fill {gapMin}–{gapMax}mm gap: show lenses covering this range"
+							onclick={() =>
+								onGapClick?.({ focalStart: gap.focalStart, focalEnd: gap.focalEnd })}
+							onkeydown={(e) => {
+								if (e.key === 'Enter' || e.key === ' ') {
+									e.preventDefault();
+									onGapClick?.({ focalStart: gap.focalStart, focalEnd: gap.focalEnd });
+								}
+							}}
+						>
+							<!-- Striped background fill -->
+							<rect
+								x={LABEL_WIDTH + gap.x}
+								y={gapTopY}
+								width={gap.width}
+								height={HEATMAP_HEIGHT}
+								rx="4"
+								fill="url(#{uid}-gap-stripes)"
+								class="gap-fill"
+							/>
+							<!-- Hover/focus highlight overlay -->
+							<rect
+								x={LABEL_WIDTH + gap.x}
+								y={gapTopY}
+								width={gap.width}
+								height={HEATMAP_HEIGHT}
+								rx="4"
+								fill="transparent"
+								class="gap-hit"
+							/>
+							<!-- Border -->
+							<rect
+								x={LABEL_WIDTH + gap.x + 0.5}
+								y={gapTopY + 0.5}
+								width={gap.width - 1}
+								height={HEATMAP_HEIGHT - 1}
+								rx="3.5"
+								fill="none"
+								stroke="var(--text-faint)"
+								stroke-width="1"
+								stroke-dasharray="4 2"
+								class="gap-border"
+							/>
+						</g>
+					{:else}
+						<rect
+							x={LABEL_WIDTH + gap.x}
+							y={gapTopY}
+							width={gap.width}
+							height={HEATMAP_HEIGHT}
+							rx="4"
+							fill="url(#{uid}-gap-stripes)"
+						/>
+						<rect
+							x={LABEL_WIDTH + gap.x + 0.5}
+							y={gapTopY + 0.5}
+							width={gap.width - 1}
+							height={HEATMAP_HEIGHT - 1}
+							rx="3.5"
+							fill="none"
+							stroke="var(--text-faint)"
+							stroke-width="1"
+							stroke-dasharray="4 2"
+						/>
+					{/if}
 				{/each}
 			</g>
 		{/if}
@@ -423,6 +506,41 @@
 	.lens-shape:focus-visible {
 		outline: 2px solid var(--accent);
 		outline-offset: 2px;
+	}
+
+	/* Gap marker */
+	.gap-marker.interactive {
+		cursor: pointer;
+	}
+
+	.gap-marker .gap-border {
+		stroke: var(--text-faint);
+	}
+
+	@media (prefers-reduced-motion: no-preference) {
+		.gap-marker .gap-border {
+			transition: stroke 150ms ease;
+		}
+		.gap-marker .gap-hit {
+			transition: fill 150ms ease;
+		}
+	}
+
+	.gap-marker.interactive:hover .gap-hit,
+	.gap-marker.interactive:focus-visible .gap-hit {
+		fill: color-mix(in srgb, var(--accent) 15%, transparent);
+	}
+
+	.gap-marker.interactive:hover .gap-border,
+	.gap-marker.interactive:focus-visible .gap-border {
+		stroke: var(--accent);
+		stroke-dasharray: none;
+	}
+
+	.gap-marker.interactive:focus-visible {
+		outline: 2px solid var(--accent);
+		outline-offset: 2px;
+		border-radius: 4px;
 	}
 
 	/* Tooltip */

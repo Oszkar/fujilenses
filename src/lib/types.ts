@@ -40,6 +40,8 @@ export interface FilterState {
 	ar: boolean;
 	af: boolean;
 	ffe: boolean;
+	fmin: number | null;
+	fmax: number | null;
 	sort: SortField;
 	sortDir: SortDirection;
 	scale: ScaleType;

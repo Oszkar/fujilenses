@@ -44,7 +44,9 @@
 			wr: false,
 			ois: false,
 			ar: false,
-			af: false
+			af: false,
+			fmin: null,
+			fmax: null
 		});
 	}
 </script>
