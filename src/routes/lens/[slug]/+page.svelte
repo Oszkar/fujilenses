@@ -444,7 +444,19 @@
 		}
 
 		.also-list {
-			grid-template-columns: 1fr;
+			display: flex;
+			overflow-x: auto;
+			scroll-snap-type: x mandatory;
+			-webkit-overflow-scrolling: touch;
+			gap: 12px;
+			padding-bottom: 4px;
+		}
+
+		.also-card {
+			min-width: 220px;
+			max-width: 280px;
+			flex-shrink: 0;
+			scroll-snap-align: start;
 		}
 	}
 
@@ -453,6 +465,7 @@
 		margin-top: 48px;
 		padding-top: 32px;
 		border-top: 1px solid var(--border-subtle);
+		overflow: hidden;
 	}
 
 	.also-heading {
