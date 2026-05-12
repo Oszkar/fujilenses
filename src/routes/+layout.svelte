@@ -3,6 +3,7 @@
 	import { goto } from '$app/navigation';
 	import { page } from '$app/state';
 	import { fly, fade } from 'svelte/transition';
+	import { injectSpeedInsights } from '@vercel/speed-insights/sveltekit';
 
 	import NavBar from '$lib/components/NavBar.svelte';
 	import Sidebar from '$lib/components/Sidebar.svelte';
@@ -12,6 +13,8 @@
 	import { parseFiltersFromURL, filtersToSearchParams, defaultFilters } from '$lib/filters';
 	import { browser } from '$app/environment';
 	import type { FilterState, ViewMode } from '$lib/types';
+
+	injectSpeedInsights();
 
 	let { children } = $props();
 
