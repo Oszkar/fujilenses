@@ -217,20 +217,15 @@
 	<div class="section">
 		<h3 class="section-header">Theme</h3>
 		<div class="segmented">
-			<button
-				class="seg-btn"
-				class:active={getTheme() === 'dark'}
-				onclick={() => setTheme('dark')}
-			>
-				Dark
-			</button>
-			<button
-				class="seg-btn"
-				class:active={getTheme() === 'light'}
-				onclick={() => setTheme('light')}
-			>
-				Light
-			</button>
+			{#each [{ value: 'auto', label: 'Auto' }, { value: 'dark', label: 'Dark' }, { value: 'light', label: 'Light' }] as opt (opt.value)}
+				<button
+					class="seg-btn"
+					class:active={getTheme() === opt.value}
+					onclick={() => setTheme(opt.value as Theme)}
+				>
+					{opt.label}
+				</button>
+			{/each}
 		</div>
 	</div>
 
