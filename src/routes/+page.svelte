@@ -204,6 +204,15 @@
 				: `${filteredLenses.length} of ${allLenses.length} lenses matching current filters`;
 		return filters.view === 'map' ? `${scaleLabel} · ${countLabel}` : countLabel;
 	});
+
+	// Split the subtitle so numeric runs render in mono + tabular-nums (result-count treatment).
+	let subtitleSegments = $derived.by((): { text: string; mono: boolean }[] => {
+		if (!pageSubtitle) return [];
+		return pageSubtitle
+			.split(/(\d+)/)
+			.filter((part) => part !== '')
+			.map((part) => ({ text: part, mono: /^\d+$/.test(part) }));
+	});
 </script>
 
 <svelte:head>
@@ -229,7 +238,9 @@
 		<div>
 			<h1 class="page-heading">{pageTitle}</h1>
 			{#if pageSubtitle}
-				<p class="page-subtitle">{pageSubtitle}</p>
+				<p class="page-subtitle">
+					{#each subtitleSegments as seg}{#if seg.mono}<span class="result-num">{seg.text}</span>{:else}{seg.text}{/if}{/each}
+				</p>
 			{/if}
 		</div>
 		<button class="share-btn" onclick={handleShareKit}>
@@ -250,7 +261,9 @@
 {:else}
 	<h1 class="page-heading">{pageTitle}</h1>
 	{#if pageSubtitle}
-		<p class="page-subtitle">{pageSubtitle}</p>
+		<p class="page-subtitle">
+			{#each subtitleSegments as seg}{#if seg.mono}<span class="result-num">{seg.text}</span>{:else}{seg.text}{/if}{/each}
+		</p>
 	{/if}
 {/if}
 
@@ -347,7 +360,7 @@
 						<line x1="16" y1="22" x2="24" y2="22" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
 					</svg>
 					<p class="empty-title">Your kit is empty</p>
-					<p class="empty-hint">Add lenses from the Table or Map view to track your gear and see focal coverage.</p>
+					<p class="empty-hint">Add lenses from the Table or Map to map your focal coverage and spot the gaps.</p>
 				</div>
 			</div>
 		{:else}
@@ -442,12 +455,12 @@
 		display: flex;
 		align-items: flex-start;
 		justify-content: space-between;
-		gap: 16px;
-		margin-bottom: 24px;
+		gap: var(--space-4);
+		margin-bottom: var(--space-6);
 	}
 
 	.page-heading-row .page-heading {
-		margin-bottom: 4px;
+		margin-bottom: var(--space-1);
 	}
 
 	.page-heading-row .page-subtitle {
@@ -456,24 +469,29 @@
 
 	.page-heading {
 		font-family: var(--font-sans);
-		font-weight: 600;
-		font-size: 22px;
+		font-weight: var(--weight-semibold);
+		font-size: calc(var(--text-2xl) * var(--font-scale, 1));
 		color: var(--text-primary);
-		margin: 0 0 4px 0;
+		margin: 0 0 var(--space-1) 0;
 	}
 
 	.page-subtitle {
 		font-family: var(--font-sans);
-		font-size: 13px;
+		font-size: calc(var(--text-base) * var(--font-scale, 1));
 		color: var(--text-muted);
-		margin: 0 0 24px 0;
+		margin: 0 0 var(--space-6) 0;
+	}
+
+	.page-subtitle .result-num {
+		font-family: var(--font-mono);
+		font-variant-numeric: tabular-nums;
 	}
 
 	.active-chips {
 		display: flex;
 		flex-wrap: wrap;
-		gap: 8px;
-		margin: 0 0 16px 0;
+		gap: var(--space-2);
+		margin: 0 0 var(--space-4) 0;
 		position: relative;
 		z-index: 6;
 	}
@@ -481,22 +499,24 @@
 	.active-chip {
 		display: inline-flex;
 		align-items: center;
-		gap: 8px;
-		padding: 6px 8px 6px 14px;
-		border-radius: 999px;
+		gap: var(--space-2);
+		padding: 6px var(--space-2) 6px 14px;
+		border-radius: var(--radius-full);
 		background: color-mix(in srgb, var(--accent) 12%, transparent);
 		border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
 		color: var(--accent);
 		font-family: var(--font-sans);
-		font-size: 12px;
-		font-weight: 500;
+		font-size: calc(var(--text-sm) * var(--font-scale, 1));
+		font-weight: var(--weight-medium);
 		cursor: pointer;
 		min-height: 34px;
 	}
 
 	@media (prefers-reduced-motion: no-preference) {
 		.active-chip {
-			transition: background 150ms ease, border-color 150ms ease;
+			transition:
+				background var(--dur-fast) var(--ease-out),
+				border-color var(--dur-fast) var(--ease-out);
 		}
 	}
 
@@ -517,8 +537,8 @@
 		justify-content: center;
 		width: 20px;
 		height: 20px;
-		border-radius: 50%;
-		font-size: 14px;
+		border-radius: var(--radius-full);
+		font-size: calc(var(--text-md) * var(--font-scale, 1));
 		line-height: 1;
 		background: color-mix(in srgb, var(--accent) 25%, transparent);
 	}
@@ -526,7 +546,7 @@
 
 	@media (max-width: 1023px) {
 		.page-subtitle {
-			padding-bottom: 16px;
+			padding-bottom: var(--space-4);
 			border-bottom: 1px solid var(--border-subtle);
 		}
 	}
@@ -537,19 +557,19 @@
 		align-items: center;
 		gap: 6px;
 		flex-wrap: wrap;
-		padding: 12px 0;
+		padding: var(--space-3) 0;
 		font-family: var(--font-sans);
-		font-size: 11px;
+		font-size: calc(var(--text-xs) * var(--font-scale, 1));
 		color: var(--text-muted);
 	}
 
 	.legend-badge {
 		display: inline-block;
 		padding: 1px 6px;
-		border-radius: 3px;
+		border-radius: var(--radius-xs);
 		font-family: var(--font-mono);
-		font-weight: 500;
-		font-size: 10px;
+		font-weight: var(--weight-medium);
+		font-size: calc(var(--text-2xs) * var(--font-scale, 1));
 		text-transform: uppercase;
 	}
 
@@ -572,11 +592,11 @@
 		opacity: 0.4;
 	}
 
-	/* Filter sizes */
+	/* Filter sizes — My Kit coverage cards */
 	.filter-sizes {
 		display: flex;
 		flex-wrap: wrap;
-		gap: 8px;
+		gap: var(--space-2);
 	}
 
 	.filter-size-chip {
@@ -584,31 +604,44 @@
 		flex-direction: column;
 		align-items: center;
 		gap: 2px;
-		padding: 8px 16px;
-		border-radius: 8px;
+		padding: var(--space-2) var(--space-4);
+		border-radius: var(--radius-lg);
 		background: var(--bg-surface);
 		border: 1px solid var(--border-subtle);
 		cursor: default;
 	}
 
+	@media (prefers-reduced-motion: no-preference) {
+		.filter-size-chip {
+			transition:
+				border-color var(--dur-fast) var(--ease-out),
+				background var(--dur-fast) var(--ease-out);
+		}
+	}
+
+	.filter-size-chip:hover {
+		border-color: var(--accent);
+		background: var(--bg-elevated);
+	}
+
 	.filter-size-value {
 		font-family: var(--font-mono);
-		font-weight: 500;
-		font-size: 14px;
+		font-weight: var(--weight-medium);
+		font-size: calc(var(--text-md) * var(--font-scale, 1));
 		color: var(--text-primary);
 	}
 
 	.filter-size-count {
 		font-family: var(--font-sans);
-		font-size: 11px;
+		font-size: calc(var(--text-xs) * var(--font-scale, 1));
 		color: var(--text-muted);
 	}
 
 	.gap-hint {
 		font-family: var(--font-sans);
-		font-size: 11px;
+		font-size: calc(var(--text-xs) * var(--font-scale, 1));
 		color: var(--text-muted);
-		margin: 8px 0 0 0;
+		margin: var(--space-2) 0 0 0;
 	}
 
 	.filter-size-asterisk {
@@ -618,7 +651,7 @@
 
 	.filter-size-footnote {
 		font-family: var(--font-sans);
-		font-size: 11px;
+		font-size: calc(var(--text-xs) * var(--font-scale, 1));
 		color: var(--text-muted);
 		margin-top: 10px;
 		line-height: 1.5;
@@ -629,12 +662,12 @@
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
-		gap: 16px;
-		padding: 12px 16px;
-		border-radius: 8px;
+		gap: var(--space-4);
+		padding: var(--space-3) var(--space-4);
+		border-radius: var(--radius-lg);
 		background: color-mix(in srgb, var(--accent) 8%, transparent);
 		border: 1px solid color-mix(in srgb, var(--accent) 20%, transparent);
-		margin-bottom: 24px;
+		margin-bottom: var(--space-6);
 	}
 
 	.shared-banner-text {
@@ -642,8 +675,8 @@
 		align-items: center;
 		gap: 10px;
 		font-family: var(--font-sans);
-		font-size: 13px;
-		font-weight: 500;
+		font-size: calc(var(--text-base) * var(--font-scale, 1));
+		font-weight: var(--weight-medium);
 		color: var(--text-primary);
 	}
 
@@ -655,16 +688,16 @@
 	.shared-banner-actions {
 		display: flex;
 		align-items: center;
-		gap: 8px;
+		gap: var(--space-2);
 		flex-shrink: 0;
 	}
 
 	.shared-btn {
 		padding: 6px 14px;
-		border-radius: 6px;
+		border-radius: var(--radius-md);
 		font-family: var(--font-sans);
-		font-size: 12px;
-		font-weight: 500;
+		font-size: calc(var(--text-sm) * var(--font-scale, 1));
+		font-weight: var(--weight-medium);
 		cursor: pointer;
 		border: none;
 		white-space: nowrap;
@@ -677,7 +710,9 @@
 
 	@media (prefers-reduced-motion: no-preference) {
 		.shared-btn {
-			transition: opacity 150ms ease, background 150ms ease;
+			transition:
+				opacity var(--dur-fast) var(--ease-out),
+				background var(--dur-fast) var(--ease-out);
 		}
 	}
 
@@ -707,8 +742,8 @@
 
 	.shared-feedback {
 		font-family: var(--font-sans);
-		font-size: 12px;
-		font-weight: 500;
+		font-size: calc(var(--text-sm) * var(--font-scale, 1));
+		font-weight: var(--weight-medium);
 		color: var(--kit);
 	}
 
@@ -724,21 +759,24 @@
 		display: inline-flex;
 		align-items: center;
 		gap: 6px;
-		padding: 5px 12px;
-		border-radius: 6px;
+		padding: 5px var(--space-3);
+		border-radius: var(--radius-md);
 		border: 1px solid var(--border-default);
 		background: transparent;
 		color: var(--text-secondary);
 		font-family: var(--font-sans);
-		font-size: 11px;
-		font-weight: 500;
+		font-size: calc(var(--text-xs) * var(--font-scale, 1));
+		font-weight: var(--weight-medium);
 		cursor: pointer;
 		white-space: nowrap;
 	}
 
 	@media (prefers-reduced-motion: no-preference) {
 		.share-btn {
-			transition: color 150ms ease, border-color 150ms ease, background 150ms ease;
+			transition:
+				color var(--dur-fast) var(--ease-out),
+				border-color var(--dur-fast) var(--ease-out),
+				background var(--dur-fast) var(--ease-out);
 		}
 	}
 
@@ -760,10 +798,10 @@
 
 	.section-heading {
 		font-family: var(--font-sans);
-		font-weight: 600;
-		font-size: 15px;
+		font-weight: var(--weight-semibold);
+		font-size: calc(var(--text-lg) * var(--font-scale, 1));
 		color: var(--text-secondary);
-		margin: 0 0 16px 0;
+		margin: 0 0 var(--space-4) 0;
 	}
 
 	/* Empty states */
@@ -771,34 +809,34 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		padding: 64px 0;
+		padding: var(--space-16) 0;
 	}
 
 	.empty-content {
 		display: flex;
 		flex-direction: column;
 		align-items: center;
-		gap: 12px;
+		gap: var(--space-3);
 		max-width: 320px;
 		text-align: center;
 	}
 
 	.empty-icon {
 		color: var(--text-faint);
-		margin-bottom: 4px;
+		margin-bottom: var(--space-1);
 	}
 
 	.empty-title {
 		font-family: var(--font-sans);
-		font-weight: 600;
-		font-size: 16px;
+		font-weight: var(--weight-semibold);
+		font-size: calc(var(--text-lg) * var(--font-scale, 1));
 		color: var(--text-primary);
 		margin: 0;
 	}
 
 	.empty-hint {
 		font-family: var(--font-sans);
-		font-size: 13px;
+		font-size: calc(var(--text-base) * var(--font-scale, 1));
 		color: var(--text-muted);
 		margin: 0;
 		line-height: 1.5;
