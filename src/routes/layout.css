@@ -3,124 +3,371 @@
 /* --- Font faces --- */
 
 @font-face {
-	font-family: 'Instrument Sans';
+	font-family: 'Geist';
 	font-style: normal;
-	font-weight: 400 700;
+	font-weight: 300 700;
 	font-display: swap;
-	src: url('/fonts/instrument-sans-latin.woff2') format('woff2');
+	src: url('/fonts/geist-latin.woff2') format('woff2');
 	unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
 		U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
 		U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
 @font-face {
-	font-family: 'Instrument Sans';
+	font-family: 'Geist';
 	font-style: normal;
-	font-weight: 400 700;
+	font-weight: 300 700;
 	font-display: swap;
-	src: url('/fonts/instrument-sans-latin-ext.woff2') format('woff2');
+	src: url('/fonts/geist-latin-ext.woff2') format('woff2');
 	unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF,
 		U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020,
 		U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
 }
 
 @font-face {
-	font-family: 'JetBrains Mono';
+	font-family: 'Geist Mono';
 	font-style: normal;
-	font-weight: 400 500;
+	font-weight: 400 600;
 	font-display: swap;
-	src: url('/fonts/jetbrains-mono-latin.woff2') format('woff2');
+	src: url('/fonts/geist-mono-latin.woff2') format('woff2');
 	unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
 		U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
 		U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
 @font-face {
-	font-family: 'JetBrains Mono';
+	font-family: 'Geist Mono';
 	font-style: normal;
-	font-weight: 400 500;
+	font-weight: 400 600;
 	font-display: swap;
-	src: url('/fonts/jetbrains-mono-latin-ext.woff2') format('woff2');
+	src: url('/fonts/geist-mono-latin-ext.woff2') format('woff2');
 	unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF,
 		U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020,
 		U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
 }
 
-/* --- Design tokens (dark mode default) --- */
-
+/* ----------------------------------------------------------------
+   THEME-AGNOSTIC TOKENS  (type, space, radius, motion, z, layout)
+   ---------------------------------------------------------------- */
 :root {
-	/* Backgrounds */
-	--bg-base: #0f1318;
-	--bg-surface: #181f28;
-	--bg-elevated: #1a2230;
-	--bg-accent: #1a2d42;
-	--border-subtle: #222a35;
-	--border-default: #2a323c;
+	/* Font families ------------------------------------------------ */
+	--font-sans: 'Geist', system-ui, -apple-system, sans-serif;
+	--font-mono: 'Geist Mono', ui-monospace, 'SF Mono', monospace;
+
+	/* Type scale (px) — minor-third-ish, tuned for a dense data UI -- */
+	--text-2xs: 10px; /* micro badges (spec chips)        */
+	--text-xs: 11px; /* labels, section headers, ticks    */
+	--text-sm: 12px; /* secondary UI, counts              */
+	--text-base: 13px; /* default UI / control labels      */
+	--text-md: 14px; /* table model names, body           */
+	--text-lg: 16px; /* sub-section headings              */
+	--text-xl: 20px; /* card / panel titles               */
+	--text-2xl: 24px; /* page heading                     */
+	--text-3xl: 32px; /* lens detail hero name            */
+	--text-4xl: 40px; /* marketing / empty-state display  */
+
+	/* Line heights -------------------------------------------------- */
+	--leading-tight: 1.15;
+	--leading-snug: 1.35;
+	--leading-normal: 1.55;
+
+	/* Letter spacing ------------------------------------------------ */
+	--tracking-label: 0.06em; /* uppercase section headers     */
+	--tracking-badge: 0.04em; /* uppercase mono badges          */
+	--tracking-tight: -0.01em; /* large display numerals        */
+
+	/* Weights ------------------------------------------------------- */
+	--weight-regular: 400;
+	--weight-medium: 500;
+	--weight-semibold: 600;
+	--weight-bold: 700;
+
+	/* Font-size accessibility scale (S / M / L selector) ------------ */
+	--font-scale: 1;
+
+	/* Spacing scale (4px base) ------------------------------------- */
+	--space-1: 4px;
+	--space-2: 8px;
+	--space-3: 12px;
+	--space-4: 16px;
+	--space-5: 20px;
+	--space-6: 24px;
+	--space-8: 32px;
+	--space-10: 40px;
+	--space-12: 48px;
+	--space-16: 64px;
+
+	/* Radii --------------------------------------------------------- */
+	--radius-xs: 3px; /* micro badges                       */
+	--radius-sm: 5px; /* chips, small controls              */
+	--radius-md: 7px; /* buttons, inputs, segmented         */
+	--radius-lg: 10px; /* cards, panels                     */
+	--radius-xl: 14px; /* hero / photo frames               */
+	--radius-full: 999px;
+
+	/* Layout -------------------------------------------------------- */
+	--sidebar-width: 240px;
+	--content-max: 1200px;
+	--content-pad-x: 32px;
+	--nav-height: 56px;
+
+	/* Motion -------------------------------------------------------- */
+	--ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+	--ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+	--dur-fast: 120ms;
+	--dur-base: 180ms;
+	--dur-slow: 260ms;
+
+	/* Z-index ------------------------------------------------------- */
+	--z-sticky: 5;
+	--z-nav: 30;
+	--z-drawer-overlay: 40;
+	--z-drawer: 50;
+	--z-tooltip: 60;
+}
+
+/* ----------------------------------------------------------------
+   DARK THEME  (default + explicit [data-theme="dark"])
+   ---------------------------------------------------------------- */
+:root,
+:root[data-theme='dark'] {
+	color-scheme: dark;
+
+	/* Surfaces */
+	--bg-base: #0d1117; /* page background                 */
+	--bg-surface: #161b22; /* sidebar, cards               */
+	--bg-elevated: #1c232d; /* hover, active items         */
+	--bg-overlay: rgba(8, 11, 16, 0.72); /* drawer scrim  */
+
+	/* Accent tint surfaces (driven by --accent, theme-aware) */
+	--bg-accent: color-mix(in srgb, var(--accent) 16%, var(--bg-surface));
+	--bg-accent-soft: color-mix(in srgb, var(--accent) 10%, transparent);
+
+	/* Borders */
+	--border-subtle: #21262d; /* dividers, chart gridlines  */
+	--border-default: #2d343d; /* inputs, inactive controls */
+	--border-strong: #3a424d; /* hover borders             */
 
 	/* Text */
-	--text-primary: #e6edf3;
-	--text-secondary: #9ba4b2;
-	--text-muted: #6b7688;
-	--text-faint: #4d5768;
+	--text-primary: #e9eef4; /* headings, model names, data */
+	--text-secondary: #9ba4b2; /* body, secondary data       */
+	--text-muted: #6b7688; /* labels, inactive nav          */
+	--text-faint: #4d5768; /* ticks, footer, decorative     */
+	--text-on-accent: #0d1117; /* text on a filled accent    */
 
-	/* Accent */
-	--accent: #60a5fa;
-	--accent-bright: #a8d4ff;
+	/* Accent — interactive UI chrome (indigo; kept clear of maker blue) */
+	--accent: #818cf8;
+	--accent-bright: #aab4ff; /* active-tab / selected text  */
+	--accent-hover: #99a2fb;
 
-	/* Manufacturer */
-	--mfr-fujinon: #7eb8f0;
-	--mfr-sigma: #c9a0ff;
-	--mfr-viltrox: #fdba74;
-	--mfr-tamron: #6ee7b7;
-	--mfr-sirui: #f9a8d4;
-	--mfr-voigtlander: #fbbf24;
-	--mfr-ttartisan: #fca5a5;
+	/* Maker palette — harmonized OKLCH family (L .80 / C .105, hue varies) */
+	--mfr-fujinon: oklch(0.81 0.1 245); /* sky blue          */
+	--mfr-sigma: oklch(0.79 0.11 305); /* violet            */
+	--mfr-viltrox: oklch(0.82 0.12 75); /* amber             */
+	--mfr-voigtlander: oklch(0.83 0.1 110); /* gold-olive    */
+	--mfr-tamron: oklch(0.81 0.1 168); /* mint              */
+	--mfr-sirui: oklch(0.78 0.11 350); /* rose              */
+	--mfr-ttartisan: oklch(0.76 0.12 28); /* coral           */
 
 	/* Semantic */
-	--kit: #4ade80;
-	--kit-bg: rgba(78, 205, 128, 0.08);
-	--danger: #f87171;
-	--danger-bg: rgba(248, 113, 113, 0.15);
-	--spec-wr: #2dd4bf;
-	--spec-feature: #93c5fd;
+	--kit: oklch(0.82 0.16 150); /* ownership green           */
+	--kit-bg: color-mix(in srgb, var(--kit) 9%, transparent);
+	--spec-wr: oklch(0.81 0.1 195); /* weather-resist teal    */
+	--spec-feature: oklch(0.81 0.08 250); /* OIS / LM blue    */
+	--new: var(--accent); /* "NEW" badge                      */
+	--danger: oklch(0.72 0.16 25);
+	--danger-bg: color-mix(in srgb, var(--danger) 15%, transparent);
 
-	/* Typography */
-	--font-sans: 'Instrument Sans', system-ui, sans-serif;
-	--font-mono: 'JetBrains Mono', ui-monospace, monospace;
+	/* Maker badge fill opacity (used via color-mix at call sites) */
+	--mfr-badge-fill: 16%;
+
+	/* Elevation — restrained; dark UIs lean on borders, not big shadows */
+	--shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+	--shadow-md: 0 4px 12px rgba(0, 0, 0, 0.45);
+	--shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.55);
+	--ring-focus: 0 0 0 2px var(--bg-base), 0 0 0 4px var(--accent);
 }
 
-/* --- Light mode --- */
-
+/* ----------------------------------------------------------------
+   LIGHT THEME  — explicit toggle + OS preference fallback
+   ---------------------------------------------------------------- */
 :root[data-theme='light'] {
-	--bg-base: #f5f7fa;
-	--bg-surface: #ffffff;
-	--bg-elevated: #ffffff;
-	--bg-accent: #e0edff;
-	--border-subtle: #e5e8ed;
-	--border-default: #cdd3dc;
+	color-scheme: light;
 
-	--text-primary: #1a1e24;
-	--text-secondary: #4a5264;
+	--bg-base: #f6f8fa;
+	--bg-surface: #ffffff;
+	--bg-elevated: #f0f3f6;
+	--bg-overlay: rgba(27, 31, 36, 0.4);
+
+	--border-subtle: #e6e9ee;
+	--border-default: #d3d9e0;
+	--border-strong: #bfc7d1;
+
+	--text-primary: #161b22;
+	--text-secondary: #4a5260;
 	--text-muted: #6b7688;
 	--text-faint: #9ba4b2;
+	--text-on-accent: #ffffff;
 
-	--accent: #2563eb;
-	--accent-bright: #1d4ed8;
+	--accent: #4f46e5;
+	--accent-bright: #4338ca;
+	--accent-hover: #4338ca;
 
-	--mfr-fujinon: #3b82d6;
-	--mfr-sigma: #8b5cf6;
-	--mfr-viltrox: #d97706;
-	--mfr-tamron: #059669;
-	--mfr-sirui: #db2777;
-	--mfr-voigtlander: #b45309;
-	--mfr-ttartisan: #b91c1c;
+	--mfr-fujinon: oklch(0.53 0.15 250);
+	--mfr-sigma: oklch(0.52 0.17 305);
+	--mfr-viltrox: oklch(0.62 0.14 65);
+	--mfr-voigtlander: oklch(0.58 0.11 105);
+	--mfr-tamron: oklch(0.55 0.12 165);
+	--mfr-sirui: oklch(0.56 0.16 352);
+	--mfr-ttartisan: oklch(0.56 0.18 28);
 
-	--kit: #16a34a;
-	--kit-bg: rgba(22, 163, 74, 0.08);
-	--danger: #dc2626;
-	--danger-bg: rgba(220, 38, 38, 0.1);
-	--spec-wr: #0d9488;
-	--spec-feature: #2563eb;
+	--kit: oklch(0.58 0.15 150);
+	--kit-bg: color-mix(in srgb, var(--kit) 10%, transparent);
+	--spec-wr: oklch(0.55 0.1 195);
+	--spec-feature: oklch(0.53 0.14 255);
+	--danger: oklch(0.55 0.2 27);
+	--danger-bg: color-mix(in srgb, var(--danger) 12%, transparent);
+
+	--mfr-badge-fill: 18%;
+
+	--shadow-sm: 0 1px 2px rgba(27, 31, 36, 0.06);
+	--shadow-md: 0 4px 14px rgba(27, 31, 36, 0.1);
+	--shadow-lg: 0 12px 32px rgba(27, 31, 36, 0.14);
+}
+
+/* OS preference, only when no explicit theme is chosen */
+@media (prefers-color-scheme: light) {
+	:root:not([data-theme='dark']):not([data-theme='light']) {
+		color-scheme: light;
+
+		--bg-base: #f6f8fa;
+		--bg-surface: #ffffff;
+		--bg-elevated: #f0f3f6;
+		--bg-overlay: rgba(27, 31, 36, 0.4);
+
+		--border-subtle: #e6e9ee;
+		--border-default: #d3d9e0;
+		--border-strong: #bfc7d1;
+
+		--text-primary: #161b22;
+		--text-secondary: #4a5260;
+		--text-muted: #6b7688;
+		--text-faint: #9ba4b2;
+		--text-on-accent: #ffffff;
+
+		--accent: #4f46e5;
+		--accent-bright: #4338ca;
+		--accent-hover: #4338ca;
+
+		--mfr-fujinon: oklch(0.53 0.15 250);
+		--mfr-sigma: oklch(0.52 0.17 305);
+		--mfr-viltrox: oklch(0.62 0.14 65);
+		--mfr-voigtlander: oklch(0.58 0.11 105);
+		--mfr-tamron: oklch(0.55 0.12 165);
+		--mfr-sirui: oklch(0.56 0.16 352);
+		--mfr-ttartisan: oklch(0.56 0.18 28);
+
+		--kit: oklch(0.58 0.15 150);
+		--kit-bg: color-mix(in srgb, var(--kit) 10%, transparent);
+		--spec-wr: oklch(0.55 0.1 195);
+		--spec-feature: oklch(0.53 0.14 255);
+		--danger: oklch(0.55 0.2 27);
+		--danger-bg: color-mix(in srgb, var(--danger) 12%, transparent);
+
+		--mfr-badge-fill: 18%;
+
+		--shadow-sm: 0 1px 2px rgba(27, 31, 36, 0.06);
+		--shadow-md: 0 4px 14px rgba(27, 31, 36, 0.1);
+		--shadow-lg: 0 12px 32px rgba(27, 31, 36, 0.14);
+	}
+}
+
+/* ----------------------------------------------------------------
+   SEMANTIC TYPE CLASSES
+   Pair a token with intent. Use these instead of re-declaring
+   font/size/weight per component.
+   ---------------------------------------------------------------- */
+.t-display {
+	font-family: var(--font-sans);
+	font-weight: var(--weight-bold);
+	font-size: calc(var(--text-3xl) * var(--font-scale));
+	line-height: var(--leading-tight);
+	letter-spacing: var(--tracking-tight);
+	color: var(--text-primary);
+}
+.t-page-title {
+	font-family: var(--font-sans);
+	font-weight: var(--weight-semibold);
+	font-size: calc(var(--text-2xl) * var(--font-scale));
+	line-height: var(--leading-snug);
+	color: var(--text-primary);
+}
+.t-panel-title {
+	font-family: var(--font-sans);
+	font-weight: var(--weight-semibold);
+	font-size: calc(var(--text-xl) * var(--font-scale));
+	line-height: var(--leading-snug);
+	color: var(--text-primary);
+}
+.t-section {
+	font-family: var(--font-sans);
+	font-weight: var(--weight-semibold);
+	font-size: calc(var(--text-lg) * var(--font-scale));
+	color: var(--text-primary);
+}
+/* Uppercase eyebrow / sidebar section header */
+.t-label {
+	font-family: var(--font-sans);
+	font-weight: var(--weight-medium);
+	font-size: calc(var(--text-xs) * var(--font-scale));
+	text-transform: uppercase;
+	letter-spacing: var(--tracking-label);
+	color: var(--text-muted);
+}
+.t-body {
+	font-family: var(--font-sans);
+	font-weight: var(--weight-regular);
+	font-size: calc(var(--text-md) * var(--font-scale));
+	line-height: var(--leading-normal);
+	color: var(--text-secondary);
+}
+.t-ui {
+	font-family: var(--font-sans);
+	font-weight: var(--weight-medium);
+	font-size: calc(var(--text-base) * var(--font-scale));
+	color: var(--text-primary);
+}
+/* Tabular data — always mono, always tabular-nums */
+.t-data {
+	font-family: var(--font-mono);
+	font-weight: var(--weight-regular);
+	font-size: calc(var(--text-base) * var(--font-scale));
+	font-variant-numeric: tabular-nums;
+	color: var(--text-secondary);
+}
+.t-caption {
+	font-family: var(--font-sans);
+	font-weight: var(--weight-regular);
+	font-size: calc(var(--text-sm) * var(--font-scale));
+	color: var(--text-muted);
+}
+
+/* ----------------------------------------------------------------
+   GLOBAL FOCUS — keyboard only
+   ---------------------------------------------------------------- */
+:where(a, button, input, textarea, select, [tabindex]):focus-visible {
+	outline: 2px solid var(--accent);
+	outline-offset: 2px;
+	border-radius: var(--radius-xs);
+}
+
+@media (prefers-reduced-motion: reduce) {
+	*,
+	*::before,
+	*::after {
+		animation-duration: 0.001ms !important;
+		transition-duration: 0.001ms !important;
+	}
 }
 
 /* --- Base styles --- */
