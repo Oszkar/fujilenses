@@ -12,7 +12,7 @@
 
 <footer class="footer">
 	<div class="footer-left">
-		<span>{lensCount} lenses</span>
+		<span><span class="lens-num">{lensCount}</span> lenses</span>
 		<span class="sep">&middot;</span>
 		<button class="feedback-btn" onclick={() => (feedbackOpen = true)}>
 			Send feedback
@@ -32,15 +32,15 @@
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
-		padding: 12px 40px;
+		padding: var(--space-3) var(--space-10);
 		background: var(--bg-surface);
 		border-top: 1px solid var(--border-subtle);
 		font-family: var(--font-sans);
-		font-size: 12px;
+		font-size: var(--text-sm);
 		color: var(--text-muted);
 		position: sticky;
 		bottom: 0;
-		z-index: 10;
+		z-index: var(--z-sticky);
 	}
 
 	.footer-left,
@@ -50,6 +50,11 @@
 		gap: 6px;
 	}
 
+	.lens-num {
+		font-family: var(--font-mono);
+		font-variant-numeric: tabular-nums;
+	}
+
 	.sep {
 		opacity: 0.5;
 	}
@@ -57,13 +62,13 @@
 	.feedback-btn {
 		background: none;
 		border: 1px solid var(--border-default);
-		border-radius: 4px;
-		padding: 2px 8px;
+		border-radius: var(--radius-sm);
+		padding: 2px var(--space-2);
 		color: var(--text-muted);
 		font-family: var(--font-sans);
-		font-size: 12px;
+		font-size: var(--text-sm);
 		cursor: pointer;
-		transition: color 150ms ease;
+		transition: color var(--dur-fast) var(--ease-out);
 	}
 
 	.feedback-btn:hover {
@@ -72,15 +77,15 @@
 
 	@media (max-width: 1023px) {
 		.footer {
-			padding: 12px 16px;
-			font-size: 11px;
+			padding: var(--space-3) var(--space-4);
+			font-size: var(--text-xs);
 			flex-direction: column;
-			gap: 4px;
+			gap: var(--space-1);
 			align-items: flex-start;
 		}
 
 		.feedback-btn {
-			font-size: 11px;
+			font-size: var(--text-xs);
 		}
 	}
 </style>

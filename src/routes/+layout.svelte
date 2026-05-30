@@ -168,7 +168,7 @@
 
 	.content {
 		flex: 1;
-		padding: 24px 36px;
+		padding: var(--space-6) var(--content-pad-x);
 		overflow-y: auto;
 	}
 
@@ -185,14 +185,14 @@
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
-		padding: 16px 20px;
+		padding: var(--space-4) var(--space-5);
 		border-bottom: 1px solid var(--border-subtle);
 	}
 
 	.drawer-title {
 		font-family: var(--font-sans);
-		font-weight: 600;
-		font-size: 15px;
+		font-weight: var(--weight-semibold);
+		font-size: calc(var(--text-lg) * var(--font-scale, 1));
 		color: var(--text-primary);
 	}
 
@@ -202,14 +202,14 @@
 		justify-content: center;
 		width: 32px;
 		height: 32px;
-		border-radius: 6px;
+		border-radius: var(--radius-md);
 		border: none;
 		background: transparent;
 		color: var(--text-secondary);
 		cursor: pointer;
 		transition:
-			background 150ms ease,
-			color 150ms ease;
+			background var(--dur-fast) var(--ease-out),
+			color var(--dur-fast) var(--ease-out);
 	}
 
 	.drawer-close:hover {
@@ -228,15 +228,15 @@
 		}
 
 		.content {
-			padding: 16px;
+			padding: var(--space-4);
 		}
 
 		.drawer-overlay {
 			display: block;
 			position: fixed;
 			inset: 0;
-			background: rgba(0, 0, 0, 0.5);
-			z-index: 40;
+			background: var(--bg-overlay);
+			z-index: var(--z-drawer-overlay);
 		}
 
 		.drawer {
@@ -250,7 +250,8 @@
 			max-width: 85vw;
 			background: var(--bg-surface);
 			border-right: 1px solid var(--border-subtle);
-			z-index: 50;
+			box-shadow: var(--shadow-lg);
+			z-index: var(--z-drawer);
 			overflow-y: auto;
 		}
 
