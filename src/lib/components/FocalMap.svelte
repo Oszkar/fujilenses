@@ -4,7 +4,6 @@
 	import type { Lens, ScaleType } from '$lib/types';
 	import { manufacturerColors } from '$lib/data';
 	import { getFFMultiplier } from '$lib/filters';
-	import { getFontScale } from '$lib/preferences.svelte';
 	import { computeCoverageSegments, segmentsToGradientStops, detectGaps } from '$lib/coverage';
 
 	interface Props {
@@ -27,30 +26,10 @@
 		onGapClick
 	}: Props = $props();
 
-	// Component-scoped unique ID prefix
-	const uid = Math.random().toString(36).slice(2, 8);
-
-	// Layout constants
-	const BAR_HEIGHT = 8;
-	const DOT_RADIUS = 5;
-	const HEATMAP_HEIGHT = 24;
-	const GAP_MIN_PX = 40;
-
-	let containerWidth = $state(800);
-	let scrollWidth = $state(0);
-	let clientWidth = $state(0);
-	let hasOverflow = $derived(scrollWidth > clientWidth);
-
-	let ROW_HEIGHT = $derived(containerWidth < 600 ? 26 : 28);
-	let ROW_GAP = $derived(containerWidth < 600 ? 3 : 4);
-	let MARGIN = $derived({
-		top: showHeatmap && lenses.length >= 2 ? 40 + HEATMAP_HEIGHT + 14 : 40,
-		right: containerWidth < 600 ? 16 : 40,
-		bottom: 20,
-		left: 0
-	});
-	let LABEL_WIDTH = $derived(Math.round((containerWidth < 600 ? 180 : 240) * getFontScale()));
-	let containerEl: HTMLDivElement | undefined = $state();
+	// Minimum visible bar width for a zoom, in percent of the track.
+	const MIN_BAR_PCT = 1.5;
+	// Gap detection threshold, in percent of the track width.
+	const MIN_GAP_PCT = 5;
 
 	// Tooltip state
 	let tooltip = $state<{
@@ -58,10 +37,6 @@
 		x: number;
 		y: number;
 	} | null>(null);
-
-	const MIN_CHART_WIDTH = 500;
-	let chartWidth = $derived(Math.max(containerWidth - LABEL_WIDTH - MARGIN.right, MIN_CHART_WIDTH));
-	let svgHeight = $derived(MARGIN.top + lenses.length * (ROW_HEIGHT + ROW_GAP) + MARGIN.bottom);
 
 	// Compute focal bounds with FF equivalent
 	function getFocal(lens: Lens): { min: number; max: number } {
@@ -72,6 +47,7 @@
 		};
 	}
 
+	// d3 scale whose RANGE is [0, 100] (percent of the track), not pixels.
 	let xScale = $derived.by(() => {
 		const allFocals = lenses.flatMap((l) => {
 			const f = getFocal(l);
@@ -83,52 +59,71 @@
 		if (scale === 'log') {
 			return scaleLog()
 				.domain([Math.max(domainMin, 1), domainMax])
-				.range([0, chartWidth])
+				.range([0, 100])
 				.clamp(true);
 		}
-		return scaleLinear().domain([0, domainMax]).range([0, chartWidth]).clamp(true);
+		return scaleLinear().domain([0, domainMax]).range([0, 100]).clamp(true);
 	});
+
+	// pct(focal) => 0–100 position along the track.
+	function pct(focal: number): number {
+		return xScale(focal);
+	}
 
 	let ticks = $derived.by(() => {
 		return xScale.ticks(8).filter((t: number) => t > 0);
 	});
 
-	// Heatmap coverage data (sweep line)
+	// Heatmap coverage data (sweep line) — coverage.ts reused unchanged, with a
+	// percent scaleFunc (range [0,100]) and chartWidth = 100.
 	let coverageSegments = $derived(showHeatmap ? computeCoverageSegments(lenses, ffe) : []);
 	let heatmapStops = $derived.by(() => {
 		if (coverageSegments.length === 0) return [];
-		return segmentsToGradientStops(coverageSegments, xScale, chartWidth);
+		return segmentsToGradientStops(coverageSegments, pct, 100);
 	});
 	let heatmapGaps = $derived.by(() => {
 		if (coverageSegments.length === 0) return [];
-		return detectGaps(coverageSegments, xScale, GAP_MIN_PX);
+		return detectGaps(coverageSegments, pct, MIN_GAP_PCT);
 	});
 	let showHeatmapStrip = $derived(showHeatmap && lenses.length >= 2 && heatmapStops.length > 0);
 
-	function rowY(index: number): number {
-		return MARGIN.top + index * (ROW_HEIGHT + ROW_GAP);
-	}
+	// Build the coverage gradient string from the fractional stops: green
+	// (=--kit) covered density. Each stop is color-mix(... opacity ...) offset%.
+	let coverageGradient = $derived.by(() => {
+		if (heatmapStops.length === 0) return '';
+		const parts = heatmapStops.map((stop) => {
+			const color = `color-mix(in srgb, var(--kit) ${Math.round(stop.opacity * 100)}%, transparent)`;
+			return `${color} ${(stop.offset * 100).toFixed(2)}%`;
+		});
+		return `linear-gradient(to right, ${parts.join(', ')})`;
+	});
 
-	function focalLabel(lens: Lens): string {
-		const f = getFocal(lens);
-		const name = lens.model.replace(/^(XF|XC|GF)\s*/, '');
-		if (f.min === f.max) return name;
-		return name;
+	function labelText(lens: Lens): string {
+		return lens.model.replace(/^(XF|XC|GF)\s*/, '');
 	}
 
 	function mfrColor(lens: Lens): string {
 		return manufacturerColors[lens.manufacturer] ?? 'var(--text-muted)';
 	}
 
-	function showTooltip(lens: Lens, event: MouseEvent) {
-		let x = event.clientX;
-		let y = event.clientY;
-		// Boundary detection: flip tooltip if it would clip viewport
+	function showTooltipAt(lens: Lens, clientX: number, clientY: number) {
+		let x = clientX;
+		let y = clientY;
+		// Boundary detection: flip tooltip if it would clip the viewport.
 		if (typeof window !== 'undefined') {
 			if (x + 296 > window.innerWidth) x = Math.max(0, x - 296);
 			if (y - 20 < 0) y = Math.min(y + 40, window.innerHeight - 200);
 		}
 		tooltip = { lens, x, y };
+	}
+
+	function showTooltip(lens: Lens, event: MouseEvent) {
+		showTooltipAt(lens, event.clientX, event.clientY);
+	}
+
+	function showTooltipFromFocus(lens: Lens, event: FocusEvent) {
+		const rect = (event.currentTarget as HTMLElement).getBoundingClientRect();
+		showTooltipAt(lens, rect.x, rect.y);
 	}
 
 	function hideTooltip() {
@@ -142,282 +137,104 @@
 		}
 	}
 
-	function handleToggle(lens: Lens) {
-		onToggleKit(lens.slug);
+	function handleGapKeydown(gap: { focalStart: number; focalEnd: number }, event: KeyboardEvent) {
+		if (event.key === 'Enter' || event.key === ' ') {
+			event.preventDefault();
+			onGapClick?.({ focalStart: gap.focalStart, focalEnd: gap.focalEnd });
+		}
 	}
-
-	$effect(() => {
-		if (!containerEl) return;
-		const observer = new ResizeObserver((entries) => {
-			for (const entry of entries) {
-				containerWidth = entry.contentRect.width;
-				scrollWidth = containerEl?.scrollWidth ?? 0;
-				clientWidth = containerEl?.clientWidth ?? 0;
-			}
-		});
-		observer.observe(containerEl);
-		return () => observer.disconnect();
-	});
 </script>
 
-<div class="focal-map" class:has-overflow={hasOverflow} bind:this={containerEl}>
-	<svg
-		width={LABEL_WIDTH + chartWidth + MARGIN.right}
-		height={svgHeight}
-		role="img"
-		aria-label="Focal length range map"
-	>
-		<defs>
-			<clipPath id="{uid}-label-clip">
-				<rect x="0" y="0" width={LABEL_WIDTH - 8} height={svgHeight} />
-			</clipPath>
-			<pattern
-				id="{uid}-gap-stripes"
-				width="6"
-				height="6"
-				patternUnits="userSpaceOnUse"
-				patternTransform="rotate(45)"
-			>
-				<line x1="0" y1="0" x2="0" y2="6" stroke="var(--text-faint)" stroke-width="1" stroke-opacity="0.3" />
-			</pattern>
-			{#if showHeatmapStrip}
-				<linearGradient id="{uid}-coverage-gradient">
-					{#each heatmapStops as stop, i (i)}
-						<stop offset={stop.offset} stop-color="var(--accent)" stop-opacity={stop.opacity} />
-					{/each}
-				</linearGradient>
-			{/if}
-		</defs>
-
-		<!-- Wide / Tele axis labels -->
-		<text
-			x={LABEL_WIDTH + 4}
-			y={MARGIN.top - 28}
-			class="axis-context-label"
-		>
-			WIDE
-		</text>
-		<text
-			x={LABEL_WIDTH + chartWidth - 4}
-			y={MARGIN.top - 28}
-			text-anchor="end"
-			class="axis-context-label"
-		>
-			TELE
-		</text>
-
-		<!-- Axis ticks -->
+<div class="focal-map">
+	<!-- Axis: ticks + WIDE / TELE context labels, positioned by percent. -->
+	<div class="axis" aria-hidden="true">
+		<span class="axis-context wide">WIDE</span>
+		<span class="axis-context tele">TELE</span>
 		{#each ticks as tick (tick)}
-			{@const x = LABEL_WIDTH + xScale(tick)}
-			<line
-				x1={x}
-				y1={MARGIN.top - 8}
-				x2={x}
-				y2={svgHeight - MARGIN.bottom}
-				stroke="var(--border-subtle)"
-				stroke-width="1"
-			/>
-			<text
-				x={x}
-				y={MARGIN.top - 16}
-				text-anchor="middle"
-				class="tick-label"
-			>
-				{tick}mm
-			</text>
+			<span class="tick" style="--frac: {pct(tick) / 100}">
+				<span class="tick-line"></span>
+				<span class="tick-label">{tick}mm</span>
+			</span>
 		{/each}
+	</div>
 
-		<!-- Coverage heatmap strip -->
-		{#if showHeatmapStrip}
-			<g aria-label="Kit focal coverage density">
-				<desc>Coverage density visualization showing where kit lenses overlap</desc>
-				<rect
-					x={LABEL_WIDTH}
-					y={MARGIN.top - HEATMAP_HEIGHT - 4}
-					width={chartWidth}
-					height={HEATMAP_HEIGHT}
-					rx="4"
-					fill="url(#{uid}-coverage-gradient)"
-				/>
-				<!-- Gap markers -->
-				{#each heatmapGaps as gap, gi (gi)}
-					{@const gapMin = Math.round(gap.focalStart)}
-					{@const gapMax = Math.round(gap.focalEnd)}
-					{@const gapCenterX = LABEL_WIDTH + gap.x + gap.width / 2}
-					{@const gapTopY = MARGIN.top - HEATMAP_HEIGHT - 4}
-					{#if onGapClick}
-						<g
-							class="gap-marker interactive"
-							role="button"
-							tabindex="0"
-							aria-label="Fill {gapMin}–{gapMax}mm gap: show lenses covering this range"
-							onclick={() =>
-								onGapClick?.({ focalStart: gap.focalStart, focalEnd: gap.focalEnd })}
-							onkeydown={(e) => {
-								if (e.key === 'Enter' || e.key === ' ') {
-									e.preventDefault();
-									onGapClick?.({ focalStart: gap.focalStart, focalEnd: gap.focalEnd });
-								}
-							}}
-						>
-							<!-- Striped background fill -->
-							<rect
-								x={LABEL_WIDTH + gap.x}
-								y={gapTopY}
-								width={gap.width}
-								height={HEATMAP_HEIGHT}
-								rx="4"
-								fill="url(#{uid}-gap-stripes)"
-								class="gap-fill"
-							/>
-							<!-- Hover/focus highlight overlay -->
-							<rect
-								x={LABEL_WIDTH + gap.x}
-								y={gapTopY}
-								width={gap.width}
-								height={HEATMAP_HEIGHT}
-								rx="4"
-								fill="transparent"
-								class="gap-hit"
-							/>
-							<!-- Border -->
-							<rect
-								x={LABEL_WIDTH + gap.x + 0.5}
-								y={gapTopY + 0.5}
-								width={gap.width - 1}
-								height={HEATMAP_HEIGHT - 1}
-								rx="3.5"
-								fill="none"
-								stroke="var(--text-faint)"
-								stroke-width="1"
-								stroke-dasharray="4 2"
-								class="gap-border"
-							/>
-						</g>
-					{:else}
-						<rect
-							x={LABEL_WIDTH + gap.x}
-							y={gapTopY}
-							width={gap.width}
-							height={HEATMAP_HEIGHT}
-							rx="4"
-							fill="url(#{uid}-gap-stripes)"
-						/>
-						<rect
-							x={LABEL_WIDTH + gap.x + 0.5}
-							y={gapTopY + 0.5}
-							width={gap.width - 1}
-							height={HEATMAP_HEIGHT - 1}
-							rx="3.5"
-							fill="none"
-							stroke="var(--text-faint)"
-							stroke-width="1"
-							stroke-dasharray="4 2"
-						/>
-					{/if}
-				{/each}
-			</g>
-		{/if}
+	<!-- Coverage heatmap strip -->
+	{#if showHeatmapStrip}
+		<div class="coverage" role="img" aria-label="Kit focal coverage density">
+			<div class="coverage-band" style="background: {coverageGradient};"></div>
+			{#each heatmapGaps as gap, gi (gi)}
+				{@const gapMin = Math.round(gap.focalStart)}
+				{@const gapMax = Math.round(gap.focalEnd)}
+				{#if onGapClick}
+					<button
+						type="button"
+						class="gap gap-interactive"
+						style="left: {gap.x}%; width: {gap.width}%"
+						aria-label="Fill {gapMin}–{gapMax}mm gap: show lenses covering this range"
+						onclick={() => onGapClick?.({ focalStart: gap.focalStart, focalEnd: gap.focalEnd })}
+						onkeydown={(e) => handleGapKeydown(gap, e)}
+					></button>
+				{:else}
+					<span class="gap" style="left: {gap.x}%; width: {gap.width}%"></span>
+				{/if}
+			{/each}
+		</div>
+	{/if}
 
-		<!-- Lens rows -->
-		{#each lenses as lens, i (lens.slug)}
+	<!-- Lens rows -->
+	<div class="rows">
+		{#each lenses as lens (lens.slug)}
 			{@const focal = getFocal(lens)}
 			{@const inKit = kitSlugs.has(lens.slug)}
-			{@const y = rowY(i)}
 			{@const color = mfrColor(lens)}
-
-			<!-- Kit highlight background -->
-			{#if inKit}
-				<rect
-					x="0"
-					y={y}
-					width={LABEL_WIDTH + chartWidth + MARGIN.right}
-					height={ROW_HEIGHT}
-					fill="var(--kit-bg)"
-					rx="2"
-				/>
-				<rect
-					x="0"
-					y={y}
-					width="3"
-					height={ROW_HEIGHT}
-					fill="var(--kit)"
-					rx="1"
-				/>
-			{/if}
-
-			<!-- Row label -->
-			<text
-				x={LABEL_WIDTH - 12}
-				y={y + ROW_HEIGHT / 2}
-				text-anchor="end"
-				dominant-baseline="central"
-				class="row-label"
-				class:kit-label={inKit}
-				clip-path="url(#{uid}-label-clip)"
-				fill={inKit ? 'var(--kit)' : color}
-			>
-				{focalLabel(lens)}
-			</text>
-
-			<!-- Focal range visualization -->
-			{#if lens.lensType === 'Prime'}
-				<circle
-					cx={LABEL_WIDTH + xScale(focal.min)}
-					cy={y + ROW_HEIGHT / 2}
-					r={DOT_RADIUS}
-					fill={color}
-					class="lens-shape prime-shape"
-					tabindex="0"
-					role="button"
-					aria-label="{lens.manufacturer} {lens.model}"
-					aria-pressed={inKit}
-					onclick={() => handleToggle(lens)}
-					onmouseenter={(e) => showTooltip(lens, e)}
-					onmouseleave={hideTooltip}
-					onfocus={(e) =>
-						showTooltip(lens, {
-							clientX: e.currentTarget.getBoundingClientRect().x,
-							clientY: e.currentTarget.getBoundingClientRect().y
-						} as MouseEvent)}
-					onblur={hideTooltip}
-					onkeydown={(e) => handleKeydown(lens, e)}
-				/>
-			{:else}
-				<rect
-					x={LABEL_WIDTH + xScale(focal.min)}
-					y={y + ROW_HEIGHT / 2 - BAR_HEIGHT / 2}
-					width={Math.max(xScale(focal.max) - xScale(focal.min), 2)}
-					height={BAR_HEIGHT}
-					rx={BAR_HEIGHT / 2}
-					fill={color}
-					class="lens-shape"
-					tabindex="0"
-					role="button"
-					aria-label="{lens.manufacturer} {lens.model}"
-					aria-pressed={inKit}
-					onclick={() => handleToggle(lens)}
-					onmouseenter={(e) => showTooltip(lens, e)}
-					onmouseleave={hideTooltip}
-					onfocus={(e) =>
-						showTooltip(lens, {
-							clientX: e.currentTarget.getBoundingClientRect().x,
-							clientY: e.currentTarget.getBoundingClientRect().y
-						} as MouseEvent)}
-					onblur={hideTooltip}
-					onkeydown={(e) => handleKeydown(lens, e)}
-				/>
-			{/if}
+			<div class="row" class:kit={inKit}>
+				<span class="label" style="color: {inKit ? 'var(--kit)' : color};">
+					<span class="dot" style="background: {color};"></span>
+					<span class="label-text">{labelText(lens)}</span>
+				</span>
+				<span class="track">
+					{#if lens.lensType === 'Prime'}
+						<span
+							class="mark prime"
+							style="left: {pct(focal.min)}%; --c: {color};"
+							role="button"
+							tabindex="0"
+							aria-label="{lens.manufacturer} {lens.model}"
+							aria-pressed={inKit}
+							onclick={() => onToggleKit(lens.slug)}
+							onmouseenter={(e) => showTooltip(lens, e)}
+							onmouseleave={hideTooltip}
+							onfocus={(e) => showTooltipFromFocus(lens, e)}
+							onblur={hideTooltip}
+							onkeydown={(e) => handleKeydown(lens, e)}
+						></span>
+					{:else}
+						<span
+							class="mark zoom"
+							style="left: {pct(focal.min)}%; width: max({pct(focal.max) - pct(focal.min)}%, {MIN_BAR_PCT}%); --c: {color};"
+							role="button"
+							tabindex="0"
+							aria-label="{lens.manufacturer} {lens.model}"
+							aria-pressed={inKit}
+							onclick={() => onToggleKit(lens.slug)}
+							onmouseenter={(e) => showTooltip(lens, e)}
+							onmouseleave={hideTooltip}
+							onfocus={(e) => showTooltipFromFocus(lens, e)}
+							onblur={hideTooltip}
+							onkeydown={(e) => handleKeydown(lens, e)}
+						></span>
+					{/if}
+				</span>
+			</div>
 		{/each}
-	</svg>
+	</div>
 
 	<!-- Tooltip -->
 	{#if tooltip}
-		{@const focal = getFocal(tooltip.lens)}
 		{@const inKit = kitSlugs.has(tooltip.lens.slug)}
 		<div
 			class="tooltip"
-			transition:fade={{ duration: 100 }}
+			transition:fade={{ duration: 120 }}
 			style="left: {tooltip.x + 16}px; top: {tooltip.y - 20}px;"
 		>
 			{#if inKit}
@@ -450,112 +267,252 @@
 <style>
 	.focal-map {
 		position: relative;
-		overflow-x: auto;
+		width: 100%;
+		/* Single source of truth for the responsive label column width, shared
+		   by the axis/rows grid template and the tick/coverage offset math. */
+		--label-col: clamp(72px, 28%, 160px);
+		--col-gap: 10px;
 	}
 
-	.focal-map.has-overflow {
-		mask-image: linear-gradient(to right, black 90%, transparent 100%);
-		-webkit-mask-image: linear-gradient(to right, black 90%, transparent 100%);
+	/* Grid column template shared by axis and every row so ticks line up
+	   with the tracks. Label column flexes; track takes the rest. */
+	.axis,
+	.row {
+		display: grid;
+		grid-template-columns: var(--label-col) 1fr;
+		align-items: center;
+		gap: var(--col-gap);
 	}
 
-	svg {
-		display: block;
+	/* ---- Axis ---- */
+	.axis {
+		position: relative;
+		height: 22px;
+		margin-bottom: 6px;
+	}
+
+	.axis-context {
+		grid-row: 1;
+		grid-column: 2;
+		font-family: var(--font-sans);
+		font-size: var(--text-2xs);
+		text-transform: uppercase;
+		letter-spacing: 0.1em;
+		color: var(--text-faint);
+		align-self: center;
+	}
+
+	.axis-context.wide {
+		justify-self: start;
+	}
+
+	.axis-context.tele {
+		justify-self: end;
+	}
+
+	/* Ticks live in the track column; positioned by percent of that column.
+	   The track region starts after the label column + the 10px grid gap, so
+	   we offset into it and scale --frac across the remaining width. */
+	.tick {
+		position: absolute;
+		bottom: 0;
+		left: calc(
+			var(--label-col) + var(--col-gap) +
+				(100% - var(--label-col) - var(--col-gap)) * var(--frac, 0)
+		);
+		transform: translateX(-50%);
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		pointer-events: none;
+	}
+
+	.tick-line {
+		width: 1px;
+		height: 5px;
+		background: var(--border-subtle);
 	}
 
 	.tick-label {
 		font-family: var(--font-mono);
-		font-size: 11px;
-		fill: var(--text-faint);
+		font-size: var(--text-xs);
+		color: var(--text-faint);
+		font-variant-numeric: tabular-nums;
+		white-space: nowrap;
 	}
 
-	.axis-context-label {
-		font-family: var(--font-sans);
-		font-size: 10px;
-		text-transform: uppercase;
-		letter-spacing: 0.1em;
-		fill: var(--text-faint);
+	/* ---- Coverage strip ---- */
+	.coverage {
+		position: relative;
+		height: 24px;
+		margin: 0 0 12px 0;
+		/* align coverage track with the lens tracks: offset by label column */
+		margin-left: calc(var(--label-col) + var(--col-gap));
+		border-radius: var(--radius-md);
+		border: 1px solid var(--border-subtle);
+		overflow: hidden;
 	}
 
-	.row-label {
-		font-family: var(--font-sans);
-		font-size: calc(12px * var(--font-scale, 1));
+	.coverage-band {
+		position: absolute;
+		inset: 0;
 	}
 
-	.lens-shape {
+	.gap {
+		position: absolute;
+		top: 0;
+		bottom: 0;
+		background-image: repeating-linear-gradient(
+			-45deg,
+			transparent 0 6px,
+			color-mix(in srgb, var(--danger) 16%, transparent) 6px 7px
+		);
+		border-left: 1px dashed color-mix(in srgb, var(--danger) 45%, transparent);
+		border-right: 1px dashed color-mix(in srgb, var(--danger) 45%, transparent);
+	}
+
+	button.gap {
+		padding: 0;
+		appearance: none;
+		background-color: transparent;
 		cursor: pointer;
-		opacity: 0.85;
-		transform-box: fill-box;
-		transform-origin: center;
+	}
+
+	.gap-interactive {
+		outline: none;
 	}
 
 	@media (prefers-reduced-motion: no-preference) {
-		.lens-shape {
-			transition: opacity 150ms ease, transform 150ms ease;
+		.gap-interactive {
+			transition: background-color var(--dur-fast) var(--ease-out);
 		}
 	}
 
-	.lens-shape:hover,
-	.lens-shape:focus-visible {
+	.gap-interactive:hover,
+	.gap-interactive:focus-visible {
+		background-color: color-mix(in srgb, var(--danger) 12%, transparent);
+	}
+
+	.gap-interactive:focus-visible {
+		outline: 2px solid var(--accent);
+		outline-offset: -2px;
+	}
+
+	/* ---- Rows ---- */
+	.rows {
+		display: flex;
+		flex-direction: column;
+	}
+
+	.row {
+		min-height: 28px;
+		border-top: 1px solid var(--border-subtle);
+		padding: 2px 0;
+	}
+
+	.row:first-child {
+		border-top: none;
+	}
+
+	.row.kit {
+		background: var(--kit-bg);
+		box-shadow: inset 3px 0 0 var(--kit);
+	}
+
+	.label {
+		display: flex;
+		align-items: center;
+		gap: 6px;
+		min-width: 0;
+		font-family: var(--font-sans);
+		font-size: calc(var(--text-xs) * var(--font-scale, 1));
+	}
+
+	.dot {
+		flex: none;
+		width: 7px;
+		height: 7px;
+		border-radius: var(--radius-full);
+	}
+
+	.label-text {
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+
+	.track {
+		position: relative;
+		height: 18px;
+		min-width: 0;
+		background: linear-gradient(
+			to right,
+			transparent,
+			color-mix(in srgb, var(--border-subtle) 50%, transparent) 50%,
+			transparent
+		);
+		border-radius: var(--radius-full);
+	}
+
+	.mark {
+		position: absolute;
+		top: 50%;
+		cursor: pointer;
+		opacity: 0.85;
+	}
+
+	.mark:hover,
+	.mark:focus-visible {
 		opacity: 1;
 	}
 
-	.lens-shape.prime-shape:hover {
-		transform: scale(1.15);
+	.mark.prime {
+		width: 10px;
+		height: 10px;
+		transform: translate(-50%, -50%);
+		border-radius: var(--radius-full);
+		background: var(--c);
+		border: 2px solid var(--bg-surface);
 	}
 
-	.lens-shape:focus-visible {
-		outline: 2px solid var(--accent);
-		outline-offset: 2px;
-	}
-
-	/* Gap marker */
-	.gap-marker.interactive {
-		cursor: pointer;
-	}
-
-	.gap-marker .gap-border {
-		stroke: var(--text-faint);
+	.mark.zoom {
+		height: 7px;
+		transform: translateY(-50%);
+		border-radius: var(--radius-full);
+		background: var(--c);
 	}
 
 	@media (prefers-reduced-motion: no-preference) {
-		.gap-marker .gap-border {
-			transition: stroke 150ms ease;
+		.mark {
+			transition:
+				opacity var(--dur-fast) var(--ease-out),
+				transform var(--dur-fast) var(--ease-out);
 		}
-		.gap-marker .gap-hit {
-			transition: fill 150ms ease;
-		}
 	}
 
-	.gap-marker.interactive:hover .gap-hit,
-	.gap-marker.interactive:focus-visible .gap-hit {
-		fill: color-mix(in srgb, var(--accent) 15%, transparent);
+	.mark.prime:hover,
+	.mark.prime:focus-visible {
+		transform: translate(-50%, -50%) scale(1.15);
 	}
 
-	.gap-marker.interactive:hover .gap-border,
-	.gap-marker.interactive:focus-visible .gap-border {
-		stroke: var(--accent);
-		stroke-dasharray: none;
-	}
-
-	.gap-marker.interactive:focus-visible {
+	.mark:focus-visible {
 		outline: 2px solid var(--accent);
 		outline-offset: 2px;
-		border-radius: 4px;
 	}
 
-	/* Tooltip */
+	/* ---- Tooltip ---- */
 	.tooltip {
 		position: fixed;
-		z-index: 50;
+		z-index: 60;
 		background: var(--bg-elevated);
 		border: 1px solid var(--border-subtle);
-		border-radius: 8px;
+		border-radius: var(--radius-lg);
 		padding: 12px 16px;
 		display: flex;
 		flex-direction: column;
 		gap: 4px;
 		pointer-events: none;
-		box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+		box-shadow: var(--shadow-md);
 		max-width: 280px;
 	}
 
@@ -563,10 +520,10 @@
 		display: inline-block;
 		align-self: flex-start;
 		padding: 1px 8px;
-		border-radius: 3px;
+		border-radius: var(--radius-xs);
 		font-family: var(--font-mono);
 		font-weight: 500;
-		font-size: 10px;
+		font-size: var(--text-2xs);
 		color: var(--kit);
 		background: color-mix(in srgb, var(--kit) 15%, transparent);
 		margin-bottom: 2px;
@@ -574,14 +531,14 @@
 
 	.tooltip-mfr {
 		font-family: var(--font-sans);
-		font-size: 11px;
+		font-size: var(--text-xs);
 		color: var(--text-muted);
 	}
 
 	.tooltip-model {
 		font-family: var(--font-sans);
 		font-weight: 500;
-		font-size: 14px;
+		font-size: var(--text-md);
 		color: var(--text-primary);
 	}
 
@@ -599,7 +556,7 @@
 
 	.tooltip-spec-label {
 		font-family: var(--font-sans);
-		font-size: 10px;
+		font-size: var(--text-2xs);
 		text-transform: uppercase;
 		color: var(--text-muted);
 	}
@@ -607,7 +564,8 @@
 	.tooltip-spec-value {
 		font-family: var(--font-mono);
 		font-weight: 500;
-		font-size: 13px;
+		font-size: var(--text-base);
 		color: var(--text-primary);
+		font-variant-numeric: tabular-nums;
 	}
 </style>
