@@ -4,7 +4,7 @@
 
 # FujiLenses
 
-Interactive lens explorer for the Fujifilm X-mount ecosystem. Browse, filter, and compare lenses from Fujinon, Sigma, Viltrox, Tamron, Sirui, and Voigtlander.
+Interactive lens explorer for the Fujifilm X-mount ecosystem. Browse, filter, and compare lenses from Fujinon, TTArtisan, Viltrox, Sigma, Sirui, Voigtländer, and Tamron.
 
 **[www.fujilenses.com](https://www.fujilenses.com)**
 
@@ -31,15 +31,16 @@ Interactive lens explorer for the Fujifilm X-mount ecosystem. Browse, filter, an
 
 ## Lens Data
 
-91 lenses across 7 manufacturers:
+111 lenses across 7 manufacturers:
 
 | Manufacturer | Lenses |
 |---|---|
 | Fujinon | 48 (41 XF + 7 XC) |
+| TTArtisan | 20 |
 | Viltrox | 14 |
 | Sigma | 11 |
 | Sirui | 7 |
-| Voigtlander | 7 |
+| Voigtländer | 7 |
 | Tamron | 4 |
 
 Data files: `src/lib/data/xf-lenses.json` and `src/lib/data/third-party-lenses.json`.
@@ -56,6 +57,13 @@ pnpm dev
 ```sh
 pnpm build    # runs slug uniqueness check, then builds
 pnpm preview  # preview production build locally
+```
+
+## Testing
+
+```sh
+pnpm test        # run unit tests (Vitest)
+pnpm test:watch  # watch mode
 ```
 
 ## Contributing
