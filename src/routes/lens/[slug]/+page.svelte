@@ -14,6 +14,9 @@
 	// Register lite-youtube web component (client-side only)
 	onMount(async () => {
 		if (!customElements.get('lite-youtube')) {
+			// lite-youtube-embed ships no types; this dynamic import is for its side effect
+			// (registering the <lite-youtube> custom element) only.
+			// @ts-expect-error -- no type declarations for this package
 			await import('lite-youtube-embed');
 		}
 	});
