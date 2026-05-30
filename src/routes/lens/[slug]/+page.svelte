@@ -46,6 +46,12 @@
 			? `FUJINON ${lens.mountType}-MOUNT`
 			: `${lens.manufacturer.toUpperCase()} · ${lens.mountType}-MOUNT`
 	);
+
+	// Roadmap: retailer/price slot. Render-only from existing fields; no fetching.
+	let hasPrice = $derived(lens.approxPriceUSD > 0);
+	let hasRetailer = $derived(!!lens.retailerUrl && lens.retailerUrl.length > 0);
+	let showBuyBlock = $derived(hasPrice || hasRetailer);
+	let priceDisplay = $derived(`~$${lens.approxPriceUSD.toLocaleString('en-US')}`);
 </script>
 
 <svelte:head>
@@ -108,6 +114,32 @@
 				<span>No photo available</span>
 			</div>
 		</div>
+
+		<!-- Retailer / price slot — renders only when there's data to show -->
+		{#if showBuyBlock}
+			<div class="buy-block">
+				<span class="buy-label">Where to buy</span>
+				{#if hasPrice}
+					<div class="buy-price">
+						<span class="buy-amount">{priceDisplay}</span>
+						<span class="buy-price-caption">
+							Indicative{#if lens.priceUpdatedYear > 0} · updated {lens.priceUpdatedYear}{/if}
+						</span>
+					</div>
+				{/if}
+				{#if hasRetailer}
+					<a
+						class="buy-link"
+						href={lens.retailerUrl}
+						target="_blank"
+						rel="noopener noreferrer nofollow sponsored"
+					>
+						Check price <span class="buy-arrow" aria-hidden="true">↗</span>
+					</a>
+					<p class="buy-disclosure">Affiliate link — we may earn a commission.</p>
+				{/if}
+			</div>
+		{/if}
 	</div>
 
 	<!-- Right column -->
@@ -360,6 +392,76 @@
 
 	.photo-glyph {
 		color: var(--text-muted);
+	}
+
+	/* Retailer / price slot — card under the photo */
+	.buy-block {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-2);
+		margin-top: var(--space-4);
+		padding: var(--space-4);
+		background: var(--bg-surface);
+		border: 1px solid var(--border-subtle);
+		border-radius: var(--radius-lg);
+	}
+
+	/* Label — .t-label treatment */
+	.buy-label {
+		font-family: var(--font-sans);
+		font-weight: var(--weight-medium);
+		font-size: calc(var(--text-xs) * var(--font-scale, 1));
+		text-transform: uppercase;
+		letter-spacing: var(--tracking-label);
+		color: var(--text-muted);
+	}
+
+	.buy-price {
+		display: flex;
+		align-items: baseline;
+		flex-wrap: wrap;
+		gap: var(--space-2);
+	}
+
+	.buy-amount {
+		font-family: var(--font-mono);
+		font-variant-numeric: tabular-nums;
+		font-weight: var(--weight-medium);
+		font-size: calc(var(--text-xl) * var(--font-scale, 1));
+		color: var(--text-primary);
+		letter-spacing: var(--tracking-tight);
+	}
+
+	.buy-price-caption {
+		font-family: var(--font-sans);
+		font-size: calc(var(--text-xs) * var(--font-scale, 1));
+		color: var(--text-muted);
+	}
+
+	.buy-link {
+		align-self: flex-start;
+		font-family: var(--font-sans);
+		font-weight: var(--weight-medium);
+		font-size: calc(var(--text-md) * var(--font-scale, 1));
+		color: var(--accent);
+		text-decoration: none;
+		transition: color var(--dur-fast) var(--ease-out);
+	}
+
+	.buy-link:hover {
+		color: var(--accent-bright);
+	}
+
+	.buy-arrow {
+		font-size: 0.9em;
+	}
+
+	.buy-disclosure {
+		margin: 0;
+		font-family: var(--font-sans);
+		font-size: calc(var(--text-xs) * var(--font-scale, 1));
+		color: var(--text-muted);
+		line-height: var(--leading-normal);
 	}
 
 	/* Specs (right) */
