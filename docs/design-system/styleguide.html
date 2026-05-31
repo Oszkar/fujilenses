@@ -1,0 +1,1212 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>FujiLenses — Design System</title>
+		<link rel="stylesheet" href="colors_and_type.css" />
+		<style>
+			* {
+				box-sizing: border-box;
+				margin: 0;
+				padding: 0;
+			}
+			body {
+				font-family: var(--font-sans);
+				background: var(--bg-base);
+				color: var(--text-primary);
+				-webkit-font-smoothing: antialiased;
+				transition:
+					background var(--dur-base) var(--ease-out),
+					color var(--dur-base) var(--ease-out);
+			}
+
+			/* ---------- Page shell ---------- */
+			.topbar {
+				position: sticky;
+				top: 0;
+				z-index: var(--z-nav);
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+				gap: var(--space-4);
+				padding: 0 var(--space-8);
+				height: var(--nav-height);
+				background: color-mix(in srgb, var(--bg-surface) 86%, transparent);
+				backdrop-filter: blur(12px);
+				border-bottom: 1px solid var(--border-subtle);
+			}
+			.brand {
+				display: flex;
+				align-items: center;
+				gap: var(--space-3);
+			}
+			.brand .mark {
+				width: 26px;
+				height: 26px;
+				border-radius: var(--radius-sm);
+				background: var(--bg-base);
+				border: 1px solid var(--border-default);
+				display: grid;
+				place-items: center;
+			}
+			.brand .mark span {
+				width: 11px;
+				height: 11px;
+				border-radius: var(--radius-full);
+				border: 2.5px solid var(--accent);
+			}
+			.brand b {
+				font-weight: var(--weight-bold);
+				font-size: 15px;
+				letter-spacing: -0.01em;
+			}
+			.brand .tag {
+				font-size: var(--text-xs);
+				color: var(--text-muted);
+				padding-left: var(--space-3);
+				margin-left: var(--space-1);
+				border-left: 1px solid var(--border-default);
+			}
+			.controls {
+				display: flex;
+				align-items: center;
+				gap: var(--space-4);
+			}
+			.ctl-group {
+				display: flex;
+				align-items: center;
+				gap: var(--space-2);
+			}
+			.ctl-group > .t-label {
+				display: none;
+			}
+			@media (min-width: 720px) {
+				.ctl-group > .t-label {
+					display: inline;
+				}
+			}
+
+			main {
+				max-width: 1080px;
+				margin: 0 auto;
+				padding: var(--space-12) var(--space-8) var(--space-16);
+			}
+			.hero {
+				margin-bottom: var(--space-12);
+			}
+			.hero h1 {
+				font-size: var(--text-4xl);
+				font-weight: var(--weight-bold);
+				letter-spacing: -0.02em;
+				line-height: 1.05;
+				margin-bottom: var(--space-4);
+			}
+			.hero p {
+				max-width: 60ch;
+				font-size: var(--text-md);
+				line-height: var(--leading-normal);
+				color: var(--text-secondary);
+			}
+			.hero .meta {
+				display: flex;
+				flex-wrap: wrap;
+				gap: var(--space-2);
+				margin-top: var(--space-6);
+			}
+
+			section {
+				margin-top: var(--space-16);
+				scroll-margin-top: 80px;
+			}
+			.sec-head {
+				display: flex;
+				align-items: baseline;
+				gap: var(--space-4);
+				padding-bottom: var(--space-4);
+				margin-bottom: var(--space-6);
+				border-bottom: 1px solid var(--border-subtle);
+			}
+			.sec-head h2 {
+				font-size: var(--text-2xl);
+				font-weight: var(--weight-semibold);
+				letter-spacing: -0.01em;
+			}
+			.sec-head .num {
+				font-family: var(--font-mono);
+				font-size: var(--text-sm);
+				color: var(--text-faint);
+			}
+			.sec-head p {
+				margin-left: auto;
+				font-size: var(--text-sm);
+				color: var(--text-muted);
+				max-width: 42ch;
+				text-align: right;
+			}
+			.sub {
+				font-family: var(--font-sans);
+				font-weight: var(--weight-medium);
+				font-size: var(--text-xs);
+				text-transform: uppercase;
+				letter-spacing: var(--tracking-label);
+				color: var(--text-muted);
+				margin: var(--space-8) 0 var(--space-4);
+			}
+			.sub:first-of-type {
+				margin-top: 0;
+			}
+
+			/* ---------- Reusable layout ---------- */
+			.grid {
+				display: grid;
+				gap: var(--space-3);
+			}
+			.cards {
+				display: grid;
+				grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+				gap: var(--space-3);
+			}
+			.panel {
+				background: var(--bg-surface);
+				border: 1px solid var(--border-subtle);
+				border-radius: var(--radius-lg);
+				padding: var(--space-6);
+			}
+
+			/* ---------- Color swatches ---------- */
+			.swatch {
+				border: 1px solid var(--border-subtle);
+				border-radius: var(--radius-md);
+				overflow: hidden;
+				background: var(--bg-surface);
+			}
+			.swatch .chip {
+				height: 64px;
+				width: 100%;
+			}
+			.swatch .meta {
+				padding: var(--space-3);
+				border-top: 1px solid var(--border-subtle);
+			}
+			.swatch .name {
+				font-size: var(--text-sm);
+				font-weight: var(--weight-medium);
+				color: var(--text-primary);
+			}
+			.swatch .val {
+				font-family: var(--font-mono);
+				font-size: var(--text-2xs);
+				color: var(--text-muted);
+				margin-top: 2px;
+			}
+			.swatch .use {
+				font-size: var(--text-2xs);
+				color: var(--text-faint);
+				margin-top: var(--space-1);
+			}
+
+			/* maker chips row */
+			.maker-row {
+				display: flex;
+				flex-wrap: wrap;
+				gap: var(--space-2);
+			}
+
+			/* ---------- Type specimens ---------- */
+			.type-row {
+				display: grid;
+				grid-template-columns: 130px 1fr;
+				gap: var(--space-4);
+				align-items: baseline;
+				padding: var(--space-4) 0;
+				border-bottom: 1px solid var(--border-subtle);
+			}
+			.type-row:last-child {
+				border-bottom: none;
+			}
+			.type-row .key {
+				font-family: var(--font-mono);
+				font-size: var(--text-2xs);
+				color: var(--text-muted);
+				line-height: 1.5;
+			}
+			.type-row .key b {
+				display: block;
+				color: var(--text-secondary);
+				font-weight: var(--weight-medium);
+			}
+
+			.font-card {
+				display: grid;
+				grid-template-columns: 1fr 1fr;
+				gap: var(--space-4);
+			}
+			@media (max-width: 640px) {
+				.font-card {
+					grid-template-columns: 1fr;
+				}
+			}
+			.font-spec .glyphs {
+				font-size: 40px;
+				font-weight: var(--weight-semibold);
+				letter-spacing: -0.01em;
+				margin-bottom: var(--space-3);
+			}
+			.font-spec.mono .glyphs {
+				font-family: var(--font-mono);
+				font-weight: var(--weight-medium);
+			}
+			.font-spec .name {
+				font-size: var(--text-md);
+				font-weight: var(--weight-semibold);
+			}
+			.font-spec .role {
+				font-size: var(--text-sm);
+				color: var(--text-muted);
+				margin-top: 2px;
+			}
+			.font-spec .weights {
+				margin-top: var(--space-4);
+				display: flex;
+				flex-direction: column;
+				gap: 2px;
+			}
+
+			/* ---------- Component demos ---------- */
+			.demo {
+				display: flex;
+				flex-wrap: wrap;
+				align-items: center;
+				gap: var(--space-3);
+			}
+			.demo.col {
+				flex-direction: column;
+				align-items: stretch;
+				max-width: 280px;
+			}
+
+			/* Badges (canonical component CSS — mirrors the app) */
+			.mfr-badge {
+				display: inline-flex;
+				align-items: center;
+				padding: 3px 8px;
+				border-radius: var(--radius-xs);
+				font-family: var(--font-mono);
+				font-weight: var(--weight-medium);
+				font-size: var(--text-xs);
+				letter-spacing: var(--tracking-badge);
+				text-transform: uppercase;
+				color: var(--c);
+				background: color-mix(in srgb, var(--c) var(--mfr-badge-fill), transparent);
+			}
+			.spec-badge {
+				display: inline-flex;
+				align-items: center;
+				padding: 2px 7px;
+				border-radius: var(--radius-xs);
+				font-family: var(--font-mono);
+				font-weight: var(--weight-medium);
+				font-size: var(--text-2xs);
+				letter-spacing: var(--tracking-badge);
+				text-transform: uppercase;
+				color: var(--c, var(--text-muted));
+				background: color-mix(in srgb, var(--c, var(--text-muted)) 15%, transparent);
+			}
+
+			/* Buttons */
+			.btn {
+				display: inline-flex;
+				align-items: center;
+				justify-content: center;
+				gap: var(--space-2);
+				height: 34px;
+				padding: 0 var(--space-4);
+				border-radius: var(--radius-md);
+				border: 1px solid transparent;
+				font-family: var(--font-sans);
+				font-weight: var(--weight-medium);
+				font-size: var(--text-base);
+				cursor: pointer;
+				transition:
+					background var(--dur-fast) var(--ease-out),
+					border-color var(--dur-fast) var(--ease-out),
+					color var(--dur-fast) var(--ease-out);
+			}
+			.btn-primary {
+				background: var(--accent);
+				color: var(--text-on-accent);
+			}
+			.btn-primary:hover {
+				background: var(--accent-hover);
+			}
+			.btn-secondary {
+				background: var(--bg-surface);
+				border-color: var(--border-default);
+				color: var(--text-primary);
+			}
+			.btn-secondary:hover {
+				background: var(--bg-elevated);
+				border-color: var(--border-strong);
+			}
+			.btn-ghost {
+				background: transparent;
+				color: var(--text-secondary);
+			}
+			.btn-ghost:hover {
+				background: var(--bg-elevated);
+				color: var(--text-primary);
+			}
+			.btn-danger {
+				background: var(--danger-bg);
+				color: var(--danger);
+			}
+			.btn-sm {
+				height: 28px;
+				padding: 0 var(--space-3);
+				font-size: var(--text-sm);
+			}
+
+			/* Segmented control */
+			.segmented {
+				display: inline-flex;
+				gap: var(--space-1);
+				padding: 3px;
+				background: var(--bg-base);
+				border: 1px solid var(--border-default);
+				border-radius: var(--radius-md);
+			}
+			.seg-btn {
+				padding: 5px 14px;
+				border: none;
+				border-radius: var(--radius-sm);
+				background: transparent;
+				font-family: var(--font-sans);
+				font-weight: var(--weight-medium);
+				font-size: var(--text-sm);
+				color: var(--text-muted);
+				cursor: pointer;
+				transition:
+					background var(--dur-base) var(--ease-out),
+					color var(--dur-base) var(--ease-out);
+			}
+			.seg-btn:hover {
+				color: var(--text-secondary);
+			}
+			.seg-btn.active {
+				background: var(--bg-accent);
+				color: var(--accent-bright);
+			}
+
+			/* Toggle */
+			.toggle-row {
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+				gap: var(--space-4);
+				padding: var(--space-2) 0;
+			}
+			.toggle-row .lbl {
+				font-size: var(--text-base);
+				color: var(--text-secondary);
+			}
+			.toggle {
+				appearance: none;
+				width: 36px;
+				height: 20px;
+				border-radius: var(--radius-full);
+				background: var(--border-default);
+				position: relative;
+				cursor: pointer;
+				transition: background var(--dur-base) var(--ease-out);
+				flex-shrink: 0;
+			}
+			.toggle::after {
+				content: '';
+				position: absolute;
+				top: 2px;
+				left: 2px;
+				width: 16px;
+				height: 16px;
+				border-radius: 50%;
+				background: var(--text-muted);
+				transition:
+					transform var(--dur-base) var(--ease-out),
+					background var(--dur-base) var(--ease-out);
+			}
+			.toggle:checked {
+				background: var(--accent);
+			}
+			.toggle:checked::after {
+				transform: translateX(16px);
+				background: var(--text-on-accent);
+			}
+
+			/* Sidebar filter item */
+			.mfr-item {
+				display: flex;
+				align-items: center;
+				gap: var(--space-3);
+				padding: 7px 10px;
+				border-radius: var(--radius-sm);
+				border: none;
+				background: transparent;
+				cursor: pointer;
+				width: 100%;
+				text-align: left;
+				transition: background var(--dur-base) var(--ease-out);
+			}
+			.mfr-item:hover,
+			.mfr-item.active {
+				background: var(--bg-elevated);
+			}
+			.mfr-item .dot {
+				width: 8px;
+				height: 8px;
+				border-radius: 50%;
+				flex-shrink: 0;
+				background: var(--c);
+			}
+			.mfr-item .name {
+				font-size: var(--text-base);
+				font-weight: var(--weight-medium);
+				color: var(--c);
+			}
+			.mfr-item .count {
+				margin-left: auto;
+				font-family: var(--font-mono);
+				font-size: var(--text-xs);
+				color: var(--text-faint);
+			}
+
+			/* Kit chips */
+			.kit-badge {
+				display: inline-flex;
+				align-items: center;
+				gap: 5px;
+				padding: 3px 9px;
+				border-radius: var(--radius-sm);
+				font-family: var(--font-mono);
+				font-weight: var(--weight-medium);
+				font-size: var(--text-xs);
+				letter-spacing: var(--tracking-badge);
+				color: var(--kit);
+				background: color-mix(in srgb, var(--kit) 15%, transparent);
+				border: none;
+				cursor: pointer;
+			}
+			.kit-badge .dot {
+				width: 6px;
+				height: 6px;
+				border-radius: 50%;
+				background: var(--kit);
+			}
+			.kit-add {
+				padding: 3px 9px;
+				border-radius: var(--radius-sm);
+				border: 1px dashed var(--border-default);
+				background: transparent;
+				font-family: var(--font-sans);
+				font-size: var(--text-sm);
+				color: var(--text-muted);
+				cursor: pointer;
+			}
+			.kit-add:hover {
+				color: var(--text-secondary);
+				border-color: var(--border-strong);
+			}
+
+			/* Lens table */
+			.lens-table {
+				width: 100%;
+				border-collapse: separate;
+				border-spacing: 0;
+				font-size: var(--text-md);
+			}
+			.lens-table th {
+				text-align: left;
+				padding: 8px 12px;
+				font-weight: var(--weight-medium);
+				font-size: var(--text-xs);
+				text-transform: uppercase;
+				letter-spacing: 0.05em;
+				color: var(--text-muted);
+				border-bottom: 1px solid var(--border-subtle);
+				white-space: nowrap;
+			}
+			.lens-table th.active {
+				color: var(--accent);
+			}
+			.lens-table td {
+				padding: 11px 12px;
+				border-bottom: 1px solid var(--border-subtle);
+				white-space: nowrap;
+				vertical-align: middle;
+			}
+			.lens-table tr:hover td {
+				background: var(--bg-elevated);
+			}
+			.lens-table .model {
+				font-weight: var(--weight-medium);
+				color: var(--text-primary);
+				text-decoration: none;
+			}
+			.lens-table .model:hover {
+				color: var(--accent);
+			}
+			.lens-table .data {
+				font-family: var(--font-mono);
+				font-variant-numeric: tabular-nums;
+				color: var(--text-secondary);
+			}
+			.lens-table .year {
+				color: var(--text-faint);
+			}
+			.lens-table tr.kit td {
+				background: var(--kit-bg);
+			}
+			.lens-table tr.kit td:first-child {
+				box-shadow: inset 3px 0 0 var(--kit);
+			}
+			.lens-table tr.kit .model {
+				color: var(--kit);
+			}
+
+			/* Detail / consider cards */
+			.consider {
+				display: grid;
+				grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+				gap: var(--space-3);
+			}
+			.consider-card {
+				display: flex;
+				flex-direction: column;
+				gap: var(--space-2);
+				padding: var(--space-4);
+				border-radius: var(--radius-lg);
+				background: var(--bg-surface);
+				border: 1px solid var(--border-subtle);
+				text-decoration: none;
+				transition:
+					border-color var(--dur-base) var(--ease-out),
+					background var(--dur-base) var(--ease-out);
+			}
+			.consider-card:hover {
+				border-color: var(--accent);
+				background: var(--bg-elevated);
+			}
+			.consider-card .model {
+				font-weight: var(--weight-medium);
+				font-size: var(--text-md);
+				color: var(--text-primary);
+			}
+			.consider-card .specs {
+				display: flex;
+				gap: 6px;
+				font-family: var(--font-mono);
+				font-size: var(--text-sm);
+				color: var(--text-muted);
+			}
+			.consider-card .specs .sep {
+				opacity: 0.4;
+			}
+
+			/* Photo frame (new — supports forthcoming product photos) */
+			.photo-frame {
+				position: relative;
+				aspect-ratio: 4 / 3;
+				border-radius: var(--radius-xl);
+				background:
+					repeating-linear-gradient(
+						-45deg,
+						transparent 0 11px,
+						color-mix(in srgb, var(--text-faint) 9%, transparent) 11px 12px
+					),
+					var(--bg-surface);
+				border: 1px solid var(--border-subtle);
+				display: grid;
+				place-items: center;
+			}
+			.photo-frame .ph {
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				gap: var(--space-2);
+				font-family: var(--font-mono);
+				font-size: var(--text-xs);
+				color: var(--text-faint);
+				letter-spacing: 0.04em;
+			}
+
+			/* Tooltip */
+			.tooltip {
+				display: inline-block;
+				padding: var(--space-3);
+				border-radius: var(--radius-md);
+				background: var(--bg-elevated);
+				border: 1px solid var(--border-default);
+				box-shadow: var(--shadow-md);
+				max-width: 220px;
+			}
+			.tooltip .tt-title {
+				font-size: var(--text-base);
+				font-weight: var(--weight-semibold);
+			}
+			.tooltip .tt-row {
+				display: flex;
+				justify-content: space-between;
+				gap: var(--space-4);
+				font-family: var(--font-mono);
+				font-size: var(--text-xs);
+				color: var(--text-muted);
+				margin-top: 4px;
+			}
+
+			/* spacing demo */
+			.space-demo {
+				display: flex;
+				align-items: flex-end;
+				gap: var(--space-4);
+				flex-wrap: wrap;
+			}
+			.space-demo .unit {
+				text-align: center;
+			}
+			.space-demo .bar {
+				background: var(--accent);
+				border-radius: var(--radius-xs);
+				margin: 0 auto var(--space-2);
+				opacity: 0.85;
+			}
+			.space-demo .u {
+				font-family: var(--font-mono);
+				font-size: var(--text-2xs);
+				color: var(--text-muted);
+			}
+			.radius-demo {
+				display: flex;
+				gap: var(--space-4);
+				flex-wrap: wrap;
+			}
+			.radius-demo .r {
+				width: 70px;
+				height: 70px;
+				background: var(--bg-elevated);
+				border: 1px solid var(--border-default);
+				display: grid;
+				place-items: end center;
+				padding-bottom: 6px;
+				font-family: var(--font-mono);
+				font-size: var(--text-2xs);
+				color: var(--text-muted);
+			}
+			.elev-demo {
+				display: flex;
+				gap: var(--space-6);
+				flex-wrap: wrap;
+			}
+			.elev-demo .e {
+				width: 110px;
+				height: 70px;
+				border-radius: var(--radius-lg);
+				background: var(--bg-surface);
+				border: 1px solid var(--border-subtle);
+				display: grid;
+				place-items: center;
+				font-family: var(--font-mono);
+				font-size: var(--text-2xs);
+				color: var(--text-muted);
+			}
+
+			.note {
+				display: inline-block;
+				margin-top: var(--space-3);
+				padding: 2px 8px;
+				border-radius: var(--radius-sm);
+				font-size: var(--text-2xs);
+				font-family: var(--font-mono);
+				color: var(--text-faint);
+				background: var(--bg-base);
+				border: 1px solid var(--border-subtle);
+			}
+			.rec {
+				color: var(--kit);
+				border-color: color-mix(in srgb, var(--kit) 40%, transparent);
+			}
+
+			/* accent explorer */
+			.accent-pick {
+				display: flex;
+				gap: var(--space-2);
+				flex-wrap: wrap;
+			}
+			.accent-pick button {
+				display: flex;
+				align-items: center;
+				gap: var(--space-2);
+				padding: 6px 10px 6px 6px;
+				border-radius: var(--radius-md);
+				border: 1px solid var(--border-default);
+				background: var(--bg-surface);
+				color: var(--text-secondary);
+				font-family: var(--font-sans);
+				font-size: var(--text-sm);
+				font-weight: var(--weight-medium);
+				cursor: pointer;
+			}
+			.accent-pick button[aria-pressed='true'] {
+				border-color: var(--accent);
+				color: var(--text-primary);
+				background: var(--bg-accent-soft);
+			}
+			.accent-pick .sw {
+				width: 18px;
+				height: 18px;
+				border-radius: var(--radius-sm);
+			}
+			.accent-pick .star {
+				color: var(--kit);
+				font-size: 11px;
+			}
+		</style>
+	</head>
+	<body>
+		<header class="topbar">
+			<div class="brand">
+				<span class="mark"><span></span></span>
+				<b>FujiLenses</b>
+				<span class="tag">Design System</span>
+			</div>
+			<div class="controls">
+				<div class="ctl-group">
+					<span class="t-label">Theme</span>
+					<div class="segmented" id="themeSeg">
+						<button class="seg-btn" data-theme-val="auto">Auto</button>
+						<button class="seg-btn active" data-theme-val="dark">Dark</button>
+						<button class="seg-btn" data-theme-val="light">Light</button>
+					</div>
+				</div>
+			</div>
+		</header>
+
+		<main>
+			<div class="hero">
+				<h1>Technical Clarity, refined.</h1>
+				<p>
+					The visual language for FujiLenses — an interactive lens explorer for the Fujifilm
+					X-mount ecosystem. A calm, data-dense interface where the lens data is the only thing
+					allowed to carry color. This page is the living reference: every token, type ramp, and
+					component below is rendered live and reacts to the theme and accent controls.
+				</p>
+				<div class="meta">
+					<span class="note">Geist + Geist Mono</span>
+					<span class="note">Dark / Light / Auto</span>
+					<span class="note">OKLCH maker palette</span>
+					<span class="note">colors_and_type.css</span>
+				</div>
+			</div>
+
+			<!-- ============ ACCENT EXPLORER ============ -->
+			<section id="accent">
+				<div class="sec-head">
+					<span class="num">00</span>
+					<h2>Accent</h2>
+					<p>One interactive accent, kept clear of every data hue. Pick one — the whole page updates.</p>
+				</div>
+				<div class="panel">
+					<div class="accent-pick" id="accentPick">
+						<button data-accent="indigo" aria-pressed="true">
+							<span class="sw" style="background:#818cf8"></span> Indigo <span class="star">★ rec</span>
+						</button>
+						<button data-accent="violet">
+							<span class="sw" style="background:#c084fc"></span> Violet
+						</button>
+						<button data-accent="azure">
+							<span class="sw" style="background:#38bdf8"></span> Azure
+						</button>
+						<button data-accent="amber">
+							<span class="sw" style="background:#fbbf24"></span> Amber
+						</button>
+						<button data-accent="graphite">
+							<span class="sw" style="background:#94a3b8"></span> Graphite
+						</button>
+					</div>
+					<p class="t-body" style="margin-top:16px;max-width:64ch" id="accentNote">
+						<b style="color:var(--text-primary)">Indigo</b> is the recommendation: it reads
+						unmistakably as interactive chrome and sits far from Fujinon's sky-blue data color, so
+						links and selection never get confused with the catalogue. Azure and Amber are shown for
+						comparison — both gorgeous, but they collide with a maker hue. Graphite is the
+						"colour-comes-only-from-data" extreme.
+					</p>
+				</div>
+			</section>
+
+			<!-- ============ COLOR ============ -->
+			<section id="color">
+				<div class="sec-head">
+					<span class="num">01</span>
+					<h2>Color</h2>
+					<p>Cool-neutral surfaces. Color is reserved for data and a single accent.</p>
+				</div>
+
+				<div class="sub">Surfaces &amp; borders</div>
+				<div class="cards" id="surfaceSwatches"></div>
+
+				<div class="sub">Text</div>
+				<div class="cards" id="textSwatches"></div>
+
+				<div class="sub">Maker palette — one OKLCH family</div>
+				<div class="panel">
+					<div class="maker-row" id="makerBadges"></div>
+					<p class="t-caption" style="margin-top:16px">
+						Shared lightness &amp; chroma, hue is the only variable — so seven brands read as one
+						coherent data set. Badge fill is the maker color at
+						<code style="font-family:var(--font-mono)">--mfr-badge-fill</code> opacity. Color is never
+						the sole signal: every badge is also labelled.
+					</p>
+				</div>
+
+				<div class="sub">Semantic</div>
+				<div class="cards" id="semanticSwatches"></div>
+			</section>
+
+			<!-- ============ TYPE ============ -->
+			<section id="type">
+				<div class="sec-head">
+					<span class="num">02</span>
+					<h2>Typography</h2>
+					<p>Geist for the interface, Geist Mono for every number.</p>
+				</div>
+
+				<div class="panel font-card">
+					<div class="font-spec">
+						<div class="glyphs">Ag 24‑70</div>
+						<div class="name">Geist</div>
+						<div class="role">Interface · headings · labels</div>
+						<div class="weights t-caption">
+							<span style="font-weight:400">400 Regular — body &amp; data</span>
+							<span style="font-weight:500">500 Medium — UI labels, model names</span>
+							<span style="font-weight:600">600 Semibold — headings</span>
+							<span style="font-weight:700">700 Bold — display</span>
+						</div>
+					</div>
+					<div class="font-spec mono">
+						<div class="glyphs">f/1.4 · 56mm</div>
+						<div class="name">Geist Mono</div>
+						<div class="role">All quantitative data · ticks · badges</div>
+						<div class="weights t-caption">
+							<span style="font-family:var(--font-mono);font-weight:400">400 — table data, axis ticks</span>
+							<span style="font-family:var(--font-mono);font-weight:500">500 — badges, key specs</span>
+							<span style="font-family:var(--font-mono)">tabular-nums always on</span>
+						</div>
+					</div>
+				</div>
+
+				<div class="sub">Type scale</div>
+				<div class="panel" id="typeScale"></div>
+			</section>
+
+			<!-- ============ SPACING ============ -->
+			<section id="space">
+				<div class="sec-head">
+					<span class="num">03</span>
+					<h2>Spacing, radius &amp; elevation</h2>
+					<p>4px base grid. Restrained radii. Borders over shadows.</p>
+				</div>
+
+				<div class="sub">Spacing scale (4px base)</div>
+				<div class="panel">
+					<div class="space-demo" id="spaceDemo"></div>
+				</div>
+
+				<div class="sub">Radius</div>
+				<div class="panel">
+					<div class="radius-demo" id="radiusDemo"></div>
+				</div>
+
+				<div class="sub">Elevation</div>
+				<div class="panel">
+					<div class="elev-demo">
+						<div class="e" style="box-shadow:var(--shadow-sm)">sm</div>
+						<div class="e" style="box-shadow:var(--shadow-md)">md</div>
+						<div class="e" style="box-shadow:var(--shadow-lg)">lg</div>
+					</div>
+					<p class="t-caption" style="margin-top:16px">
+						Dark UIs lean on borders, not big shadows. <code style="font-family:var(--font-mono)">sm</code>
+						for resting cards, <code style="font-family:var(--font-mono)">md</code> for tooltips &amp;
+						popovers, <code style="font-family:var(--font-mono)">lg</code> for the mobile drawer only.
+					</p>
+				</div>
+			</section>
+
+			<!-- ============ COMPONENTS ============ -->
+			<section id="components">
+				<div class="sec-head">
+					<span class="num">04</span>
+					<h2>Components</h2>
+					<p>The reusable kit. Same CSS the app ships.</p>
+				</div>
+
+				<div class="sub">Buttons</div>
+				<div class="panel demo">
+					<button class="btn btn-primary">Add to My Kit</button>
+					<button class="btn btn-secondary">Clear filters</button>
+					<button class="btn btn-ghost">Cancel</button>
+					<button class="btn btn-danger">Remove</button>
+					<button class="btn btn-secondary btn-sm">Small</button>
+				</div>
+
+				<div class="sub">Spec &amp; status badges</div>
+				<div class="panel demo">
+					<span class="spec-badge" style="--c:var(--text-muted)">MF</span>
+					<span class="spec-badge" style="--c:var(--spec-wr)">WR</span>
+					<span class="spec-badge" style="--c:var(--spec-feature)">OIS</span>
+					<span class="spec-badge" style="--c:var(--spec-feature)">LM</span>
+					<span class="spec-badge" style="--c:var(--new)">NEW</span>
+					<span class="kit-badge"><span class="dot"></span>IN KIT</span>
+					<span class="kit-add">+ kit</span>
+				</div>
+
+				<div class="sub">Controls</div>
+				<div class="panel" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:32px">
+					<div>
+						<div class="t-label" style="margin-bottom:10px">Segmented</div>
+						<div class="segmented">
+							<button class="seg-btn active">All</button>
+							<button class="seg-btn">Prime</button>
+							<button class="seg-btn">Zoom</button>
+						</div>
+					</div>
+					<div>
+						<div class="t-label" style="margin-bottom:10px">Toggles</div>
+						<label class="toggle-row"><span class="lbl">Weather Resistant</span><input type="checkbox" class="toggle" checked /></label>
+						<label class="toggle-row"><span class="lbl">FF Equivalent</span><input type="checkbox" class="toggle" /></label>
+					</div>
+					<div>
+						<div class="t-label" style="margin-bottom:10px">Filter list</div>
+						<button class="mfr-item active" style="--c:var(--mfr-fujinon)"><span class="dot"></span><span class="name">Fujinon</span><span class="count">48</span></button>
+						<button class="mfr-item" style="--c:var(--mfr-viltrox)"><span class="dot"></span><span class="name">Viltrox</span><span class="count">14</span></button>
+					</div>
+				</div>
+
+				<div class="sub">Lens table</div>
+				<div class="panel" style="padding:8px 8px 0">
+					<table class="lens-table" id="demoTable"></table>
+				</div>
+
+				<div class="sub">Tooltip &amp; "Also consider" cards</div>
+				<div class="panel" style="display:flex;gap:32px;flex-wrap:wrap;align-items:flex-start">
+					<div class="tooltip">
+						<div class="tt-title">XF 56mm F1.2 R</div>
+						<div class="tt-row"><span>Equivalent</span><span>85mm</span></div>
+						<div class="tt-row"><span>Aperture</span><span>f/1.2</span></div>
+						<div class="tt-row"><span>Weight</span><span>405g</span></div>
+					</div>
+					<div class="consider" style="flex:1;min-width:280px">
+						<a class="consider-card" href="#components">
+							<span class="mfr-badge" style="--c:var(--mfr-sigma)">Sigma</span>
+							<span class="model">56mm F1.4 DC DN</span>
+							<span class="specs"><span>56mm</span><span class="sep">·</span><span>f/1.4</span><span class="sep">·</span><span>280g</span></span>
+						</a>
+						<a class="consider-card" href="#components">
+							<span class="mfr-badge" style="--c:var(--mfr-viltrox)">Viltrox</span>
+							<span class="model">75mm F1.2 Pro</span>
+							<span class="specs"><span>75mm</span><span class="sep">·</span><span>f/1.2</span><span class="sep">·</span><span>620g</span></span>
+						</a>
+					</div>
+				</div>
+
+				<div class="sub">Product photo frame <span style="text-transform:none;letter-spacing:0;color:var(--text-faint)">— new, ready for forthcoming lens photos</span></div>
+				<div class="panel" style="max-width:340px">
+					<div class="photo-frame">
+						<div class="ph">
+							<svg width="28" height="28" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5">
+								<rect x="4" y="8" width="24" height="18" rx="2" /><circle cx="16" cy="17" r="5" /><rect x="11" y="6" width="6" height="3" rx="1" />
+							</svg>
+							<span>product photo · 4:3</span>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<footer style="margin-top:64px;padding-top:24px;border-top:1px solid var(--border-subtle)">
+				<p class="t-caption">
+					FujiLenses Design System · companion to <code style="font-family:var(--font-mono)">DESIGN-TOKENS.md</code>
+					and <code style="font-family:var(--font-mono)">colors_and_type.css</code>. Browse the
+					component kit and screen mockups in the <b>ui_kits/</b> folder.
+				</p>
+			</footer>
+		</main>
+
+		<script>
+			/* ---------- Theme switch ---------- */
+			const root = document.documentElement;
+			const themeSeg = document.getElementById('themeSeg');
+			function applyTheme(val) {
+				if (val === 'auto') root.removeAttribute('data-theme');
+				else root.setAttribute('data-theme', val);
+				localStorage.setItem('ds-theme', val);
+				[...themeSeg.children].forEach((b) =>
+					b.classList.toggle('active', b.dataset.themeVal === val)
+				);
+			}
+			themeSeg.addEventListener('click', (e) => {
+				const b = e.target.closest('[data-theme-val]');
+				if (b) applyTheme(b.dataset.themeVal);
+			});
+			applyTheme(localStorage.getItem('ds-theme') || 'dark');
+
+			/* ---------- Accent explorer ---------- */
+			const ACCENTS = {
+				indigo: { d: ['#818cf8', '#aab4ff', '#99a2fb'], l: ['#4f46e5', '#4338ca', '#4338ca'] },
+				violet: { d: ['#c084fc', '#d8b4fe', '#cb9bfd'], l: ['#7c3aed', '#6d28d9', '#6d28d9'] },
+				azure: { d: ['#38bdf8', '#7dd3fc', '#5fc8fa'], l: ['#0284c7', '#0369a1', '#0369a1'] },
+				amber: { d: ['#fbbf24', '#fcd34d', '#fbc733'], l: ['#d97706', '#b45309', '#b45309'] },
+				graphite: { d: ['#94a3b8', '#cbd5e1', '#aab6c6'], l: ['#475569', '#334155', '#334155'] }
+			};
+			const accentNotes = {
+				indigo: '<b style="color:var(--text-primary)">Indigo</b> is the recommendation: it reads unmistakably as interactive chrome and sits far from Fujinon\'s sky-blue data color, so links and selection never get confused with the catalogue.',
+				violet: '<b style="color:var(--text-primary)">Violet</b> is a softer, more editorial cousin of indigo. Distinct from data hues, though it sits closer to Sigma\'s lavender — fine because Sigma chips are always labelled.',
+				azure: '<b style="color:var(--text-primary)">Azure</b> is bright and energetic, but it overlaps Fujinon\'s sky-blue — UI chrome and the largest maker in the catalogue would share a color. Use only if Fujinon shifts hue.',
+				amber: '<b style="color:var(--text-primary)">Amber</b> is warm and confident, but it collides head-on with Viltrox. Beautiful as a one-off CTA color, risky as the system accent.',
+				graphite: '<b style="color:var(--text-primary)">Graphite</b> is the minimal extreme — the UI goes monochrome and the only color in the entire app comes from lens data. Very calm, but selection states lose a little punch.'
+			};
+			const accentPick = document.getElementById('accentPick');
+			let accentStyle = document.createElement('style');
+			document.head.appendChild(accentStyle);
+			function setAccent(name) {
+				const a = ACCENTS[name];
+				accentStyle.textContent = `
+					:root,:root[data-theme='dark']{--accent:${a.d[0]};--accent-bright:${a.d[1]};--accent-hover:${a.d[2]}}
+					:root[data-theme='light']{--accent:${a.l[0]};--accent-bright:${a.l[1]};--accent-hover:${a.l[2]}}
+					@media(prefers-color-scheme:light){:root:not([data-theme='dark']):not([data-theme='light']){--accent:${a.l[0]};--accent-bright:${a.l[1]};--accent-hover:${a.l[2]}}}
+				`;
+				[...accentPick.children].forEach((b) =>
+					b.setAttribute('aria-pressed', b.dataset.accent === name)
+				);
+				document.getElementById('accentNote').innerHTML = accentNotes[name];
+				localStorage.setItem('ds-accent', name);
+			}
+			accentPick.addEventListener('click', (e) => {
+				const b = e.target.closest('[data-accent]');
+				if (b) setAccent(b.dataset.accent);
+			});
+			setAccent(localStorage.getItem('ds-accent') || 'indigo');
+
+			/* ---------- Data-driven swatches ---------- */
+			const surfaces = [
+				['--bg-base', 'Page background'],
+				['--bg-surface', 'Sidebar, cards'],
+				['--bg-elevated', 'Hover, active'],
+				['--bg-accent', 'Selected control'],
+				['--border-subtle', 'Dividers'],
+				['--border-default', 'Inputs']
+			];
+			const texts = [
+				['--text-primary', 'Headings, data'],
+				['--text-secondary', 'Body, secondary'],
+				['--text-muted', 'Labels, inactive'],
+				['--text-faint', 'Ticks, footer']
+			];
+			const semantics = [
+				['--kit', 'Ownership green'],
+				['--spec-wr', 'Weather-resist'],
+				['--spec-feature', 'OIS / LM'],
+				['--accent', 'Interactive'],
+				['--danger', 'Destructive']
+			];
+			const makers = [
+				['Fujinon', '--mfr-fujinon'],
+				['Sigma', '--mfr-sigma'],
+				['Viltrox', '--mfr-viltrox'],
+				['Voigtländer', '--mfr-voigtlander'],
+				['Tamron', '--mfr-tamron'],
+				['Sirui', '--mfr-sirui'],
+				['TTArtisan', '--mfr-ttartisan']
+			];
+
+			function swatchHTML(varName, use) {
+				return `<div class="swatch">
+					<div class="chip" style="background:var(${varName})"></div>
+					<div class="meta">
+						<div class="name">${varName.replace('--', '')}</div>
+						<div class="use">${use}</div>
+					</div>
+				</div>`;
+			}
+			document.getElementById('surfaceSwatches').innerHTML = surfaces.map((s) => swatchHTML(s[0], s[1])).join('');
+			document.getElementById('textSwatches').innerHTML = texts.map((s) => swatchHTML(s[0], s[1])).join('');
+			document.getElementById('semanticSwatches').innerHTML = semantics.map((s) => swatchHTML(s[0], s[1])).join('');
+			document.getElementById('makerBadges').innerHTML = makers
+				.map((m) => `<span class="mfr-badge" style="--c:var(${m[1]})">${m[0]}</span>`)
+				.join('');
+
+			/* ---------- Type scale ---------- */
+			const scale = [
+				['text-4xl', '40 / Bold', 'Display', 'font-weight:700;font-size:40px;letter-spacing:-.02em'],
+				['text-3xl', '32 / Bold', 'Lens detail hero', 'font-weight:700;font-size:32px;letter-spacing:-.02em'],
+				['text-2xl', '24 / Semibold', 'Page heading', 'font-weight:600;font-size:24px;letter-spacing:-.01em'],
+				['text-xl', '20 / Semibold', 'Panel title', 'font-weight:600;font-size:20px'],
+				['text-lg', '16 / Semibold', 'Sub-section', 'font-weight:600;font-size:16px'],
+				['text-md', '14 / Regular', 'Body, model names', 'font-weight:400;font-size:14px'],
+				['text-base', '13 / Medium', 'UI labels', 'font-weight:500;font-size:13px'],
+				['text-sm', '12 / Regular', 'Secondary UI', 'font-weight:400;font-size:12px;color:var(--text-secondary)'],
+				['text-xs', '11 / Medium up', 'Eyebrow labels', 'font-weight:500;font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--text-muted)'],
+				['text-2xs', '10 / Medium', 'Micro badges', 'font-weight:500;font-size:10px;text-transform:uppercase;letter-spacing:.04em;color:var(--text-muted)']
+			];
+			document.getElementById('typeScale').innerHTML = scale
+				.map(
+					(s) => `<div class="type-row">
+						<div class="key"><b>${s[0]}</b>${s[1]}<br>${s[2]}</div>
+						<div style="${s[3]}">The quick brown fox</div>
+					</div>`
+				)
+				.join('');
+
+			/* ---------- Spacing demo ---------- */
+			const spaces = [4, 8, 12, 16, 20, 24, 32, 40, 48, 64];
+			document.getElementById('spaceDemo').innerHTML = spaces
+				.map(
+					(s) => `<div class="unit"><div class="bar" style="width:${s}px;height:${s}px"></div><div class="u">${s}</div></div>`
+				)
+				.join('');
+
+			/* ---------- Radius demo ---------- */
+			const radii = [['xs', 3], ['sm', 5], ['md', 7], ['lg', 10], ['xl', 14], ['full', 999]];
+			document.getElementById('radiusDemo').innerHTML = radii
+				.map((r) => `<div class="r" style="border-radius:${r[1]}px">${r[0]}</div>`)
+				.join('');
+
+			/* ---------- Demo table ---------- */
+			const rows = [
+				{ mfr: 'Fujinon', c: '--mfr-fujinon', model: 'XF 56mm F1.2 R WR', focal: '56mm', ap: 'f/1.2', w: '405g', y: '2022', specs: [['WR', '--spec-wr']], kit: true, neww: true },
+				{ mfr: 'Sigma', c: '--mfr-sigma', model: '18-50mm F2.8 DC DN', focal: '18–50mm', ap: 'f/2.8', w: '290g', y: '2021', specs: [] },
+				{ mfr: 'Viltrox', c: '--mfr-viltrox', model: 'AF 27mm F1.2 Pro', focal: '27mm', ap: 'f/1.2', w: '560g', y: '2023', specs: [['LM', '--spec-feature']], neww: true },
+				{ mfr: 'Voigtländer', c: '--mfr-voigtlander', model: 'Nokton 35mm F1.2', focal: '35mm', ap: 'f/1.2', w: '456g', y: '2023', specs: [['MF', '--text-muted']] },
+				{ mfr: 'Tamron', c: '--mfr-tamron', model: '17-70mm F2.8 VC', focal: '17–70mm', ap: 'f/2.8', w: '525g', y: '2021', specs: [['WR', '--spec-wr'], ['OIS', '--spec-feature']] }
+			];
+			const head = `<thead><tr>
+				<th>Maker</th><th>Model</th>
+				<th class="active">Focal ↑</th><th>Aperture</th><th>Weight</th><th>Year</th><th>Specs</th><th></th>
+			</tr></thead>`;
+			const body =
+				'<tbody>' +
+				rows
+					.map(
+						(r) => `<tr class="${r.kit ? 'kit' : ''}">
+							<td><span class="mfr-badge" style="--c:var(${r.c})">${r.mfr}</span></td>
+							<td><a class="model" href="#components">${r.model}</a>${r.neww ? ' <span class="spec-badge" style="--c:var(--new)">NEW</span>' : ''}</td>
+							<td class="data">${r.focal}</td>
+							<td class="data">${r.ap}</td>
+							<td class="data">${r.w}</td>
+							<td class="data year">${r.y}</td>
+							<td>${r.specs.map((s) => `<span class="spec-badge" style="--c:var(${s[1]});margin-right:4px">${s[0]}</span>`).join('')}</td>
+							<td style="text-align:right">${r.kit ? '<span class="kit-badge"><span class="dot"></span>IN KIT</span>' : '<span class="kit-add">+ kit</span>'}</td>
+						</tr>`
+					)
+					.join('') +
+				'</tbody>';
+			document.getElementById('demoTable').innerHTML = head + body;
+		</script>
+	</body>
+</html>

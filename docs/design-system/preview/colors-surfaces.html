@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<link rel="stylesheet" href="../colors_and_type.css"/>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:var(--font-sans);background:var(--bg-base);color:var(--text-primary);padding:20px;-webkit-font-smoothing:antialiased}
+  .row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+  .col{display:flex;flex-direction:column;gap:10px}
+  .mfr-badge{display:inline-flex;align-items:center;padding:3px 8px;border-radius:var(--radius-xs);font-family:var(--font-mono);font-weight:500;font-size:11px;letter-spacing:.04em;text-transform:uppercase;color:var(--c);background:color-mix(in srgb,var(--c) var(--mfr-badge-fill),transparent)}
+  .spec-badge{display:inline-flex;align-items:center;padding:2px 7px;border-radius:var(--radius-xs);font-family:var(--font-mono);font-weight:500;font-size:10px;letter-spacing:.04em;text-transform:uppercase;color:var(--c,var(--text-muted));background:color-mix(in srgb,var(--c,var(--text-muted)) 15%,transparent)}
+  .sw{border-radius:var(--radius-sm);border:1px solid var(--border-subtle)}
+  .lbl{font-size:10px;color:var(--text-muted);margin-top:5px}
+  .val{font-family:var(--font-mono);font-size:9px;color:var(--text-faint)}
+  
+</style>
+</head>
+<body><div class="row">
+<div class="col" style="gap:0;width:96px"><div class="sw" style="height:64px;background:var(--bg-base)"></div><div class="lbl">Page</div><div class="val">bg-base</div></div><div class="col" style="gap:0;width:96px"><div class="sw" style="height:64px;background:var(--bg-surface)"></div><div class="lbl">Surface</div><div class="val">bg-surface</div></div><div class="col" style="gap:0;width:96px"><div class="sw" style="height:64px;background:var(--bg-elevated)"></div><div class="lbl">Elevated</div><div class="val">bg-elevated</div></div><div class="col" style="gap:0;width:96px"><div class="sw" style="height:64px;background:var(--border-subtle)"></div><div class="lbl">Border subtle</div><div class="val">border-subtle</div></div><div class="col" style="gap:0;width:96px"><div class="sw" style="height:64px;background:var(--border-default)"></div><div class="lbl">Border</div><div class="val">border-default</div></div>
+</div></body></html>

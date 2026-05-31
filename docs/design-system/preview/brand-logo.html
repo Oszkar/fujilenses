@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<link rel="stylesheet" href="../colors_and_type.css"/>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:var(--font-sans);background:var(--bg-base);color:var(--text-primary);padding:20px;-webkit-font-smoothing:antialiased}
+  .row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+  .col{display:flex;flex-direction:column;gap:10px}
+  .mfr-badge{display:inline-flex;align-items:center;padding:3px 8px;border-radius:var(--radius-xs);font-family:var(--font-mono);font-weight:500;font-size:11px;letter-spacing:.04em;text-transform:uppercase;color:var(--c);background:color-mix(in srgb,var(--c) var(--mfr-badge-fill),transparent)}
+  .spec-badge{display:inline-flex;align-items:center;padding:2px 7px;border-radius:var(--radius-xs);font-family:var(--font-mono);font-weight:500;font-size:10px;letter-spacing:.04em;text-transform:uppercase;color:var(--c,var(--text-muted));background:color-mix(in srgb,var(--c,var(--text-muted)) 15%,transparent)}
+  .sw{border-radius:var(--radius-sm);border:1px solid var(--border-subtle)}
+  .lbl{font-size:10px;color:var(--text-muted);margin-top:5px}
+  .val{font-family:var(--font-mono);font-size:9px;color:var(--text-faint)}
+  
+  .mk{width:30px;height:30px;border-radius:7px;background:var(--bg-base);border:1px solid var(--border-default);display:grid;place-items:center}
+  .mk span{width:13px;height:13px;border-radius:999px;border:3px solid var(--accent)}
+
+</style>
+</head>
+<body><div class="col" style="gap:18px">
+  <div class="row" style="gap:11px">
+    <span class="mk"><span></span></span>
+    <b style="font-size:18px;letter-spacing:-.01em">FujiLenses</b>
+  </div>
+  <div class="lbl">Lens-iris mark in accent · Geist Bold wordmark · sentence-case product name</div>
+</div></body></html>
