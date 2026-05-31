@@ -108,7 +108,7 @@ Weights: 400 regular · 500 medium (UI labels, model names, badges) · 600 semib
 
 ### Font-size accessibility scale
 
-`--font-scale` (S = 0.92 / M = 1 / L = 1.12) multiplies UI + data sizes. Minimum rendered text in any view is 11px.
+`--font-scale` (S = 0.875 / M = 1 / L = 1.125, as shipped in `src/lib/preferences.svelte.ts`) multiplies UI + data sizes.
 
 ---
 

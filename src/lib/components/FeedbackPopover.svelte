@@ -228,7 +228,7 @@
 	.popover-title {
 		font-family: var(--font-sans);
 		font-weight: var(--weight-semibold);
-		font-size: var(--text-md);
+		font-size: calc(var(--text-md) * var(--font-scale, 1));
 		color: var(--text-primary);
 	}
 
@@ -268,7 +268,7 @@
 
 	.field-label {
 		font-family: var(--font-sans);
-		font-size: var(--text-xs);
+		font-size: calc(var(--text-xs) * var(--font-scale, 1));
 		font-weight: var(--weight-medium);
 		text-transform: uppercase;
 		letter-spacing: var(--tracking-label);
@@ -312,13 +312,13 @@
 	.cat-label {
 		font-family: var(--font-sans);
 		font-weight: var(--weight-medium);
-		font-size: var(--text-base);
+		font-size: calc(var(--text-base) * var(--font-scale, 1));
 		color: var(--text-primary);
 	}
 
 	.cat-desc {
 		font-family: var(--font-sans);
-		font-size: var(--text-xs);
+		font-size: calc(var(--text-xs) * var(--font-scale, 1));
 		color: var(--text-muted);
 	}
 
@@ -330,7 +330,7 @@
 		background: var(--bg-base);
 		color: var(--text-primary);
 		font-family: var(--font-sans);
-		font-size: var(--text-base);
+		font-size: calc(var(--text-base) * var(--font-scale, 1));
 		resize: vertical;
 		min-height: 80px;
 		transition: border-color var(--dur-fast) var(--ease-out);
@@ -349,7 +349,7 @@
 		color: var(--text-on-accent);
 		font-family: var(--font-sans);
 		font-weight: var(--weight-semibold);
-		font-size: var(--text-base);
+		font-size: calc(var(--text-base) * var(--font-scale, 1));
 		cursor: pointer;
 		transition: background var(--dur-fast) var(--ease-out);
 	}
@@ -365,14 +365,14 @@
 
 	.error-msg {
 		font-family: var(--font-sans);
-		font-size: var(--text-sm);
+		font-size: calc(var(--text-sm) * var(--font-scale, 1));
 		color: var(--danger);
 		margin: 0;
 	}
 
 	.success-msg {
 		font-family: var(--font-sans);
-		font-size: var(--text-base);
+		font-size: calc(var(--text-base) * var(--font-scale, 1));
 		color: var(--text-secondary);
 		margin: 0;
 		line-height: var(--leading-normal);

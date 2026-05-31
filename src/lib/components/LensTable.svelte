@@ -187,7 +187,7 @@
 		padding: 8px 12px;
 		text-align: left;
 		font-weight: var(--weight-medium);
-		font-size: var(--text-xs);
+		font-size: calc(var(--text-xs) * var(--font-scale, 1));
 		text-transform: uppercase;
 		letter-spacing: 0.05em;
 		color: var(--text-muted);

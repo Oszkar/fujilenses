@@ -48,8 +48,20 @@
 	);
 
 	// Roadmap: retailer/price slot. Render-only from existing fields; no fetching.
+	// Only allow http(s) targets — anything else (e.g. javascript:) is treated as no link.
+	function safeUrl(url: string): string | null {
+		if (!url) return null;
+		try {
+			const parsed = new URL(url, 'https://fujilenses.com');
+			return parsed.protocol === 'http:' || parsed.protocol === 'https:' ? parsed.href : null;
+		} catch {
+			return null;
+		}
+	}
+
 	let hasPrice = $derived(lens.approxPriceUSD > 0);
-	let hasRetailer = $derived(!!lens.retailerUrl && lens.retailerUrl.length > 0);
+	let safeRetailerUrl = $derived(safeUrl(lens.retailerUrl));
+	let hasRetailer = $derived(safeRetailerUrl !== null);
 	let showBuyBlock = $derived(hasPrice || hasRetailer);
 	let priceDisplay = $derived(`~$${lens.approxPriceUSD.toLocaleString('en-US')}`);
 </script>
@@ -130,7 +142,7 @@
 				{#if hasRetailer}
 					<a
 						class="buy-link"
-						href={lens.retailerUrl}
+						href={safeRetailerUrl}
 						target="_blank"
 						rel="noopener noreferrer nofollow sponsored"
 					>

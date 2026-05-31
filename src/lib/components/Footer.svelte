@@ -36,7 +36,7 @@
 		background: var(--bg-surface);
 		border-top: 1px solid var(--border-subtle);
 		font-family: var(--font-sans);
-		font-size: var(--text-sm);
+		font-size: calc(var(--text-sm) * var(--font-scale, 1));
 		color: var(--text-muted);
 		position: sticky;
 		bottom: 0;
@@ -66,7 +66,7 @@
 		padding: 2px var(--space-2);
 		color: var(--text-muted);
 		font-family: var(--font-sans);
-		font-size: var(--text-sm);
+		font-size: calc(var(--text-sm) * var(--font-scale, 1));
 		cursor: pointer;
 		transition: color var(--dur-fast) var(--ease-out);
 	}
@@ -78,14 +78,14 @@
 	@media (max-width: 1023px) {
 		.footer {
 			padding: var(--space-3) var(--space-4);
-			font-size: var(--text-xs);
+			font-size: calc(var(--text-xs) * var(--font-scale, 1));
 			flex-direction: column;
 			gap: var(--space-1);
 			align-items: flex-start;
 		}
 
 		.feedback-btn {
-			font-size: var(--text-xs);
+			font-size: calc(var(--text-xs) * var(--font-scale, 1));
 		}
 	}
 </style>

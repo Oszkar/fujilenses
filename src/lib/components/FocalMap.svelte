@@ -158,7 +158,7 @@
 
 	<!-- Coverage heatmap strip -->
 	{#if showHeatmapStrip}
-		<div class="coverage" role="img" aria-label="Kit focal coverage density">
+		<div class="coverage" role="group" aria-label="Kit focal coverage density">
 			<div class="coverage-band" style="background: {coverageGradient};"></div>
 			{#each heatmapGaps as gap, gi (gi)}
 				{@const gapMin = Math.round(gap.focalStart)}
@@ -314,7 +314,7 @@
 
 	.tick-label {
 		font-family: var(--font-mono);
-		font-size: var(--text-xs);
+		font-size: calc(var(--text-xs) * var(--font-scale, 1));
 		color: var(--text-faint);
 		font-variant-numeric: tabular-nums;
 		white-space: nowrap;
@@ -483,7 +483,7 @@
 	/* ---- Tooltip ---- */
 	.tooltip {
 		position: fixed;
-		z-index: 60;
+		z-index: var(--z-tooltip);
 		background: var(--bg-elevated);
 		border: 1px solid var(--border-subtle);
 		border-radius: var(--radius-lg);
