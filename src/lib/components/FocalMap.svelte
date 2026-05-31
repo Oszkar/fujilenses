@@ -29,7 +29,7 @@
 	// Minimum visible bar width for a zoom, in percent of the track.
 	const MIN_BAR_PCT = 1.5;
 	// Gap detection threshold, in percent of the track width.
-	const MIN_GAP_PCT = 5;
+	const MIN_GAP_PCT = 2;
 
 	// Tooltip state
 	let tooltip = $state<{
@@ -146,10 +146,8 @@
 </script>
 
 <div class="focal-map">
-	<!-- Axis: ticks + WIDE / TELE context labels, positioned by percent. -->
+	<!-- Axis: ticks positioned by percent. -->
 	<div class="axis" aria-hidden="true">
-		<span class="axis-context wide">WIDE</span>
-		<span class="axis-context tele">TELE</span>
 		{#each ticks as tick (tick)}
 			<span class="tick" style="--frac: {pct(tick) / 100}">
 				<span class="tick-line"></span>
@@ -291,25 +289,6 @@
 		margin-bottom: 6px;
 	}
 
-	.axis-context {
-		grid-row: 1;
-		grid-column: 2;
-		font-family: var(--font-sans);
-		font-size: var(--text-2xs);
-		text-transform: uppercase;
-		letter-spacing: 0.1em;
-		color: var(--text-faint);
-		align-self: center;
-	}
-
-	.axis-context.wide {
-		justify-self: start;
-	}
-
-	.axis-context.tele {
-		justify-self: end;
-	}
-
 	/* Ticks live in the track column; positioned by percent of that column.
 	   The track region starts after the label column + the 10px grid gap, so
 	   we offset into it and scale --frac across the remaining width. */
@@ -424,6 +403,7 @@
 		align-items: center;
 		gap: 6px;
 		min-width: 0;
+		padding-left: var(--space-2);
 		font-family: var(--font-sans);
 		font-size: calc(var(--text-xs) * var(--font-scale, 1));
 	}
