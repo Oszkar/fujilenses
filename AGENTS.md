@@ -101,7 +101,7 @@ Notes:
 - There is no linter configured; `pnpm check` (svelte-check) is the type/lint gate.
 - Treat green `pnpm check` **and** green `pnpm build` as the minimum bar before pushing.
 
-## 8. Communication
+## 6. Communication
 
 - Be concise. Short bullets, concrete next steps.
 - Ask targeted questions early when requirements are ambiguous.
