@@ -1,6 +1,6 @@
 import { browser } from '$app/environment';
 
-export type Theme = 'dark' | 'light';
+export type Theme = 'auto' | 'dark' | 'light';
 export type FontSize = 's' | 'm' | 'l';
 
 const THEME_KEY = 'fujilenses-theme';
@@ -12,14 +12,9 @@ const fontScaleMap: Record<FontSize, number> = {
 	l: 1.125
 };
 
-function getSystemTheme(): Theme {
-	if (!browser) return 'dark';
-	return window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
-}
-
 function loadTheme(): Theme {
-	if (!browser) return 'dark';
-	return (localStorage.getItem(THEME_KEY) as Theme) || getSystemTheme();
+	if (!browser) return 'auto';
+	return (localStorage.getItem(THEME_KEY) as Theme) || 'auto';
 }
 
 function loadFontSize(): FontSize {
@@ -32,7 +27,11 @@ let fontSize = $state<FontSize>(loadFontSize());
 
 function applyTheme(t: Theme) {
 	if (!browser) return;
-	document.documentElement.setAttribute('data-theme', t);
+	if (t === 'auto') {
+		document.documentElement.removeAttribute('data-theme');
+	} else {
+		document.documentElement.setAttribute('data-theme', t);
+	}
 }
 
 function applyFontSize(size: FontSize) {

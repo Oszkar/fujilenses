@@ -99,7 +99,7 @@
 							class="mfr-badge"
 							style="
 								color: {manufacturerColors[lens.manufacturer] ?? 'var(--text-primary)'};
-								background: color-mix(in srgb, {manufacturerColors[lens.manufacturer] ?? 'var(--text-muted)'} 18%, transparent);
+								background: color-mix(in srgb, {manufacturerColors[lens.manufacturer] ?? 'var(--text-muted)'} var(--mfr-badge-fill), transparent);
 							"
 						>
 							{lens.manufacturer.toUpperCase()}
@@ -175,7 +175,7 @@
 		border-collapse: separate;
 		border-spacing: 0;
 		font-family: var(--font-sans);
-		font-size: calc(14px * var(--font-scale, 1));
+		font-size: calc(var(--text-md) * var(--font-scale, 1));
 	}
 
 	/* Header — sticky must be on th, not thead (Chrome/Firefox don't support sticky thead) */
@@ -186,8 +186,8 @@
 		background: var(--bg-base);
 		padding: 8px 12px;
 		text-align: left;
-		font-weight: 500;
-		font-size: 11px;
+		font-weight: var(--weight-medium);
+		font-size: calc(var(--text-xs) * var(--font-scale, 1));
 		text-transform: uppercase;
 		letter-spacing: 0.05em;
 		color: var(--text-muted);
@@ -213,7 +213,7 @@
 	.sort-button:focus-visible {
 		outline: 2px solid var(--accent);
 		outline-offset: 2px;
-		border-radius: 4px;
+		border-radius: var(--radius-sm);
 	}
 
 	th.sortable:hover {
@@ -231,7 +231,7 @@
 
 	@media (prefers-reduced-motion: no-preference) {
 		.sort-chevron {
-			transition: transform 200ms ease;
+			transition: transform var(--dur-base) var(--ease-out);
 		}
 	}
 
@@ -245,7 +245,7 @@
 
 	@media (prefers-reduced-motion: no-preference) {
 		tbody tr {
-			transition: background 150ms ease, transform 150ms ease;
+			transition: background var(--dur-fast) var(--ease-out), transform var(--dur-fast) var(--ease-out);
 		}
 	}
 
@@ -278,20 +278,22 @@
 	.mfr-badge {
 		display: inline-block;
 		padding: 2px 8px;
-		border-radius: 4px;
+		border-radius: var(--radius-xs);
 		font-family: var(--font-mono);
-		font-weight: 500;
-		font-size: 11px;
-		letter-spacing: 0.02em;
+		font-weight: var(--weight-medium);
+		font-size: var(--text-xs);
+		letter-spacing: var(--tracking-badge);
+		text-transform: uppercase;
 	}
 
 	/* Model link */
 	.model-link {
-		font-weight: 500;
-		font-size: calc(14px * var(--font-scale, 1));
+		font-family: var(--font-sans);
+		font-weight: var(--weight-medium);
+		font-size: calc(var(--text-md) * var(--font-scale, 1));
 		color: var(--text-primary);
 		text-decoration: none;
-		transition: color 150ms ease;
+		transition: color var(--dur-fast) var(--ease-out);
 	}
 
 	.model-link:hover {
@@ -307,20 +309,22 @@
 		display: inline-block;
 		margin-left: 8px;
 		padding: 1px 6px;
-		border-radius: 3px;
+		border-radius: var(--radius-xs);
 		font-family: var(--font-mono);
-		font-weight: 500;
-		font-size: 10px;
+		font-weight: var(--weight-medium);
+		font-size: var(--text-2xs);
 		text-transform: uppercase;
-		color: var(--accent);
-		background: color-mix(in srgb, var(--accent) 15%, transparent);
+		letter-spacing: var(--tracking-badge);
+		color: var(--new);
+		background: color-mix(in srgb, var(--new) 15%, transparent);
 		vertical-align: middle;
 	}
 
 	/* Mono data cells */
 	.mono {
 		font-family: var(--font-mono);
-		font-size: calc(13px * var(--font-scale, 1));
+		font-variant-numeric: tabular-nums;
+		font-size: calc(var(--text-base) * var(--font-scale, 1));
 		color: var(--text-secondary);
 	}
 
@@ -338,11 +342,12 @@
 	.spec-badge {
 		display: inline-block;
 		padding: 1px 6px;
-		border-radius: 3px;
+		border-radius: var(--radius-xs);
 		margin-right: 4px;
 		font-family: var(--font-mono);
-		font-weight: 500;
-		font-size: 10px;
+		font-weight: var(--weight-medium);
+		font-size: var(--text-2xs);
+		letter-spacing: var(--tracking-badge);
 		text-transform: uppercase;
 	}
 
@@ -369,17 +374,19 @@
 	.kit-badge {
 		display: inline-block;
 		padding: 2px 10px;
-		border-radius: 4px;
+		border-radius: var(--radius-sm);
 		font-family: var(--font-mono);
-		font-weight: 500;
-		font-size: 11px;
+		font-weight: var(--weight-medium);
+		font-size: var(--text-xs);
+		letter-spacing: var(--tracking-badge);
+		text-transform: uppercase;
 		color: var(--kit);
 		background: color-mix(in srgb, var(--kit) 15%, transparent);
 		cursor: pointer;
 		border: none;
 		transition:
-			background 150ms ease,
-			color 150ms ease;
+			background var(--dur-fast) var(--ease-out),
+			color var(--dur-fast) var(--ease-out);
 	}
 
 	.kit-badge:hover {
@@ -389,18 +396,18 @@
 
 	.kit-add {
 		padding: 2px 10px;
-		border-radius: 4px;
+		border-radius: var(--radius-sm);
 		border: none;
 		background: transparent;
 		font-family: var(--font-sans);
-		font-size: 12px;
+		font-size: var(--text-sm);
 		color: var(--text-faint);
 		cursor: pointer;
 		opacity: 0;
 		transition:
-			color 150ms ease,
-			background 150ms ease,
-			opacity 150ms ease;
+			color var(--dur-fast) var(--ease-out),
+			background var(--dur-fast) var(--ease-out),
+			opacity var(--dur-fast) var(--ease-out);
 	}
 
 	tbody tr:hover .kit-add {

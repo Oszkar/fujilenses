@@ -212,8 +212,8 @@
 		max-width: calc(100vw - 32px);
 		background: var(--bg-surface);
 		border: 1px solid var(--border-subtle);
-		border-radius: 12px;
-		box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+		border-radius: var(--radius-lg);
+		box-shadow: var(--shadow-md);
 		overflow: hidden;
 	}
 
@@ -227,8 +227,8 @@
 
 	.popover-title {
 		font-family: var(--font-sans);
-		font-weight: 600;
-		font-size: 14px;
+		font-weight: var(--weight-semibold);
+		font-size: calc(var(--text-md) * var(--font-scale, 1));
 		color: var(--text-primary);
 	}
 
@@ -238,12 +238,14 @@
 		justify-content: center;
 		width: 28px;
 		height: 28px;
-		border-radius: 6px;
+		border-radius: var(--radius-md);
 		border: none;
 		background: transparent;
 		color: var(--text-muted);
 		cursor: pointer;
-		transition: background 150ms ease, color 150ms ease;
+		transition:
+			background var(--dur-fast) var(--ease-out),
+			color var(--dur-fast) var(--ease-out);
 	}
 
 	.close-btn:hover {
@@ -266,10 +268,10 @@
 
 	.field-label {
 		font-family: var(--font-sans);
-		font-size: 11px;
-		font-weight: 500;
+		font-size: calc(var(--text-xs) * var(--font-scale, 1));
+		font-weight: var(--weight-medium);
 		text-transform: uppercase;
-		letter-spacing: 0.05em;
+		letter-spacing: var(--tracking-label);
 		color: var(--text-muted);
 	}
 
@@ -284,12 +286,14 @@
 		flex-direction: column;
 		gap: 1px;
 		padding: 8px 10px;
-		border-radius: 6px;
+		border-radius: var(--radius-md);
 		border: 1px solid var(--border-default);
 		background: transparent;
 		cursor: pointer;
 		text-align: left;
-		transition: background 150ms ease, border-color 150ms ease;
+		transition:
+			background var(--dur-fast) var(--ease-out),
+			border-color var(--dur-fast) var(--ease-out);
 	}
 
 	.category-btn:hover {
@@ -301,58 +305,57 @@
 		border-color: var(--accent);
 	}
 
+	.category-btn.active .cat-label {
+		color: var(--accent-bright);
+	}
+
 	.cat-label {
 		font-family: var(--font-sans);
-		font-weight: 500;
-		font-size: 13px;
+		font-weight: var(--weight-medium);
+		font-size: calc(var(--text-base) * var(--font-scale, 1));
 		color: var(--text-primary);
 	}
 
 	.cat-desc {
 		font-family: var(--font-sans);
-		font-size: 11px;
+		font-size: calc(var(--text-xs) * var(--font-scale, 1));
 		color: var(--text-muted);
 	}
 
 	.message-input {
 		width: 100%;
 		padding: 8px 10px;
-		border-radius: 6px;
+		border-radius: var(--radius-md);
 		border: 1px solid var(--border-default);
 		background: var(--bg-base);
 		color: var(--text-primary);
 		font-family: var(--font-sans);
-		font-size: 13px;
+		font-size: calc(var(--text-base) * var(--font-scale, 1));
 		resize: vertical;
 		min-height: 80px;
-		transition: border-color 150ms ease;
+		transition: border-color var(--dur-fast) var(--ease-out);
 	}
 
 	.message-input::placeholder {
 		color: var(--text-faint);
 	}
 
-	.message-input:focus {
-		outline: none;
-		border-color: var(--accent);
-	}
-
 	.submit-btn {
 		width: 100%;
 		padding: 10px;
-		border-radius: 6px;
+		border-radius: var(--radius-md);
 		border: none;
 		background: var(--accent);
-		color: var(--bg-base);
+		color: var(--text-on-accent);
 		font-family: var(--font-sans);
-		font-weight: 600;
-		font-size: 13px;
+		font-weight: var(--weight-semibold);
+		font-size: calc(var(--text-base) * var(--font-scale, 1));
 		cursor: pointer;
-		transition: opacity 150ms ease;
+		transition: background var(--dur-fast) var(--ease-out);
 	}
 
 	.submit-btn:hover:not(:disabled) {
-		opacity: 0.9;
+		background: var(--accent-hover);
 	}
 
 	.submit-btn:disabled {
@@ -360,23 +363,18 @@
 		cursor: not-allowed;
 	}
 
-	.submit-btn:focus-visible {
-		outline: 2px solid var(--accent);
-		outline-offset: 2px;
-	}
-
 	.error-msg {
 		font-family: var(--font-sans);
-		font-size: 12px;
+		font-size: calc(var(--text-sm) * var(--font-scale, 1));
 		color: var(--danger);
 		margin: 0;
 	}
 
 	.success-msg {
 		font-family: var(--font-sans);
-		font-size: 13px;
+		font-size: calc(var(--text-base) * var(--font-scale, 1));
 		color: var(--text-secondary);
 		margin: 0;
-		line-height: 1.5;
+		line-height: var(--leading-normal);
 	}
 </style>

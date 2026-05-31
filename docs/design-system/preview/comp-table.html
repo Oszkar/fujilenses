@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<link rel="stylesheet" href="../colors_and_type.css"/>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:var(--font-sans);background:var(--bg-base);color:var(--text-primary);padding:20px;-webkit-font-smoothing:antialiased}
+  .row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+  .col{display:flex;flex-direction:column;gap:10px}
+  .mfr-badge{display:inline-flex;align-items:center;padding:3px 8px;border-radius:var(--radius-xs);font-family:var(--font-mono);font-weight:500;font-size:11px;letter-spacing:.04em;text-transform:uppercase;color:var(--c);background:color-mix(in srgb,var(--c) var(--mfr-badge-fill),transparent)}
+  .spec-badge{display:inline-flex;align-items:center;padding:2px 7px;border-radius:var(--radius-xs);font-family:var(--font-mono);font-weight:500;font-size:10px;letter-spacing:.04em;text-transform:uppercase;color:var(--c,var(--text-muted));background:color-mix(in srgb,var(--c,var(--text-muted)) 15%,transparent)}
+  .sw{border-radius:var(--radius-sm);border:1px solid var(--border-subtle)}
+  .lbl{font-size:10px;color:var(--text-muted);margin-top:5px}
+  .val{font-family:var(--font-mono);font-size:9px;color:var(--text-faint)}
+  
+  .t{width:100%;border-collapse:separate;border-spacing:0;font-size:13px}
+  .t th{text-align:left;padding:7px 10px;font-size:10px;text-transform:uppercase;letter-spacing:.05em;color:var(--text-muted);border-bottom:1px solid var(--border-subtle);font-weight:500}
+  .t td{padding:9px 10px;border-bottom:1px solid var(--border-subtle)}
+  .t a{font-weight:500;color:var(--text-primary);text-decoration:none}
+  .t .d{font-family:var(--font-mono);color:var(--text-secondary)}
+  .t tr.kit td{background:var(--kit-bg)}
+  .t tr.kit td:first-child{box-shadow:inset 3px 0 0 var(--kit)}
+  .t tr.kit a{color:var(--kit)}
+
+</style>
+</head>
+<body><table class="t">
+<thead><tr><th>Maker</th><th>Model</th><th style="color:var(--accent)">Focal ▲</th><th>Aperture</th><th>Weight</th><th>Specs</th></tr></thead>
+<tbody>
+<tr class="kit"><td><span class="mfr-badge" style="--c:var(--mfr-fujinon)">Fujinon</span></td><td><a>XF 56mm F1.2 R WR</a></td><td class="d">56mm</td><td class="d">f/1.2</td><td class="d">405g</td><td><span class="spec-badge" style="--c:var(--spec-wr)">WR</span></td></tr>
+<tr><td><span class="mfr-badge" style="--c:var(--mfr-sigma)">Sigma</span></td><td><a>18-50mm F2.8 DC DN</a></td><td class="d">18–50mm</td><td class="d">f/2.8</td><td class="d">290g</td><td></td></tr>
+<tr><td><span class="mfr-badge" style="--c:var(--mfr-viltrox)">Viltrox</span></td><td><a>AF 27mm F1.2 Pro</a></td><td class="d">27mm</td><td class="d">f/1.2</td><td class="d">560g</td><td><span class="spec-badge" style="--c:var(--spec-feature)">LM</span></td></tr>
+</tbody></table></body></html>

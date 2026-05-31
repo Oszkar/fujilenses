@@ -1,0 +1,572 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>FujiLenses — UI Kit</title>
+		<link rel="stylesheet" href="../../colors_and_type.css" />
+		<link rel="stylesheet" href="app.css" />
+	</head>
+	<body>
+		<div class="app-shell">
+			<!-- NAV -->
+			<nav class="nav-bar">
+				<div class="nav-left">
+					<button class="drawer-toggle" id="drawerToggle" aria-label="Toggle filters">
+						<svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M2 4h14M2 9h14M2 14h14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" /></svg>
+					</button>
+					<div class="nav-brand">
+						<span class="nav-mark"><span></span></span>
+						<span class="nav-logo">FujiLenses</span>
+					</div>
+					<div class="nav-divider"></div>
+					<div class="tabs" id="tabs">
+						<button class="tab active" data-view="table">Table</button>
+						<button class="tab" data-view="map">Map</button>
+						<button class="tab" data-view="kit">My Kit</button>
+					</div>
+				</div>
+				<div class="nav-right">
+					<div class="kit-count" id="kitCount"><span class="dot"></span><span id="kitCountLabel">0 in kit</span></div>
+				</div>
+			</nav>
+
+			<div class="app-body">
+				<div class="drawer-overlay" id="drawerOverlay"></div>
+				<!-- SIDEBAR -->
+				<aside class="sidebar desktop" id="sidebar">
+					<div class="fsection" id="secMfr">
+						<div class="fsection-head">Manufacturer</div>
+						<div class="mfr-list" id="mfrList"></div>
+					</div>
+					<div class="fsection" id="secType">
+						<div class="fsection-head">Lens Type</div>
+						<div class="segmented" id="typeSeg">
+							<button class="seg-btn active" data-type="">All</button>
+							<button class="seg-btn" data-type="prime">Prime</button>
+							<button class="seg-btn" data-type="zoom">Zoom</button>
+						</div>
+					</div>
+					<div class="fsection" id="secFeat">
+						<div class="fsection-head">Features</div>
+						<label class="toggle-row"><span class="toggle-label">Weather Resistant</span><input type="checkbox" class="toggle" data-feat="wr" /></label>
+						<label class="toggle-row"><span class="toggle-label">Stabilisation</span><input type="checkbox" class="toggle" data-feat="ois" /></label>
+						<label class="toggle-row"><span class="toggle-label">Autofocus</span><input type="checkbox" class="toggle" data-feat="af" /></label>
+					</div>
+					<div class="fsection">
+						<div class="fsection-head">Display</div>
+						<label class="toggle-row"><span class="toggle-label">FF Equivalent</span><input type="checkbox" class="toggle" id="ffeToggle" /></label>
+					</div>
+					<div class="fsection" id="secScale" style="display:none">
+						<div class="fsection-head">Scale</div>
+						<div class="segmented" id="scaleSeg">
+							<button class="seg-btn active" data-scale="log">Log</button>
+							<button class="seg-btn" data-scale="linear">Linear</button>
+						</div>
+					</div>
+					<div class="fsection">
+						<div class="fsection-head">Font Size</div>
+						<div class="segmented" id="fontSeg">
+							<button class="seg-btn" data-fs="0.92">S</button>
+							<button class="seg-btn active" data-fs="1">M</button>
+							<button class="seg-btn" data-fs="1.12">L</button>
+						</div>
+					</div>
+					<div class="fsection">
+						<div class="fsection-head">Theme</div>
+						<div class="segmented" id="themeSeg">
+							<button class="seg-btn" data-theme-val="auto">Auto</button>
+							<button class="seg-btn active" data-theme-val="dark">Dark</button>
+							<button class="seg-btn" data-theme-val="light">Light</button>
+						</div>
+					</div>
+					<div class="sidebar-bottom">
+						<button class="btn btn-secondary btn-block" id="clearBtn" style="display:none">Clear filters</button>
+					</div>
+				</aside>
+
+				<!-- CONTENT -->
+				<main class="content">
+					<div class="content-inner">
+						<!-- TABLE VIEW -->
+						<section class="view active" id="view-table">
+							<div class="page-head">
+								<div>
+									<h1 class="page-title">All lenses</h1>
+									<div class="page-sub">Fujifilm X-mount · primes &amp; zooms across 7 makers</div>
+								</div>
+								<div class="result-count" id="tableCount"></div>
+							</div>
+							<div class="table-wrap">
+								<table class="lens-table"><thead id="tableHead"></thead><tbody id="tableBody"></tbody></table>
+							</div>
+						</section>
+
+						<!-- MAP VIEW -->
+						<section class="view" id="view-map">
+							<div class="page-head">
+								<div>
+									<h1 class="page-title">Focal map</h1>
+									<div class="page-sub">Coverage by maker — dots are primes, bars are zooms</div>
+								</div>
+								<div class="result-count" id="mapCount"></div>
+							</div>
+							<div class="focal-map">
+								<div class="focal-axis" id="mapAxis"></div>
+								<div id="mapLanes"></div>
+							</div>
+						</section>
+
+						<!-- KIT VIEW -->
+						<section class="view" id="view-kit">
+							<div class="page-head">
+								<div>
+									<h1 class="page-title">My Kit</h1>
+									<div class="page-sub" id="kitSub">Lenses you own — coverage &amp; gaps</div>
+								</div>
+								<div class="result-count" id="kitWeight"></div>
+							</div>
+							<div id="kitContent"></div>
+						</section>
+
+						<!-- DETAIL VIEW -->
+						<section class="view" id="view-detail">
+							<button class="back-link" id="backLink">&larr; Back to browse</button>
+							<div id="detailContent"></div>
+						</section>
+					</div>
+				</main>
+			</div>
+		</div>
+
+		<div class="tooltip" id="tooltip"></div>
+
+		<script>
+			/* ============ DATA ============ */
+			const MFR = {
+				Fujinon: '--mfr-fujinon', Sigma: '--mfr-sigma', Viltrox: '--mfr-viltrox',
+				Voigtländer: '--mfr-voigtlander', Tamron: '--mfr-tamron', Sirui: '--mfr-sirui', TTArtisan: '--mfr-ttartisan'
+			};
+			// f = focal [min,max], a = aperture, w grams, y year, t type, specs flags
+			const LENSES = [
+				{ s: 'xf-16-55-f28', mfr: 'Fujinon', model: 'XF 16-55mm F2.8 R LM WR', f: [16, 55], a: 2.8, w: 655, y: 2015, t: 'zoom', af: 1, wr: 1, ois: 0, lm: 1, ar: 1 },
+				{ s: 'xf-56-f12', mfr: 'Fujinon', model: 'XF 56mm F1.2 R WR', f: [56, 56], a: 1.2, w: 405, y: 2022, t: 'prime', af: 1, wr: 1, ois: 0, lm: 0, ar: 1 },
+				{ s: 'xf-33-f14', mfr: 'Fujinon', model: 'XF 33mm F1.4 R LM WR', f: [33, 33], a: 1.4, w: 360, y: 2021, t: 'prime', af: 1, wr: 1, ois: 0, lm: 1, ar: 1 },
+				{ s: 'xf-70-300', mfr: 'Fujinon', model: 'XF 70-300mm F4-5.6 R LM OIS WR', f: [70, 300], a: 4, w: 580, y: 2021, t: 'zoom', af: 1, wr: 1, ois: 1, lm: 1, ar: 1 },
+				{ s: 'xf-23-f2', mfr: 'Fujinon', model: 'XF 23mm F2 R WR', f: [23, 23], a: 2, w: 180, y: 2018, t: 'prime', af: 1, wr: 1, ois: 0, lm: 0, ar: 1 },
+				{ s: 'sigma-18-50', mfr: 'Sigma', model: '18-50mm F2.8 DC DN', f: [18, 50], a: 2.8, w: 290, y: 2021, t: 'zoom', af: 1, wr: 0, ois: 0, lm: 0, ar: 0 },
+				{ s: 'sigma-56-f14', mfr: 'Sigma', model: '56mm F1.4 DC DN', f: [56, 56], a: 1.4, w: 280, y: 2018, t: 'prime', af: 1, wr: 0, ois: 0, lm: 0, ar: 0 },
+				{ s: 'sigma-10-18', mfr: 'Sigma', model: '10-18mm F2.8 DC DN', f: [10, 18], a: 2.8, w: 260, y: 2024, t: 'zoom', af: 1, wr: 0, ois: 0, lm: 0, ar: 0 },
+				{ s: 'viltrox-27-f12', mfr: 'Viltrox', model: 'AF 27mm F1.2 Pro', f: [27, 27], a: 1.2, w: 560, y: 2023, t: 'prime', af: 1, wr: 0, ois: 0, lm: 1, ar: 1 },
+				{ s: 'viltrox-75-f12', mfr: 'Viltrox', model: 'AF 75mm F1.2 Pro', f: [75, 75], a: 1.2, w: 620, y: 2023, t: 'prime', af: 1, wr: 0, ois: 0, lm: 1, ar: 1 },
+				{ s: 'tamron-17-70', mfr: 'Tamron', model: '17-70mm F2.8 Di III-A VC', f: [17, 70], a: 2.8, w: 525, y: 2021, t: 'zoom', af: 1, wr: 1, ois: 1, lm: 0, ar: 0 },
+				{ s: 'tamron-11-20', mfr: 'Tamron', model: '11-20mm F2.8 Di III-A', f: [11, 20], a: 2.8, w: 335, y: 2021, t: 'zoom', af: 1, wr: 1, ois: 0, lm: 0, ar: 0 },
+				{ s: 'voigt-35-f12', mfr: 'Voigtländer', model: 'Nokton 35mm F1.2', f: [35, 35], a: 1.2, w: 456, y: 2023, t: 'prime', af: 0, wr: 0, ois: 0, lm: 0, ar: 1 },
+				{ s: 'voigt-23-f12', mfr: 'Voigtländer', model: 'Nokton 23mm F1.2', f: [23, 23], a: 1.2, w: 270, y: 2024, t: 'prime', af: 0, wr: 0, ois: 0, lm: 0, ar: 1 },
+				{ s: 'sirui-sniper-23', mfr: 'Sirui', model: 'Sniper 23mm F1.2', f: [23, 23], a: 1.2, w: 240, y: 2023, t: 'prime', af: 1, wr: 0, ois: 0, lm: 0, ar: 0 },
+				{ s: 'ttartisan-27', mfr: 'TTArtisan', model: 'AF 27mm F2.8', f: [27, 27], a: 2.8, w: 93, y: 2023, t: 'prime', af: 1, wr: 0, ois: 0, lm: 0, ar: 0 }
+			];
+			const RETAILERS = [['B&H Photo', '$899'], ['Amazon', '$899'], ['Adorama', '$929']];
+			const NEW_AFTER = 2023;
+
+			/* ============ STATE ============ */
+			const state = {
+				view: 'table', sort: 'fmin', dir: 'asc', ffe: false,
+				mfr: new Set(), type: '', wr: false, ois: false, af: false,
+				kit: new Set(JSON.parse(localStorage.getItem('fl-kit') || '["xf-56-f12","sigma-18-50","viltrox-27-f12"]')),
+				detail: null
+			};
+			const FOCAL_MIN = 10, FOCAL_MAX = 600;
+			const logPos = (f) => (Math.log(f) - Math.log(FOCAL_MIN)) / (Math.log(FOCAL_MAX) - Math.log(FOCAL_MIN)) * 100;
+			const cvar = (m) => `var(${MFR[m]})`;
+			const focalStr = (l, mult = 1) => {
+				const lo = Math.round(l.f[0] * mult), hi = Math.round(l.f[1] * mult);
+				return lo === hi ? `${lo}mm` : `${lo}–${hi}mm`;
+			};
+			const isNew = (l) => l.y > NEW_AFTER;
+			const saveKit = () => localStorage.setItem('fl-kit', JSON.stringify([...state.kit]));
+
+			/* ============ FILTER + SORT ============ */
+			function filtered() {
+				return LENSES.filter((l) => {
+					if (state.mfr.size && !state.mfr.has(l.mfr)) return false;
+					if (state.type && l.t !== state.type) return false;
+					if (state.wr && !l.wr) return false;
+					if (state.ois && !l.ois) return false;
+					if (state.af && !l.af) return false;
+					return true;
+				}).sort((a, b) => {
+					let av, bv;
+					if (state.sort === 'fmin') { av = a.f[0]; bv = b.f[0]; }
+					else if (state.sort === 'ap') { av = a.a; bv = b.a; }
+					else if (state.sort === 'w') { av = a.w; bv = b.w; }
+					else if (state.sort === 'y') { av = a.y; bv = b.y; }
+					else { av = a.model; bv = b.model; }
+					const r = av < bv ? -1 : av > bv ? 1 : 0;
+					return state.dir === 'asc' ? r : -r;
+				});
+			}
+			const anyFilter = () => state.mfr.size || state.type || state.wr || state.ois || state.af;
+
+			/* ============ RENDER: SIDEBAR ============ */
+			const mfrCounts = {};
+			LENSES.forEach((l) => (mfrCounts[l.mfr] = (mfrCounts[l.mfr] || 0) + 1));
+			function renderSidebar() {
+				document.getElementById('mfrList').innerHTML = Object.keys(MFR)
+					.filter((m) => mfrCounts[m])
+					.map((m) => {
+						const active = state.mfr.has(m);
+						const dim = state.mfr.size && !active;
+						return `<button class="mfr-item ${active ? 'active' : ''} ${dim ? 'dimmed' : ''}" data-mfr="${m}" style="--c:${cvar(m)}">
+							<span class="dot"></span>
+							<span class="name" style="color:${active || !state.mfr.size ? cvar(m) : 'var(--text-faint)'}">${m}</span>
+							<span class="count">${mfrCounts[m]}</span>
+						</button>`;
+					}).join('');
+				const filtersOn = anyFilter() && state.view !== 'kit';
+				document.getElementById('clearBtn').style.display = filtersOn ? 'inline-flex' : 'none';
+				document.getElementById('secScale').style.display = state.view === 'map' ? 'flex' : 'none';
+				['secMfr', 'secType', 'secFeat'].forEach((id) =>
+					document.getElementById(id).classList.toggle('disabled', state.view === 'kit')
+				);
+			}
+
+			/* ============ RENDER: TABLE ============ */
+			const COLS = [
+				{ key: null, label: 'Maker' }, { key: 'model', label: 'Model' },
+				{ key: 'fmin', label: 'Focal' }, { key: 'ap', label: 'Aperture' },
+				{ key: 'w', label: 'Weight' }, { key: 'y', label: 'Year' },
+				{ key: null, label: 'Specs' }, { key: null, label: '' }
+			];
+			function specBadges(l) {
+				let h = '';
+				if (!l.af) h += `<span class="spec-badge" style="--c:var(--text-muted)">MF</span> `;
+				if (l.wr) h += `<span class="spec-badge" style="--c:var(--spec-wr)">WR</span> `;
+				if (l.ois) h += `<span class="spec-badge" style="--c:var(--spec-feature)">OIS</span> `;
+				if (l.lm) h += `<span class="spec-badge" style="--c:var(--spec-feature)">LM</span> `;
+				return h;
+			}
+			function renderTable() {
+				const mult = state.ffe ? 1.5 : 1;
+				document.getElementById('tableHead').innerHTML = '<tr>' + COLS.map((c) => {
+					if (!c.key) return `<th>${c.label}</th>`;
+					const active = state.sort === c.key;
+					return `<th class="sortable ${active ? 'active' : ''} ${active && state.dir === 'desc' ? 'desc' : ''}" data-sort="${c.key}">${c.label}${active ? '<span class="chev">▲</span>' : ''}</th>`;
+				}).join('') + '</tr>';
+				const rows = filtered();
+				document.getElementById('tableBody').innerHTML = rows.map((l) => {
+					const inKit = state.kit.has(l.s);
+					return `<tr class="${inKit ? 'kit' : ''}">
+						<td><span class="mfr-badge" style="--c:${cvar(l.mfr)}">${l.mfr}</span></td>
+						<td><a class="model" data-detail="${l.s}">${l.model}</a>${isNew(l) ? ' <span class="spec-badge" style="--c:var(--new)">NEW</span>' : ''}</td>
+						<td class="data">${focalStr(l, mult)}</td>
+						<td class="data">f/${l.a}</td>
+						<td class="data">${l.w}g</td>
+						<td class="data year">${l.y}</td>
+						<td>${specBadges(l)}</td>
+						<td class="kit-cell">${inKit ? '<button class="kit-badge" data-kit="' + l.s + '"><span class="dot"></span>IN KIT</button>' : '<button class="kit-add" data-kit="' + l.s + '">+ kit</button>'}</td>
+					</tr>`;
+				}).join('');
+				document.getElementById('tableCount').textContent = `${rows.length} lens${rows.length === 1 ? '' : 'es'}`;
+			}
+
+			/* ============ RENDER: FOCAL MAP ============ */
+			const TICKS = [10, 16, 23, 35, 50, 90, 150, 300, 600];
+			function renderAxis(el) {
+				el.innerHTML = TICKS.map((t) => `<span class="focal-tick" style="left:${logPos(t)}%">${t}</span>`).join('');
+			}
+			function gridlines() {
+				return TICKS.map((t) => `<span class="gridline" style="left:${logPos(t)}%"></span>`).join('');
+			}
+			function renderMap() {
+				renderAxis(document.getElementById('mapAxis'));
+				const rows = filtered();
+				const byMfr = {};
+				rows.forEach((l) => (byMfr[l.mfr] = byMfr[l.mfr] || []).push(l));
+				document.getElementById('mapLanes').innerHTML = Object.keys(MFR)
+					.filter((m) => byMfr[m])
+					.map((m) => {
+						const items = byMfr[m].map((l) => {
+							if (l.t === 'zoom') {
+								const x = logPos(l.f[0]), x2 = logPos(l.f[1]);
+								return `<span class="focal-zoom focal-item" data-tip="${l.s}" style="--c:${cvar(m)};left:${x}%;width:${x2 - x}%"></span>`;
+							}
+							return `<span class="focal-prime focal-item" data-tip="${l.s}" style="--c:${cvar(m)};left:${logPos(l.f[0])}%"></span>`;
+						}).join('');
+						return `<div class="focal-lane">
+							<div class="focal-lane-label" style="--c:${cvar(m)}"><span class="dot"></span>${m}</div>
+							<div class="focal-track">${gridlines()}${items}</div>
+						</div>`;
+					}).join('');
+				document.getElementById('mapCount').textContent = `${rows.length} lens${rows.length === 1 ? '' : 'es'}`;
+			}
+
+			/* ============ RENDER: KIT ============ */
+			function mergeCoverage(lenses) {
+				// build intervals; primes get a tiny visual width
+				const iv = lenses.map((l) => l.t === 'zoom' ? [l.f[0], l.f[1]] : [l.f[0], l.f[0]]).sort((a, b) => a[0] - b[0]);
+				const merged = [];
+				iv.forEach(([lo, hi]) => {
+					const last = merged[merged.length - 1];
+					if (last && lo <= last[1] * 1.04) last[1] = Math.max(last[1], hi);
+					else merged.push([lo, hi]);
+				});
+				return merged;
+			}
+			function renderKit() {
+				const kitLenses = LENSES.filter((l) => state.kit.has(l.s)).sort((a, b) => a.f[0] - b.f[0]);
+				const el = document.getElementById('kitContent');
+				if (!kitLenses.length) {
+					el.innerHTML = `<div class="empty">
+						<div class="big">Your kit is empty</div>
+						<div class="small">Add lenses from the Table or Map to map your focal coverage and spot the gaps.</div>
+						<button class="btn btn-primary" data-view-jump="table" style="margin-top:8px">Browse lenses</button>
+					</div>`;
+					document.getElementById('kitWeight').textContent = '';
+					document.getElementById('kitSub').textContent = 'Lenses you own — coverage & gaps';
+					return;
+				}
+				const totalW = kitLenses.reduce((s, l) => s + l.w, 0);
+				document.getElementById('kitWeight').textContent = `${kitLenses.length} lenses · ${(totalW / 1000).toFixed(2)} kg`;
+				document.getElementById('kitSub').textContent = 'Lenses you own — coverage & gaps';
+				const merged = mergeCoverage(kitLenses);
+				const minF = merged[0][0], maxF = merged[merged.length - 1][1];
+				// gaps between merged segments
+				const gaps = [];
+				for (let i = 1; i < merged.length; i++) {
+					const lo = merged[i - 1][1], hi = merged[i][0];
+					if (hi / lo > 1.25) gaps.push([Math.round(lo), Math.round(hi)]);
+				}
+				const segs = merged.map((s) => {
+					const x = logPos(s[0]), x2 = logPos(Math.max(s[1], s[0] * 1.01));
+					return `<span class="coverage-seg" style="left:${x}%;width:${Math.max(x2 - x, 0.8)}%"></span>`;
+				}).join('');
+				const gapAxis = TICKS.map((t) => `<span class="focal-tick" style="left:${logPos(t)}%">${t}</span>`).join('');
+				const gapChips = gaps.length
+					? gaps.map((g) => `<button class="gap-chip" data-gap="${g[0]}-${g[1]}">gap ${g[0]}–${g[1]}mm →</button>`).join('')
+					: '<span style="color:var(--kit)">No significant gaps — nice coverage.</span>';
+				const lenseRows = kitLenses.map((l) => {
+					const x = logPos(l.f[0]), x2 = logPos(Math.max(l.f[1], l.f[0] * 1.01));
+					const bar = l.t === 'zoom'
+						? `<span class="focal-zoom" style="--c:${cvar(l.mfr)};left:${x}%;width:${Math.max(x2 - x, 1)}%"></span>`
+						: `<span class="focal-prime" style="--c:${cvar(l.mfr)};left:${x}%"></span>`;
+					return `<div class="focal-lane" style="grid-template-columns:160px 1fr">
+						<div class="focal-lane-label" style="--c:${cvar(l.mfr)}"><span class="dot"></span><a class="model" data-detail="${l.s}" style="font-size:var(--text-sm)">${l.model}</a></div>
+						<div class="focal-track">${gridlines()}${bar}</div>
+					</div>`;
+				}).join('');
+				el.innerHTML = `<div class="coverage">
+					<div class="coverage-head">
+						<div class="coverage-title">Focal coverage · ${Math.round(minF)}–${Math.round(maxF)}mm</div>
+						<div class="coverage-legend">
+							<span><span class="sw" style="background:color-mix(in srgb,var(--kit) 40%,transparent)"></span>covered</span>
+							<span><span class="sw" style="background:repeating-linear-gradient(-45deg,transparent 0 3px,color-mix(in srgb,var(--danger) 35%,transparent) 3px 4px)"></span>gap</span>
+						</div>
+					</div>
+					<div class="coverage-band">${segs}</div>
+					<div class="coverage-axis">${gapAxis}</div>
+					<div class="coverage-gap-note">${gapChips}</div>
+					<div class="kit-lenses">${lenseRows}</div>
+				</div>`;
+			}
+
+			/* ============ RENDER: DETAIL ============ */
+			function renderDetail(slug) {
+				const l = LENSES.find((x) => x.s === slug);
+				if (!l) return;
+				const mult = 1.5;
+				const inKit = state.kit.has(l.s);
+				const ffe = focalStr(l, mult);
+				const specs = [
+					['Focus', l.af ? 'Autofocus' : 'Manual', l.af],
+					['Aperture ring', l.ar ? 'Yes' : 'No', l.ar],
+					['Linear motor', l.lm ? 'Yes' : 'No', l.lm],
+					['Weather resist', l.wr ? 'Yes' : 'No', l.wr],
+					['Stabilisation', l.ois ? 'OIS' : 'None', l.ois],
+					['FF equivalent', ffe, null],
+					['Release year', l.y, null],
+					['Lens type', l.t === 'zoom' ? 'Zoom' : 'Prime', null]
+				];
+				const similar = LENSES.filter((x) => x.s !== l.s && Math.abs(x.f[0] - l.f[0]) <= 12).slice(0, 3);
+				document.getElementById('detailContent').innerHTML = `<div class="detail-grid">
+					<div>
+						<div class="detail-photo"><div class="ph">
+							<svg width="30" height="30" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="4" y="8" width="24" height="18" rx="2"/><circle cx="16" cy="17" r="5"/><rect x="11" y="6" width="6" height="3" rx="1"/></svg>
+							<span>product photo · 4:3</span>
+						</div></div>
+						<div class="buy-row">
+							${RETAILERS.map((r) => `<a class="buy-link"><span class="retailer">${r[0]}</span><span class="price"><b>${r[1]}</b><span class="arrow">↗</span></span></a>`).join('')}
+						</div>
+						<div class="buy-disclaimer">Prices indicative · affiliate links help support the project</div>
+					</div>
+					<div>
+						<div class="mount-label" style="--c:${cvar(l.mfr)}">${l.mfr === 'Fujinon' ? 'FUJINON X-MOUNT' : l.mfr.toUpperCase() + ' · X-MOUNT'}</div>
+						<h1 class="detail-name">${l.model}${isNew(l) ? ' <span class="spec-badge" style="--c:var(--new)">NEW</span>' : ''}</h1>
+						<div class="key-stats">
+							<div class="key-stat"><span class="label">Focal</span><span class="value">${focalStr(l)}</span></div>
+							<div class="key-stat"><span class="label">Aperture</span><span class="value">f/${l.a}</span></div>
+							<div class="key-stat"><span class="label">Weight</span><span class="value">${l.w}g</span></div>
+						</div>
+						<div class="specs-heading">Specifications</div>
+						<div class="spec-grid">
+							${specs.map((s) => `<div class="spec-item"><span class="k">${s[0]}</span><span class="v">${s[2] !== null ? `<span class="spec-dot ${s[2] ? 'yes' : ''}"></span>` : ''}${s[1]}</span></div>`).join('')}
+						</div>
+						<button class="btn ${inKit ? 'btn-secondary' : 'btn-primary'} btn-block" data-kit="${l.s}" style="margin-top:24px;height:42px">${inKit ? 'In My Kit — Remove' : '+ Add to My Kit'}</button>
+					</div>
+				</div>
+				${similar.length ? `<div class="also"><div class="also-heading">Also consider</div><div class="consider">
+					${similar.map((x) => `<a class="consider-card" data-detail="${x.s}"><span class="mfr-badge" style="--c:${cvar(x.mfr)}">${x.mfr}</span><span class="model">${x.model}</span><span class="specs"><span>${focalStr(x)}</span><span class="sep">·</span><span>f/${x.a}</span><span class="sep">·</span><span>${x.w}g</span></span></a>`).join('')}
+				</div></div>` : ''}`;
+			}
+
+			/* ============ VIEW SWITCH ============ */
+			function setView(v) {
+				state.view = v;
+				document.querySelectorAll('.view').forEach((el) => el.classList.remove('active'));
+				document.getElementById('view-' + v).classList.add('active');
+				[...document.getElementById('tabs').children].forEach((b) => b.classList.toggle('active', b.dataset.view === v));
+				document.querySelector('.content').scrollTop = 0;
+				renderSidebar();
+				if (v === 'table') renderTable();
+				else if (v === 'map') renderMap();
+				else if (v === 'kit') renderKit();
+			}
+			function openDetail(slug) {
+				state.detail = slug;
+				renderDetail(slug);
+				document.querySelectorAll('.view').forEach((el) => el.classList.remove('active'));
+				document.getElementById('view-detail').classList.add('active');
+				document.querySelector('.content').scrollTop = 0;
+			}
+
+			/* ============ KIT COUNT ============ */
+			function updateKitCount() {
+				const n = state.kit.size;
+				document.getElementById('kitCount').style.visibility = n ? 'visible' : 'hidden';
+				document.getElementById('kitCountLabel').textContent = `${n} in kit`;
+			}
+			function toggleKit(slug) {
+				if (state.kit.has(slug)) state.kit.delete(slug);
+				else state.kit.add(slug);
+				saveKit();
+				updateKitCount();
+				if (document.getElementById('view-table').classList.contains('active')) renderTable();
+				if (document.getElementById('view-kit').classList.contains('active')) renderKit();
+				if (document.getElementById('view-detail').classList.contains('active')) renderDetail(state.detail);
+			}
+
+			/* ============ EVENTS ============ */
+			document.getElementById('tabs').addEventListener('click', (e) => {
+				const b = e.target.closest('[data-view]');
+				if (b) setView(b.dataset.view);
+			});
+			document.body.addEventListener('click', (e) => {
+				const detail = e.target.closest('[data-detail]');
+				if (detail) { openDetail(detail.dataset.detail); return; }
+				const kit = e.target.closest('[data-kit]');
+				if (kit) { toggleKit(kit.dataset.kit); return; }
+				const mfr = e.target.closest('[data-mfr]');
+				if (mfr) {
+					const m = mfr.dataset.mfr;
+					state.mfr.has(m) ? state.mfr.delete(m) : state.mfr.add(m);
+					renderSidebar(); rerenderActive(); return;
+				}
+				const sort = e.target.closest('[data-sort]');
+				if (sort) {
+					const k = sort.dataset.sort;
+					if (state.sort === k) state.dir = state.dir === 'asc' ? 'desc' : 'asc';
+					else { state.sort = k; state.dir = 'asc'; }
+					renderTable(); return;
+				}
+				const jump = e.target.closest('[data-view-jump]');
+				if (jump) { setView(jump.dataset.viewJump); return; }
+				const gap = e.target.closest('[data-gap]');
+				if (gap) { setView('table'); return; }
+			});
+			function rerenderActive() {
+				if (state.view === 'table') renderTable();
+				else if (state.view === 'map') renderMap();
+			}
+			document.getElementById('backLink').addEventListener('click', () => setView(state.view));
+			document.getElementById('typeSeg').addEventListener('click', (e) => {
+				const b = e.target.closest('[data-type]');
+				if (!b) return;
+				state.type = b.dataset.type;
+				[...e.currentTarget.children].forEach((x) => x.classList.toggle('active', x === b));
+				rerenderActive(); renderSidebar();
+			});
+			document.querySelectorAll('[data-feat]').forEach((t) =>
+				t.addEventListener('change', () => { state[t.dataset.feat] = t.checked; rerenderActive(); renderSidebar(); })
+			);
+			document.getElementById('ffeToggle').addEventListener('change', (e) => { state.ffe = e.target.checked; rerenderActive(); });
+			document.getElementById('clearBtn').addEventListener('click', () => {
+				state.mfr.clear(); state.type = ''; state.wr = state.ois = state.af = false;
+				document.querySelectorAll('[data-feat]').forEach((t) => (t.checked = false));
+				[...document.getElementById('typeSeg').children].forEach((x, i) => x.classList.toggle('active', i === 0));
+				renderSidebar(); rerenderActive();
+			});
+			document.getElementById('scaleSeg').addEventListener('click', (e) => {
+				const b = e.target.closest('[data-scale]');
+				if (b) [...e.currentTarget.children].forEach((x) => x.classList.toggle('active', x === b));
+			});
+			document.getElementById('fontSeg').addEventListener('click', (e) => {
+				const b = e.target.closest('[data-fs]');
+				if (!b) return;
+				document.documentElement.style.setProperty('--font-scale', b.dataset.fs);
+				[...e.currentTarget.children].forEach((x) => x.classList.toggle('active', x === b));
+			});
+			const themeSeg = document.getElementById('themeSeg');
+			themeSeg.addEventListener('click', (e) => {
+				const b = e.target.closest('[data-theme-val]');
+				if (!b) return;
+				const v = b.dataset.themeVal;
+				if (v === 'auto') document.documentElement.removeAttribute('data-theme');
+				else document.documentElement.setAttribute('data-theme', v);
+				localStorage.setItem('fl-theme', v);
+				[...themeSeg.children].forEach((x) => x.classList.toggle('active', x === b));
+			});
+			(function initTheme() {
+				const v = localStorage.getItem('fl-theme') || 'dark';
+				if (v === 'auto') document.documentElement.removeAttribute('data-theme');
+				else document.documentElement.setAttribute('data-theme', v);
+				[...themeSeg.children].forEach((x) => x.classList.toggle('active', x.dataset.themeVal === v));
+			})();
+
+			/* mobile drawer */
+			const drawer = document.getElementById('sidebar'), overlay = document.getElementById('drawerOverlay');
+			function openDrawer(o) {
+				drawer.classList.toggle('drawer', true);
+				drawer.classList.toggle('open', o);
+				overlay.classList.toggle('open', o);
+			}
+			document.getElementById('drawerToggle').addEventListener('click', () => openDrawer(!drawer.classList.contains('open')));
+			overlay.addEventListener('click', () => openDrawer(false));
+
+			/* tooltip on focal map */
+			const tip = document.getElementById('tooltip');
+			document.body.addEventListener('mouseover', (e) => {
+				const t = e.target.closest('[data-tip]');
+				if (!t) return;
+				const l = LENSES.find((x) => x.s === t.dataset.tip);
+				tip.innerHTML = `<div class="tt-title">${l.model}</div>
+					<div class="tt-row"><span>Focal</span><b>${focalStr(l)}</b></div>
+					<div class="tt-row"><span>Aperture</span><b>f/${l.a}</b></div>
+					<div class="tt-row"><span>Weight</span><b>${l.w}g</b></div>`;
+				tip.classList.add('show');
+			});
+			document.body.addEventListener('mousemove', (e) => {
+				if (!tip.classList.contains('show')) return;
+				const x = Math.min(e.clientX + 14, window.innerWidth - tip.offsetWidth - 8);
+				tip.style.left = x + 'px';
+				tip.style.top = (e.clientY + 14) + 'px';
+			});
+			document.body.addEventListener('mouseout', (e) => {
+				if (e.target.closest('[data-tip]')) tip.classList.remove('show');
+			});
+
+			/* ============ INIT ============ */
+			updateKitCount();
+			setView('table');
+		</script>
+	</body>
+</html>

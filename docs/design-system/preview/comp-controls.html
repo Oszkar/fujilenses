@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<link rel="stylesheet" href="../colors_and_type.css"/>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:var(--font-sans);background:var(--bg-base);color:var(--text-primary);padding:20px;-webkit-font-smoothing:antialiased}
+  .row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+  .col{display:flex;flex-direction:column;gap:10px}
+  .mfr-badge{display:inline-flex;align-items:center;padding:3px 8px;border-radius:var(--radius-xs);font-family:var(--font-mono);font-weight:500;font-size:11px;letter-spacing:.04em;text-transform:uppercase;color:var(--c);background:color-mix(in srgb,var(--c) var(--mfr-badge-fill),transparent)}
+  .spec-badge{display:inline-flex;align-items:center;padding:2px 7px;border-radius:var(--radius-xs);font-family:var(--font-mono);font-weight:500;font-size:10px;letter-spacing:.04em;text-transform:uppercase;color:var(--c,var(--text-muted));background:color-mix(in srgb,var(--c,var(--text-muted)) 15%,transparent)}
+  .sw{border-radius:var(--radius-sm);border:1px solid var(--border-subtle)}
+  .lbl{font-size:10px;color:var(--text-muted);margin-top:5px}
+  .val{font-family:var(--font-mono);font-size:9px;color:var(--text-faint)}
+  
+  .seg{display:inline-flex;gap:4px;padding:3px;background:var(--bg-base);border:1px solid var(--border-default);border-radius:var(--radius-md)}
+  .s{padding:5px 14px;border:none;border-radius:var(--radius-sm);background:transparent;font-family:var(--font-sans);font-weight:500;font-size:12px;color:var(--text-muted);cursor:pointer}
+  .s.active{background:var(--bg-accent);color:var(--accent-bright)}
+  .tg{appearance:none;width:36px;height:20px;border-radius:999px;background:var(--accent);position:relative;cursor:pointer}
+  .tg::after{content:'';position:absolute;top:2px;left:2px;width:16px;height:16px;border-radius:50%;background:var(--text-on-accent);transform:translateX(16px)}
+
+</style>
+</head>
+<body><div class="row" style="gap:28px;align-items:center">
+  <div class="seg"><button class="s active">All</button><button class="s">Prime</button><button class="s">Zoom</button></div>
+  <label style="display:flex;align-items:center;gap:10px;font-size:13px;color:var(--text-secondary)">Weather Resistant<input type="checkbox" class="tg" checked></label>
+</div></body></html>

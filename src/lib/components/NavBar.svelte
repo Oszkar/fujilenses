@@ -44,34 +44,40 @@
 	{#if kitCount > 0}
 		<div class="kit-count">
 			<span class="kit-dot"></span>
-			<span class="kit-label">{kitCount} in kit</span>
+			<span class="kit-label"><span class="kit-num">{kitCount}</span> in kit</span>
 		</div>
 	{/if}
 </nav>
 
 <style>
 	.nav-bar {
+		position: sticky;
+		top: 0;
+		z-index: var(--z-nav);
 		display: flex;
 		width: 100%;
+		height: var(--nav-height);
 		align-items: center;
 		justify-content: space-between;
-		background: var(--bg-surface);
+		background: color-mix(in srgb, var(--bg-surface) 82%, transparent);
+		backdrop-filter: blur(12px);
+		-webkit-backdrop-filter: blur(12px);
 		box-shadow: inset 0 -1px 0 0 var(--border-subtle);
-		padding: 18px 40px;
+		padding: 0 var(--space-10);
 		font-family: var(--font-sans);
-		gap: 12px;
+		gap: var(--space-3);
 	}
 
 	.nav-left {
 		display: flex;
 		align-items: center;
-		gap: 20px;
+		gap: var(--space-5);
 		min-width: 0;
 	}
 
 	.logo {
 		font-family: var(--font-sans);
-		font-weight: 700;
+		font-weight: var(--weight-bold);
 		font-size: 17px;
 		color: var(--text-primary);
 		white-space: nowrap;
@@ -80,7 +86,7 @@
 
 	.divider {
 		width: 1px;
-		height: 24px;
+		height: var(--space-6);
 		background: var(--border-default);
 		flex-shrink: 0;
 	}
@@ -88,27 +94,28 @@
 	.tabs {
 		display: flex;
 		align-items: center;
-		gap: 4px;
+		gap: var(--space-1);
 	}
 
 	.tab {
 		padding: 6px 14px;
-		border-radius: 6px;
+		border-radius: var(--radius-md);
 		border: none;
 		background: transparent;
 		font-family: var(--font-sans);
-		font-weight: 500;
-		font-size: calc(13px * var(--font-scale, 1));
+		font-weight: var(--weight-medium);
+		font-size: calc(var(--text-base) * var(--font-scale, 1));
 		color: var(--text-muted);
 		cursor: pointer;
 		white-space: nowrap;
 		transition:
-			color 200ms ease,
-			background 200ms ease;
+			color var(--dur-fast) var(--ease-out),
+			background var(--dur-fast) var(--ease-out);
 	}
 
 	.tab:hover {
-		color: var(--text-secondary);
+		color: var(--text-primary);
+		background: var(--bg-elevated);
 	}
 
 	.tab:focus-visible {
@@ -122,6 +129,7 @@
 	}
 
 	.tab.active:hover {
+		background: var(--bg-accent);
 		color: var(--accent-bright);
 	}
 
@@ -131,15 +139,15 @@
 		justify-content: center;
 		width: 36px;
 		height: 36px;
-		border-radius: 6px;
+		border-radius: var(--radius-md);
 		border: 1px solid var(--border-default);
 		background: transparent;
 		color: var(--text-secondary);
 		cursor: pointer;
 		flex-shrink: 0;
 		transition:
-			background 150ms ease,
-			color 150ms ease;
+			background var(--dur-fast) var(--ease-out),
+			color var(--dur-fast) var(--ease-out);
 	}
 
 	.drawer-toggle:hover {
@@ -155,25 +163,30 @@
 	.kit-count {
 		display: flex;
 		align-items: center;
-		gap: 8px;
-		font-family: var(--font-mono);
-		font-size: calc(12px * var(--font-scale, 1));
+		gap: var(--space-2);
+		font-family: var(--font-sans);
+		font-size: calc(var(--text-sm) * var(--font-scale, 1));
 		color: var(--text-secondary);
 		flex-shrink: 0;
+	}
+
+	.kit-num {
+		font-family: var(--font-mono);
+		font-variant-numeric: tabular-nums;
 	}
 
 	.kit-dot {
 		display: inline-block;
 		width: 8px;
 		height: 8px;
-		border-radius: 50%;
+		border-radius: var(--radius-full);
 		background: var(--kit);
 	}
 
 	/* Mobile */
 	@media (max-width: 1023px) {
 		.nav-bar {
-			padding: 12px 16px;
+			padding: 0 var(--space-4);
 		}
 
 		.drawer-toggle {
@@ -185,12 +198,12 @@
 		}
 
 		.nav-left {
-			gap: 12px;
+			gap: var(--space-3);
 		}
 
 		.tab {
 			padding: 6px 10px;
-			font-size: 12px;
+			font-size: calc(var(--text-sm) * var(--font-scale, 1));
 		}
 
 		.kit-label {

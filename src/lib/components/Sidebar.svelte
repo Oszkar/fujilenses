@@ -217,20 +217,15 @@
 	<div class="section">
 		<h3 class="section-header">Theme</h3>
 		<div class="segmented">
-			<button
-				class="seg-btn"
-				class:active={getTheme() === 'dark'}
-				onclick={() => setTheme('dark')}
-			>
-				Dark
-			</button>
-			<button
-				class="seg-btn"
-				class:active={getTheme() === 'light'}
-				onclick={() => setTheme('light')}
-			>
-				Light
-			</button>
+			{#each [{ value: 'auto', label: 'Auto' }, { value: 'dark', label: 'Dark' }, { value: 'light', label: 'Light' }] as opt (opt.value)}
+				<button
+					class="seg-btn"
+					class:active={getTheme() === opt.value}
+					onclick={() => setTheme(opt.value as Theme)}
+				>
+					{opt.label}
+				</button>
+			{/each}
 		</div>
 	</div>
 
@@ -257,39 +252,39 @@
 
 <style>
 	.sidebar {
-		width: 220px;
-		min-width: 220px;
+		width: var(--sidebar-width);
+		min-width: var(--sidebar-width);
 		background: var(--bg-surface);
 		border-right: 1px solid var(--border-subtle);
-		padding: 24px 20px;
+		padding: var(--space-6) var(--space-5);
 		overflow-y: auto;
 		display: flex;
 		flex-direction: column;
-		gap: 24px;
+		gap: var(--space-6);
 	}
 
 	.sidebar-bottom {
-		margin-top: 24px;
+		margin-top: var(--space-6);
 		display: flex;
 		flex-direction: column;
-		gap: 8px;
+		gap: var(--space-2);
 	}
 
 	.clear-btn {
 		width: 100%;
-		padding: 8px;
-		border-radius: 6px;
+		padding: var(--space-2);
+		border-radius: var(--radius-md);
 		border: 1px solid var(--border-default);
 		background: transparent;
 		font-family: var(--font-sans);
-		font-weight: 500;
-		font-size: 12px;
+		font-weight: var(--weight-medium);
+		font-size: calc(var(--text-sm) * var(--font-scale, 1));
 		color: var(--text-secondary);
 		cursor: pointer;
 		transition:
-			background 150ms ease,
-			color 150ms ease,
-			border-color 150ms ease;
+			background var(--dur-fast) var(--ease-out),
+			color var(--dur-fast) var(--ease-out),
+			border-color var(--dur-fast) var(--ease-out);
 	}
 
 	.clear-btn:hover {
@@ -307,26 +302,26 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		gap: 8px;
+		gap: var(--space-2);
 		width: 100%;
-		padding: 8px;
-		border-radius: 6px;
-		border: 1px solid color-mix(in srgb, #72a4f2 30%, transparent);
-		background: color-mix(in srgb, #72a4f2 8%, transparent);
+		padding: var(--space-2);
+		border-radius: var(--radius-md);
+		border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+		background: color-mix(in srgb, var(--accent) 8%, transparent);
 		font-family: var(--font-sans);
-		font-weight: 500;
-		font-size: 12px;
-		color: #72a4f2;
+		font-weight: var(--weight-medium);
+		font-size: calc(var(--text-sm) * var(--font-scale, 1));
+		color: var(--accent);
 		text-decoration: none;
 		cursor: pointer;
 		transition:
-			background 150ms ease,
-			border-color 150ms ease;
+			background var(--dur-fast) var(--ease-out),
+			border-color var(--dur-fast) var(--ease-out);
 	}
 
 	.kofi-btn:hover {
-		background: color-mix(in srgb, #72a4f2 15%, transparent);
-		border-color: color-mix(in srgb, #72a4f2 50%, transparent);
+		background: color-mix(in srgb, var(--accent) 15%, transparent);
+		border-color: color-mix(in srgb, var(--accent) 50%, transparent);
 	}
 
 	.kofi-btn:focus-visible {
@@ -342,12 +337,12 @@
 
 	.section-header {
 		font-family: var(--font-sans);
-		font-weight: 500;
-		font-size: calc(11px * var(--font-scale, 1));
+		font-weight: var(--weight-medium);
+		font-size: calc(var(--text-xs) * var(--font-scale, 1));
 		text-transform: uppercase;
-		letter-spacing: 0.08em;
+		letter-spacing: var(--tracking-label);
 		color: var(--text-muted);
-		margin: 0 0 12px 0;
+		margin: 0 0 var(--space-3) 0;
 	}
 
 	/* Manufacturer filter */
@@ -360,15 +355,15 @@
 	.mfr-item {
 		display: flex;
 		align-items: center;
-		gap: 10px;
+		gap: var(--space-3);
 		padding: 6px 10px;
-		border-radius: 6px;
+		border-radius: var(--radius-md);
 		border: none;
 		background: transparent;
 		cursor: pointer;
 		transition:
-			background 150ms ease,
-			opacity 150ms ease;
+			background var(--dur-base) var(--ease-out),
+			opacity var(--dur-base) var(--ease-out);
 	}
 
 	.mfr-item:hover {
@@ -391,44 +386,44 @@
 	.mfr-dot {
 		width: 8px;
 		height: 8px;
-		border-radius: 50%;
+		border-radius: var(--radius-full);
 		flex-shrink: 0;
 	}
 
 	.mfr-label {
 		font-family: var(--font-sans);
-		font-weight: 500;
-		font-size: calc(13px * var(--font-scale, 1));
-		transition: color 150ms ease;
+		font-weight: var(--weight-medium);
+		font-size: calc(var(--text-base) * var(--font-scale, 1));
+		transition: color var(--dur-base) var(--ease-out);
 	}
 
 	.mfr-count {
-		font-weight: 400;
-		font-size: 11px;
+		font-weight: var(--weight-regular);
+		font-size: calc(var(--text-xs) * var(--font-scale, 1));
 		opacity: 0.6;
 	}
 
 	/* Segmented control */
 	.segmented {
 		display: flex;
-		gap: 4px;
+		gap: var(--space-1);
 	}
 
 	.seg-btn {
 		flex: 1;
 		padding: 6px 0;
-		border-radius: 6px;
+		border-radius: var(--radius-md);
 		border: 1px solid var(--border-default);
 		background: transparent;
 		font-family: var(--font-sans);
-		font-weight: 500;
-		font-size: calc(12px * var(--font-scale, 1));
+		font-weight: var(--weight-medium);
+		font-size: calc(var(--text-sm) * var(--font-scale, 1));
 		color: var(--text-muted);
 		cursor: pointer;
 		transition:
-			background 200ms ease,
-			color 200ms ease,
-			border-color 200ms ease;
+			background var(--dur-base) var(--ease-out),
+			color var(--dur-base) var(--ease-out),
+			border-color var(--dur-base) var(--ease-out);
 	}
 
 	.seg-btn:hover {
@@ -451,7 +446,7 @@
 	.toggle-list {
 		display: flex;
 		flex-direction: column;
-		gap: 10px;
+		gap: var(--space-3);
 	}
 
 	.toggle-row {
@@ -463,7 +458,7 @@
 
 	.toggle-label {
 		font-family: var(--font-sans);
-		font-size: calc(13px * var(--font-scale, 1));
+		font-size: calc(var(--text-base) * var(--font-scale, 1));
 		color: var(--text-secondary);
 	}
 
@@ -471,11 +466,11 @@
 		appearance: none;
 		width: 36px;
 		height: 20px;
-		border-radius: 10px;
+		border-radius: var(--radius-full);
 		background: var(--border-default);
 		position: relative;
 		cursor: pointer;
-		transition: background 200ms ease;
+		transition: background var(--dur-base) var(--ease-out);
 		flex-shrink: 0;
 	}
 
@@ -486,11 +481,11 @@
 		left: 2px;
 		width: 16px;
 		height: 16px;
-		border-radius: 50%;
+		border-radius: var(--radius-full);
 		background: var(--text-muted);
 		transition:
-			transform 200ms ease,
-			background 200ms ease;
+			transform var(--dur-base) var(--ease-out),
+			background var(--dur-base) var(--ease-out);
 	}
 
 	.toggle:checked {
@@ -511,22 +506,22 @@
 	.legend {
 		display: flex;
 		flex-direction: column;
-		gap: 8px;
+		gap: var(--space-2);
 		font-family: var(--font-sans);
-		font-size: 12px;
+		font-size: calc(var(--text-sm) * var(--font-scale, 1));
 		color: var(--text-secondary);
 	}
 
 	.legend-item {
 		display: flex;
 		align-items: center;
-		gap: 10px;
+		gap: var(--space-3);
 	}
 
 	.legend-dot {
 		width: 10px;
 		height: 10px;
-		border-radius: 50%;
+		border-radius: var(--radius-full);
 		background: var(--mfr-fujinon);
 		flex-shrink: 0;
 	}
@@ -534,7 +529,7 @@
 	.legend-bar {
 		width: 24px;
 		height: 8px;
-		border-radius: 4px;
+		border-radius: var(--radius-sm);
 		background: var(--mfr-fujinon);
 		flex-shrink: 0;
 	}
@@ -542,7 +537,7 @@
 	.legend-kit {
 		width: 10px;
 		height: 10px;
-		border-radius: 2px;
+		border-radius: var(--radius-xs);
 		background: var(--kit);
 		flex-shrink: 0;
 	}
