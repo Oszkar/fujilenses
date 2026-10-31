@@ -114,7 +114,7 @@
 
 		<!-- Mobile drawer overlay -->
 		{#if drawerOpen}
-			<button type="button" class="drawer-overlay" onclick={closeDrawer} aria-label="Close filters" transition:fade={{ duration: 250 }}></button>
+			<button type="button" class="drawer-overlay" onclick={closeDrawer} aria-label={filters.view === 'kit' ? 'Close kit display settings' : 'Close filters'} transition:fade={{ duration: 250 }}></button>
 			<div
 				class="drawer"
 				transition:fly={{ x: -280, duration: 250 }}
@@ -126,8 +126,8 @@
 				onkeydown={handleDrawerKeydown}
 			>
 				<div class="drawer-header">
-					<h2 class="drawer-title" id="drawer-title">Filters</h2>
-					<button class="drawer-close" onclick={closeDrawer} aria-label="Close filters">
+					<h2 class="drawer-title" id="drawer-title">{filters.view === 'kit' ? 'Kit display settings' : 'Filters'}</h2>
+					<button class="drawer-close" onclick={closeDrawer} aria-label={filters.view === 'kit' ? 'Close kit display settings' : 'Close filters'}>
 						<svg width="18" height="18" viewBox="0 0 18 18" fill="none">
 							<path d="M4 4l10 10M14 4L4 14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
 						</svg>

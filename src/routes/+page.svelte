@@ -2,6 +2,7 @@
 	import { page } from '$app/state';
 	import { goto } from '$app/navigation';
 	import { browser } from '$app/environment';
+	import { focalCoverage } from '$lib/coverage';
 	import { allLenses } from '$lib/data';
 	import {
 		parseFiltersFromURL,
@@ -36,6 +37,9 @@
 			filters.sortDir
 		)
 	);
+
+	let kitCoverage = $derived(focalCoverage(kitLenses, filters.ffe));
+	let kitWeight = $derived(kitLenses.reduce((total, lens) => total + lens.weightGrams, 0));
 
 	// Filter sizes for kit view — distinct sizes sorted, with lens count per size
 	let kitFilterSizes = $derived.by(() => {
@@ -153,7 +157,7 @@
 		const mult = filters.ffe ? 1.5 : 1;
 		const fmin = Math.round(gap.focalStart / mult);
 		const fmax = Math.round(gap.focalEnd / mult);
-		updateFilters({ fmin, fmax, view: 'table' });
+		updateFilters({ ...defaultFilters, ffe: filters.ffe, scale: filters.scale, fmin, fmax, view: 'table' });
 	}
 
 	function clearFocalRange() {
@@ -280,7 +284,7 @@
 		</div>
 	</div>
 
-	{#if sharedKitLenses.length >= 2}
+	{#if sharedKitLenses.length > 0}
 		<section class="kit-section">
 			<h2 class="section-heading">Focal Coverage</h2>
 			<FocalMap
@@ -349,10 +353,18 @@
 						<line x1="16" y1="22" x2="24" y2="22" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
 					</svg>
 					<p class="empty-title">Your kit is empty</p>
-					<p class="empty-hint">Add lenses from the Table or Map to map your focal coverage and spot the gaps.</p>
+					<p class="empty-hint">Add lenses to see your focal coverage, total weight, and filter sizes.</p>
+					<button class="share-btn" onclick={() => updateFilters({ view: 'table' })}>Browse lenses</button>
 				</div>
 			</div>
 		{:else}
+			<dl class="kit-summary" aria-label="Kit summary">
+				<div><dt>Lenses</dt><dd>{kitLenses.length}</dd></div>
+				<div><dt>Total lens weight</dt><dd>{kitWeight.toLocaleString('en-US')}g</dd></div>
+				{#if kitCoverage}
+					<div><dt>Focal span{filters.ffe ? ' (FF equivalent)' : ''}</dt><dd>{kitCoverage.min}{kitCoverage.min !== kitCoverage.max ? `–${kitCoverage.max}` : ''}mm</dd></div>
+				{/if}
+			</dl>
 			<section class="kit-section">
 				<h2 class="section-heading">Focal Coverage</h2>
 				<FocalMap
@@ -364,9 +376,20 @@
 					showHeatmap={true}
 					onGapClick={handleGapClick}
 				/>
-				{#if kitLenses.length >= 2}
-					<p class="gap-hint">Click a hatched region to browse lenses that cover the gap.</p>
-				{/if}
+
+			</section>
+
+			<section class="kit-section">
+				<h2 class="section-heading">Lenses</h2>
+				<LensTable
+					lenses={kitLenses}
+					sort={filters.sort}
+					sortDir={filters.sortDir}
+					ffe={filters.ffe}
+					{kitSlugs}
+					onSort={handleSort}
+					onToggleKit={handleToggleKit}
+				/>
 			</section>
 
 			{#if kitFilterSizes.length > 0}
@@ -392,18 +415,6 @@
 				</section>
 			{/if}
 
-			<section class="kit-section">
-				<h2 class="section-heading">Lenses</h2>
-				<LensTable
-					lenses={kitLenses}
-					sort={filters.sort}
-					sortDir={filters.sortDir}
-					ffe={filters.ffe}
-					{kitSlugs}
-					onSort={handleSort}
-					onToggleKit={handleToggleKit}
-				/>
-			</section>
 		{/if}
 	{:else if filteredLenses.length === 0}
 		<div class="empty-state">
@@ -440,6 +451,10 @@
 {/if}
 
 <style>
+	.kit-summary { display: flex; flex-wrap: wrap; gap: var(--space-6) var(--space-10); margin: 0 0 var(--space-8); }
+	.kit-summary dt { font-size: calc(var(--text-sm) * var(--font-scale, 1)); color: var(--text-muted); }
+	.kit-summary dd { margin: var(--space-1) 0 0; font-family: var(--font-mono); font-size: calc(var(--text-xl) * var(--font-scale, 1)); color: var(--text-primary); }
+
 	.page-heading-row {
 		display: flex;
 		align-items: flex-start;
@@ -624,13 +639,6 @@
 		font-family: var(--font-sans);
 		font-size: calc(var(--text-xs) * var(--font-scale, 1));
 		color: var(--text-muted);
-	}
-
-	.gap-hint {
-		font-family: var(--font-sans);
-		font-size: calc(var(--text-xs) * var(--font-scale, 1));
-		color: var(--text-muted);
-		margin: var(--space-2) 0 0 0;
 	}
 
 	.filter-size-asterisk {

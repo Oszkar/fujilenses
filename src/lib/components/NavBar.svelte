@@ -20,7 +20,7 @@
 <nav class="nav-bar">
 	<div class="nav-left">
 		{#if onToggleDrawer}
-			<button class="drawer-toggle" onclick={onToggleDrawer} aria-label="Toggle filters">
+			<button class="drawer-toggle" onclick={onToggleDrawer} aria-label={activeView === 'kit' ? 'Toggle kit display settings' : 'Toggle filters'}>
 				<svg width="18" height="18" viewBox="0 0 18 18" fill="none">
 					<path d="M2 4h14M2 9h14M2 14h14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
 				</svg>

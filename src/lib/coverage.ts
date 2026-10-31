@@ -44,7 +44,7 @@ export function computeCoverageSegments(
 	lenses: Lens[],
 	ffe: boolean
 ): CoverageSegment[] {
-	if (lenses.length < 2) return [];
+	if (lenses.length === 0) return [];
 
 	const events: { focal: number; delta: number }[] = [];
 	for (const lens of lenses) {
@@ -99,7 +99,7 @@ export function segmentsToGradientStops(
 ): GradientStop[] {
 	if (segments.length === 0 || chartWidth <= 0) return [];
 
-	const stops: GradientStop[] = [];
+	const stops: GradientStop[] = [{ offset: 0, opacity: 0 }];
 	const clamp01 = (v: number) => Math.max(0, Math.min(1, v));
 
 	for (let i = 0; i < segments.length; i++) {
@@ -111,13 +111,15 @@ export function segmentsToGradientStops(
 		// Hard stop pairs: close previous opacity, open this opacity at same offset
 		// This prevents gradient interpolation between segments with different counts
 		const prevOpacity = i > 0 ? opacityForCount(segments[i - 1].count) : 0;
-		if (i > 0 && prevOpacity !== opacity) {
+		if (prevOpacity !== opacity) {
 			stops.push({ offset: startFrac, opacity: prevOpacity });
 		}
 		stops.push({ offset: startFrac, opacity });
 		stops.push({ offset: endFrac, opacity });
 	}
 
+	const end = clamp01(scaleFunc(segments[segments.length - 1].focalEnd) / chartWidth);
+	stops.push({ offset: end, opacity: 0 }, { offset: 1, opacity: 0 });
 	return stops;
 }
 
@@ -143,4 +145,21 @@ export function detectGaps(
 	}
 
 	return gaps;
+}
+
+/** Exact focal intervals for copy and gap actions; primes are points, not artificial bands. */
+export function focalCoverage(lenses: Lens[], ffe: boolean) {
+	if (lenses.length === 0) return null;
+	const intervals = lenses.map((lens) => {
+		const mult = ffe ? getFFMultiplier(lens.mountType) : 1;
+		return { start: Math.round(lens.minFocalLength * mult), end: Math.round(lens.maxFocalLength * mult) };
+	}).sort((a, b) => a.start - b.start);
+	const min = intervals[0].start;
+	let max = intervals[0].end;
+	const gaps: { focalStart: number; focalEnd: number }[] = [];
+	for (const interval of intervals.slice(1)) {
+		if (interval.start > max) gaps.push({ focalStart: max, focalEnd: interval.start });
+		max = Math.max(max, interval.end);
+	}
+	return { min, max, gaps };
 }
