@@ -1,4 +1,5 @@
 import { browser } from '$app/environment';
+import { readStorage, writeStorage } from '$lib/storage';
 
 export type Theme = 'auto' | 'dark' | 'light';
 export type FontSize = 's' | 'm' | 'l';
@@ -14,12 +15,14 @@ const fontScaleMap: Record<FontSize, number> = {
 
 function loadTheme(): Theme {
 	if (!browser) return 'auto';
-	return (localStorage.getItem(THEME_KEY) as Theme) || 'auto';
+	const value = readStorage(THEME_KEY);
+	return value === 'dark' || value === 'light' ? value : 'auto';
 }
 
 function loadFontSize(): FontSize {
 	if (!browser) return 'm';
-	return (localStorage.getItem(FONT_SIZE_KEY) as FontSize) || 'm';
+	const value = readStorage(FONT_SIZE_KEY);
+	return value === 's' || value === 'l' ? value : 'm';
 }
 
 let theme = $state<Theme>(loadTheme());
@@ -41,8 +44,8 @@ function applyFontSize(size: FontSize) {
 
 // Apply on load
 if (browser) {
-	applyTheme(theme);
-	applyFontSize(fontSize);
+	applyTheme(getTheme());
+	applyFontSize(getFontSize());
 }
 
 export function getTheme(): Theme {
@@ -52,7 +55,7 @@ export function getTheme(): Theme {
 export function setTheme(t: Theme): void {
 	theme = t;
 	applyTheme(t);
-	if (browser) localStorage.setItem(THEME_KEY, t);
+	writeStorage(THEME_KEY, t);
 }
 
 export function getFontSize(): FontSize {
@@ -62,7 +65,7 @@ export function getFontSize(): FontSize {
 export function setFontSize(size: FontSize): void {
 	fontSize = size;
 	applyFontSize(size);
-	if (browser) localStorage.setItem(FONT_SIZE_KEY, size);
+	writeStorage(FONT_SIZE_KEY, size);
 }
 
 export function getFontScale(): number {

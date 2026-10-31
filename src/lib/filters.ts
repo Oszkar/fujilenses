@@ -96,6 +96,16 @@ const validSortFields: SortField[] = [
 ];
 
 export function parseFiltersFromURL(params: URLSearchParams): FilterState {
+	const positiveNumber = (key: string): number | null => {
+		const value = Number(params.get(key));
+		return Number.isFinite(value) && value > 0 ? value : null;
+	};
+	const view = params.get('view');
+	const type = params.get('type');
+	const mount = params.get('mount');
+	let fmin = positiveNumber('fmin');
+	let fmax = positiveNumber('fmax');
+	if (fmin !== null && fmax !== null && fmin > fmax) [fmin, fmax] = [fmax, fmin];
 	const sortRaw = params.get('sort');
 	const sort = validSortFields.includes(sortRaw as SortField)
 		? (sortRaw as SortField)
@@ -106,22 +116,35 @@ export function parseFiltersFromURL(params: URLSearchParams): FilterState {
 	const scale: ScaleType = scaleRaw === 'linear' ? 'linear' : 'log';
 
 	return {
-		view: (params.get('view') as FilterState['view']) || 'table',
-		type: (params.get('type') as FilterState['type']) || null,
-		mount: (params.get('mount') as FilterState['mount']) || null,
+		view: view === 'map' || view === 'kit' ? view : 'table',
+		type: type === 'prime' || type === 'zoom' ? type : null,
+		mount: mount === 'xf' || mount === 'xc' || mount === 'gf' ? mount : null,
 		mfr: params.get('mfr')?.split(',').filter(Boolean) || [],
-		ap: params.has('ap') ? Number(params.get('ap')) : null,
+		ap: positiveNumber('ap'),
 		wr: params.get('wr') === 'true',
 		ois: params.get('ois') === 'true',
 		ar: params.get('ar') === 'true',
 		af: params.get('af') === 'true',
 		ffe: params.get('ffe') === 'true',
-		fmin: params.has('fmin') ? Number(params.get('fmin')) : null,
-		fmax: params.has('fmax') ? Number(params.get('fmax')) : null,
+		fmin,
+		fmax,
 		sort,
 		sortDir,
 		scale
 	};
+}
+
+/** Catalog navigation always targets home; sorting can retain a shared kit. */
+export function catalogHref(filters: FilterState, sharedKit: string | null = null): string {
+	const params = filtersToSearchParams(filters);
+	if (sharedKit) params.set('skit', sharedKit);
+	const query = params.toString();
+	return query ? `/?${query}` : '/';
+}
+
+export function parseSharedKit(value: string | null, lenses: Lens[]): Lens[] {
+	const slugs = new Set(value?.split(',').filter(Boolean));
+	return lenses.filter((lens) => slugs.has(lens.slug));
 }
 
 export function filtersToSearchParams(filters: FilterState): URLSearchParams {

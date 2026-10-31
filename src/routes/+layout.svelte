@@ -10,7 +10,7 @@
 	import Footer from '$lib/components/Footer.svelte';
 	import { allLenses } from '$lib/data';
 	import { getKitCount } from '$lib/kit.svelte';
-	import { parseFiltersFromURL, filtersToSearchParams, defaultFilters } from '$lib/filters';
+	import { parseFiltersFromURL, catalogHref, defaultFilters } from '$lib/filters';
 	import { browser } from '$app/environment';
 	import type { FilterState, ViewMode } from '$lib/types';
 
@@ -27,9 +27,7 @@
 
 	function updateFilters(updates: Partial<FilterState>) {
 		const next = { ...filters, ...updates };
-		const params = filtersToSearchParams(next);
-		const query = params.toString();
-		goto(query ? `?${query}` : '/', { replaceState: true, noScroll: true, keepFocus: true });
+		goto(catalogHref(next), { replaceState: true, noScroll: true, keepFocus: true });
 	}
 
 	function handleViewChange(view: ViewMode) {

@@ -47,7 +47,10 @@ Data files: `src/lib/data/xf-lenses.json` and `src/lib/data/third-party-lenses.j
 
 ## Development
 
+Node 24.13.0 and pnpm 11.5.0 are pinned in `.node-version` and `package.json`.
+
 ```sh
+corepack enable
 pnpm install
 pnpm dev
 ```
@@ -65,6 +68,8 @@ pnpm preview  # preview production build locally
 pnpm test        # run unit tests (Vitest)
 pnpm test:watch  # watch mode
 ```
+
+CI runs `pnpm check`, `pnpm test`, and `pnpm build` on pull requests and main. Dependabot checks npm dependencies and GitHub Actions on Mondays at 09:00 Asia/Tokyo; security updates run independently.
 
 ## Contributing
 
