@@ -67,7 +67,7 @@ Relevant local history: `14fa2c6` says Viltrox weights were corrected using Vilt
 | mountType | Existing XF/XC convention is an application taxonomy; third-party XF means X compatibility here. This is not a manufacturer series designation. |
 | approxPriceUSD / priceUpdatedYear / retailerUrl | Intentionally unused placeholders per CONTRIBUTING.md; zero/empty is missing data, not a sourced retail price. |
 | reviews | Existing video identity/content not audited. |
-| Catalog completeness | Not exhaustive. Fujifilm's current XF400mm F4.5 is missing; see Fujinon report. Other missing/new lenses may exist. |
+| Catalog completeness | Five released non-tilt models added after the initial audit; see [catalog additions and evidence](catalog-additions.md). Tilt and upcoming models remain deferred. Not an exhaustive historical catalog. |
 
 ## Source and uncertainty policy
 
@@ -75,4 +75,4 @@ Use the **exact X-mount version**, model generation and finish. Preserve whether
 
 Count clicked and clickless physical aperture rings as present. Distinguish dedicated aperture rings from programmable focus/control rings, switches and fixed-aperture lenses. Manufacturer manuals with labelled controls and explicit hands-on X reviews are stronger than absence from a feature list.
 
-The manufacturer reports retain source URLs, evidence types, mount/accessory qualifications and the check date. The applied-corrections sidecar maps each changed field to its current value and evidence report. Keep these records updated with future data edits. The current boolean/number-only model cannot represent unknowns or weight ranges; unresolved legacy values remain unchanged and explicitly flagged here. No missing-lens additions or uncertain date/naming changes were made.
+The manufacturer reports retain source URLs, evidence types, mount/accessory qualifications and the check date. The applied-corrections sidecar maps each changed field to its current value and evidence report. Keep these records updated with future data edits. The current boolean/number-only model cannot represent unknowns or weight ranges; unresolved legacy values remain unchanged and explicitly flagged here. The original audit made no missing-lens additions or uncertain date/naming changes; subsequent additions are recorded in [catalog-additions.md](catalog-additions.md).
