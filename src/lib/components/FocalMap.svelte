@@ -1,4 +1,6 @@
 <script lang="ts">
+	import KitButton from './KitButton.svelte';
+	import { apertureDisplay } from '$lib/aperture';
 	import { scaleLog, scaleLinear } from 'd3-scale';
 	import { fade } from 'svelte/transition';
 	import type { Lens, ScaleType } from '$lib/types';
@@ -130,13 +132,6 @@
 		tooltip = null;
 	}
 
-	function handleKeydown(lens: Lens, event: KeyboardEvent) {
-		if (event.key === 'Enter' || event.key === ' ') {
-			event.preventDefault();
-			onToggleKit(lens.slug);
-		}
-	}
-
 	function handleGapKeydown(gap: { focalStart: number; focalEnd: number }, event: KeyboardEvent) {
 		if (event.key === 'Enter' || event.key === ' ') {
 			event.preventDefault();
@@ -145,7 +140,8 @@
 	}
 </script>
 
-<div class="focal-map">
+<div class="map-scroll">
+	<div class="focal-map">
 	<!-- Axis: ticks positioned by percent. -->
 	<div class="axis" aria-hidden="true">
 		{#each ticks as tick (tick)}
@@ -186,43 +182,40 @@
 			{@const inKit = kitSlugs.has(lens.slug)}
 			{@const color = mfrColor(lens)}
 			<div class="row" class:kit={inKit}>
-				<span class="label" style="color: {inKit ? 'var(--kit)' : color};">
+				<a href="/lens/{lens.slug}" title={lens.model} class="label" style="color: {inKit ? 'var(--kit)' : color};">
 					<span class="dot" style="background: {color};"></span>
 					<span class="label-text">{labelText(lens)}</span>
-				</span>
+				</a>
 				<span class="track">
 					{#if lens.lensType === 'Prime'}
-						<span
+						<button
+							type="button"
 							class="mark prime"
 							style="left: {pct(focal.min)}%; --c: {color};"
-							role="button"
-							tabindex="0"
-							aria-label="{lens.manufacturer} {lens.model}"
-							aria-pressed={inKit}
-							onclick={() => onToggleKit(lens.slug)}
+							aria-label="Show specifications for {lens.manufacturer} {lens.model}"
+							onclick={(e) => showTooltip(lens, e)}
+							onkeydown={(e) => { if (e.key === 'Escape') hideTooltip(); }}
 							onmouseenter={(e) => showTooltip(lens, e)}
 							onmouseleave={hideTooltip}
 							onfocus={(e) => showTooltipFromFocus(lens, e)}
 							onblur={hideTooltip}
-							onkeydown={(e) => handleKeydown(lens, e)}
-						></span>
+						></button>
 					{:else}
-						<span
+						<button
+							type="button"
 							class="mark zoom"
 							style="left: {pct(focal.min)}%; width: max({pct(focal.max) - pct(focal.min)}%, {MIN_BAR_PCT}%); --c: {color};"
-							role="button"
-							tabindex="0"
-							aria-label="{lens.manufacturer} {lens.model}"
-							aria-pressed={inKit}
-							onclick={() => onToggleKit(lens.slug)}
+							aria-label="Show specifications for {lens.manufacturer} {lens.model}"
+							onclick={(e) => showTooltip(lens, e)}
+							onkeydown={(e) => { if (e.key === 'Escape') hideTooltip(); }}
 							onmouseenter={(e) => showTooltip(lens, e)}
 							onmouseleave={hideTooltip}
 							onfocus={(e) => showTooltipFromFocus(lens, e)}
 							onblur={hideTooltip}
-							onkeydown={(e) => handleKeydown(lens, e)}
-						></span>
+						></button>
 					{/if}
 				</span>
+				<KitButton {inKit} model={lens.model} onToggle={() => onToggleKit(lens.slug)} />
 			</div>
 		{/each}
 	</div>
@@ -254,15 +247,18 @@
 					<span class="tooltip-spec-value">{tooltip.lens.weightGrams}g</span>
 				</div>
 				<div class="tooltip-spec">
-					<span class="tooltip-spec-label">Aperture</span>
-					<span class="tooltip-spec-value">f/{tooltip.lens.maxAperture}</span>
+					<span class="tooltip-spec-label">Max aperture</span>
+					<span class="tooltip-spec-value">{apertureDisplay(tooltip.lens)}</span>
 				</div>
 			</div>
 		</div>
 	{/if}
 </div>
 
+</div>
 <style>
+	.map-scroll { overflow-x: auto; padding: 4px; }
+	.focal-map { min-width: 600px; }
 	.focal-map {
 		position: relative;
 		width: 100%;
@@ -270,14 +266,14 @@
 		   by the axis/rows grid template and the tick/coverage offset math. */
 		--label-col: clamp(72px, 28%, 160px);
 		--col-gap: 10px;
+		--action-col: calc(126px * var(--font-scale, 1));
 	}
 
-	/* Grid column template shared by axis and every row so ticks line up
-	   with the tracks. Label column flexes; track takes the rest. */
+	/* Reserve the same action column in the axis, rows, and coverage strip. */
 	.axis,
 	.row {
 		display: grid;
-		grid-template-columns: var(--label-col) 1fr;
+		grid-template-columns: var(--label-col) minmax(0, 1fr) var(--action-col);
 		align-items: center;
 		gap: var(--col-gap);
 	}
@@ -297,7 +293,7 @@
 		bottom: 0;
 		left: calc(
 			var(--label-col) + var(--col-gap) +
-				(100% - var(--label-col) - var(--col-gap)) * var(--frac, 0)
+				(100% - var(--label-col) - var(--col-gap) * 2 - var(--action-col)) * var(--frac, 0)
 		);
 		transform: translateX(-50%);
 		display: flex;
@@ -327,6 +323,7 @@
 		margin: 0 0 12px 0;
 		/* align coverage track with the lens tracks: offset by label column */
 		margin-left: calc(var(--label-col) + var(--col-gap));
+		margin-right: calc(var(--action-col) + var(--col-gap));
 		border-radius: var(--radius-md);
 		border: 1px solid var(--border-subtle);
 		overflow: hidden;
@@ -398,7 +395,9 @@
 		box-shadow: inset 3px 0 0 var(--kit);
 	}
 
+	.label:hover { text-decoration: underline; }
 	.label {
+		text-decoration: none;
 		display: flex;
 		align-items: center;
 		gap: 6px;
@@ -435,9 +434,11 @@
 	}
 
 	.mark {
+		padding: 0;
+		border: none;
 		position: absolute;
 		top: 50%;
-		cursor: pointer;
+		cursor: help;
 		opacity: 0.85;
 	}
 
@@ -464,6 +465,8 @@
 
 	@media (prefers-reduced-motion: no-preference) {
 		.mark {
+		padding: 0;
+		border: none;
 			transition:
 				opacity var(--dur-fast) var(--ease-out),
 				transform var(--dur-fast) var(--ease-out);
