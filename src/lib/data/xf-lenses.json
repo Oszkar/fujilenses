@@ -528,6 +528,27 @@
     "filterDiameterMm": 105
   },
   {
+    "slug": "xf-400mm-f45-lm-ois-wr",
+    "manufacturer": "Fujinon",
+    "model": "XF 400mm F4.5 R LM OIS WR",
+    "mountType": "XF",
+    "lensType": "Prime",
+    "minFocalLength": 400,
+    "maxFocalLength": 400,
+    "maxAperture": 4.5,
+    "imageStabilization": true,
+    "weatherResistant": true,
+    "apertureRing": true,
+    "linearMotor": true,
+    "releaseYear": 2026,
+    "weightGrams": 1245,
+    "approxPriceUSD": 0,
+    "priceUpdatedYear": 0,
+    "retailerUrl": "",
+    "autofocus": true,
+    "filterDiameterMm": 95
+  },
+  {
     "slug": "xf-500mm-f56-lm-ois-wr",
     "manufacturer": "Fujinon",
     "model": "XF 500mm F5.6 R LM OIS WR",

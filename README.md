@@ -31,14 +31,14 @@ Interactive lens explorer for the Fujifilm X-mount ecosystem. Browse, filter, an
 
 ## Lens Data
 
-111 lenses across 7 manufacturers:
+116 lenses across 7 manufacturers:
 
 | Manufacturer | Lenses |
 |---|---|
-| Fujinon | 48 (41 XF + 7 XC) |
-| TTArtisan | 20 |
-| Viltrox | 14 |
-| Sigma | 11 |
+| Fujinon | 49 (42 XF + 7 XC) |
+| TTArtisan | 21 |
+| Viltrox | 16 |
+| Sigma | 12 |
 | Sirui | 7 |
 | Voigtländer | 7 |
 | Tamron | 4 |
