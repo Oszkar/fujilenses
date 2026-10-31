@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { computeCoverageSegments, segmentsToGradientStops, detectGaps } from './coverage';
+import { computeCoverageSegments, segmentsToGradientStops, detectGaps, focalCoverage } from './coverage';
 import type { Lens } from './types';
 
 function makeLens(overrides: Partial<Lens> = {}): Lens {
@@ -28,8 +28,8 @@ function makeLens(overrides: Partial<Lens> = {}): Lens {
 }
 
 describe('computeCoverageSegments', () => {
-	it('returns empty for fewer than 2 lenses', () => {
-		expect(computeCoverageSegments([makeLens()], false)).toEqual([]);
+	it('supports a single lens', () => {
+		expect(computeCoverageSegments([makeLens()], false)).toEqual([{ focalStart: 34.5, focalEnd: 35.5, count: 1 }]);
 	});
 
 	it('returns empty for 0 lenses', () => {
@@ -105,8 +105,8 @@ describe('segmentsToGradientStops', () => {
 		const scale = (x: number) => x;
 		const stops = segmentsToGradientStops(segments, scale, 100);
 
-		expect(stops[0].offset).toBe(0.1); // 10/100
-		expect(stops[1].offset).toBe(0.5); // 50/100
+		expect(stops[2].offset).toBe(0.1); // 10/100
+		expect(stops[3].offset).toBe(0.5); // 50/100
 	});
 
 	it('clamps offsets to 0-1', () => {
@@ -115,7 +115,7 @@ describe('segmentsToGradientStops', () => {
 		const stops = segmentsToGradientStops(segments, scale, 100);
 
 		expect(stops[0].offset).toBe(0);
-		expect(stops[1].offset).toBe(1);
+		expect(stops[3].offset).toBe(1);
 	});
 
 	it('assigns correct opacity with hard stops at boundaries', () => {
@@ -125,13 +125,17 @@ describe('segmentsToGradientStops', () => {
 		];
 		const stops = segmentsToGradientStops(segments, (x) => x, 100);
 
-		// Segment 1: start=0.15, end=0.15
-		expect(stops[0].opacity).toBe(0.15);
-		expect(stops[1].opacity).toBe(0.15);
-		// Hard stop pair at boundary: close prev (0.15), open next (0.30)
-		expect(stops[2].opacity).toBe(0.15); // closing prev segment
-		expect(stops[3].opacity).toBe(0.30); // opening next segment
-		expect(stops[4].opacity).toBe(0.30); // end of segment 2
+		expect(stops).toEqual([
+			{ offset: 0, opacity: 0 },
+			{ offset: 0.1, opacity: 0 },
+			{ offset: 0.1, opacity: 0.15 },
+			{ offset: 0.3, opacity: 0.15 },
+			{ offset: 0.3, opacity: 0.15 },
+			{ offset: 0.3, opacity: 0.30 },
+			{ offset: 0.5, opacity: 0.30 },
+			{ offset: 0.5, opacity: 0 },
+			{ offset: 1, opacity: 0 }
+		]);
 	});
 });
 
@@ -155,5 +159,25 @@ describe('detectGaps', () => {
 		const gaps = detectGaps(segments, scale, 40);
 
 		expect(gaps).toHaveLength(0);
+	});
+});
+
+describe('exact focal coverage', () => {
+	it('handles an empty kit and a single prime', () => {
+		expect(focalCoverage([], false)).toBeNull();
+		expect(focalCoverage([makeLens()], false)).toEqual({ min: 35, max: 35, gaps: [] });
+	});
+	it('merges touching and overlapping zooms without calling overlap a gap', () => {
+		const lenses = [makeLens({ minFocalLength: 55, maxFocalLength: 200 }), makeLens(), makeLens({ minFocalLength: 18, maxFocalLength: 55 })];
+		expect(focalCoverage(lenses, false)).toEqual({ min: 18, max: 200, gaps: [] });
+		expect(focalCoverage(lenses, true)).toEqual({ min: 27, max: 300, gaps: [] });
+	});
+	it('retains narrow gaps between primes without using artificial display widths', () => {
+		expect(focalCoverage([makeLens(), makeLens({ minFocalLength: 36, maxFocalLength: 36 })], false)).toEqual({ min: 35, max: 36, gaps: [{ focalStart: 35, focalEnd: 36 }] });
+	});
+	it('reports disjoint zoom ranges and a single zoom', () => {
+		const zoom = makeLens({ minFocalLength: 18, maxFocalLength: 55 });
+		expect(focalCoverage([zoom], false)).toEqual({ min: 18, max: 55, gaps: [] });
+		expect(focalCoverage([zoom, makeLens({ minFocalLength: 70, maxFocalLength: 300 })], false)?.gaps).toEqual([{ focalStart: 55, focalEnd: 70 }]);
 	});
 });

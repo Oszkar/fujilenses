@@ -6,7 +6,7 @@
 	import type { Lens, ScaleType } from '$lib/types';
 	import { manufacturerColors } from '$lib/data';
 	import { getFFMultiplier } from '$lib/filters';
-	import { computeCoverageSegments, segmentsToGradientStops, detectGaps } from '$lib/coverage';
+	import { computeCoverageSegments, segmentsToGradientStops, detectGaps, focalCoverage } from '$lib/coverage';
 
 	interface Props {
 		lenses: Lens[];
@@ -78,6 +78,7 @@
 
 	// Heatmap coverage data (sweep line) — coverage.ts reused unchanged, with a
 	// percent scaleFunc (range [0,100]) and chartWidth = 100.
+	let coverage = $derived(showHeatmap ? focalCoverage(lenses, ffe) : null);
 	let coverageSegments = $derived(showHeatmap ? computeCoverageSegments(lenses, ffe) : []);
 	let heatmapStops = $derived.by(() => {
 		if (coverageSegments.length === 0) return [];
@@ -85,9 +86,9 @@
 	});
 	let heatmapGaps = $derived.by(() => {
 		if (coverageSegments.length === 0) return [];
-		return detectGaps(coverageSegments, pct, MIN_GAP_PCT);
+		return detectGaps((coverage?.gaps ?? []).map((gap) => ({ ...gap, count: 0 })), pct, MIN_GAP_PCT);
 	});
-	let showHeatmapStrip = $derived(showHeatmap && lenses.length >= 2 && heatmapStops.length > 0);
+	let showHeatmapStrip = $derived(showHeatmap && heatmapStops.length > 0);
 
 	// Build the coverage gradient string from the fractional stops: green
 	// (=--kit) covered density. Each stop is color-mix(... opacity ...) offset%.
@@ -132,12 +133,6 @@
 		tooltip = null;
 	}
 
-	function handleGapKeydown(gap: { focalStart: number; focalEnd: number }, event: KeyboardEvent) {
-		if (event.key === 'Enter' || event.key === ' ') {
-			event.preventDefault();
-			onGapClick?.({ focalStart: gap.focalStart, focalEnd: gap.focalEnd });
-		}
-	}
 </script>
 
 <div class="map-scroll">
@@ -166,7 +161,6 @@
 						style="left: {gap.x}%; width: {gap.width}%"
 						aria-label="Fill {gapMin}–{gapMax}mm gap: show lenses covering this range"
 						onclick={() => onGapClick?.({ focalStart: gap.focalStart, focalEnd: gap.focalEnd })}
-						onkeydown={(e) => handleGapKeydown(gap, e)}
 					></button>
 				{:else}
 					<span class="gap" style="left: {gap.x}%; width: {gap.width}%"></span>
@@ -256,7 +250,34 @@
 </div>
 
 </div>
+{#if coverage}
+	<div class="coverage-notes">
+		{#if coverage.gaps.length > 0}
+			<p>{coverage.gaps.length} {coverage.gaps.length === 1 ? 'gap' : 'gaps'} between your shortest and longest focal lengths{ffe ? ' (FF equivalent)' : ''}.</p>
+			<div class="gap-actions">
+				{#each coverage.gaps as gap}
+					{#if onGapClick}
+						<button class="gap-link" onclick={() => onGapClick?.(gap)}>Browse {gap.focalStart}–{gap.focalEnd}mm gap</button>
+					{:else}
+						<span>{gap.focalStart}–{gap.focalEnd}mm</span>
+					{/if}
+				{/each}
+			</div>
+		{:else if coverage.min === coverage.max}
+			<p>Single focal length: {coverage.min}mm{ffe ? ' (FF equivalent)' : ''}.</p>
+		{:else}
+			<p>Continuous focal coverage from {coverage.min}–{coverage.max}mm{ffe ? ' (FF equivalent)' : ''}.</p>
+		{/if}
+		<p>Green shows coverage; darker green shows overlapping lenses. Prime lenses are single focal lengths, drawn wider for visibility.</p>
+	</div>
+{/if}
 <style>
+	.coverage-notes { margin-top: var(--space-3); color: var(--text-secondary); font-size: calc(var(--text-sm) * var(--font-scale, 1)); line-height: var(--leading-normal); }
+	.coverage-notes p { margin: var(--space-2) 0; }
+	.gap-actions { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+	.gap-link { padding: var(--space-2) var(--space-3); border: 1px solid var(--border-default); border-radius: var(--radius-sm); color: var(--accent); background: var(--bg-surface); cursor: pointer; }
+	.gap-link:hover { background: var(--bg-elevated); }
+
 	.map-scroll { overflow-x: auto; padding: 4px; }
 	.focal-map { min-width: 600px; }
 	.focal-map {

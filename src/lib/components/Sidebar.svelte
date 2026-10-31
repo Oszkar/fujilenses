@@ -52,8 +52,15 @@
 </script>
 
 <aside class="sidebar">
+	{#if isKitView}
+		<div class="section">
+			<h3 class="section-header">Your gear</h3>
+			<p class="kit-note">Your saved lenses, regardless of catalog filters.</p>
+			<button class="clear-btn" onclick={() => onFilterChange({ view: 'table' })}>Browse lenses</button>
+		</div>
+	{:else}
 	<!-- Manufacturer -->
-	<div class="section" class:disabled={isKitView}>
+	<div class="section">
 		<h3 class="section-header">Manufacturer</h3>
 		<div class="mfr-list">
 			{#each manufacturers as mfr (mfr)}
@@ -81,7 +88,7 @@
 	</div>
 
 	<!-- Lens Type -->
-	<div class="section" class:disabled={isKitView}>
+	<div class="section">
 		<h3 class="section-header">Lens Type</h3>
 		<div class="segmented">
 			{#each [{ value: null, label: 'All' }, { value: 'prime', label: 'Prime' }, { value: 'zoom', label: 'Zoom' }] as opt (opt.label)}
@@ -97,7 +104,7 @@
 	</div>
 
 	<!-- Features -->
-	<div class="section" class:disabled={isKitView}>
+	<div class="section">
 		<h3 class="section-header">Features</h3>
 		<div class="toggle-list">
 			<label class="toggle-row">
@@ -139,8 +146,10 @@
 		</div>
 	</div>
 
+	{/if}
+
 	<!-- Display -->
-	<div class="section" class:disabled={isKitView}>
+	<div class="section">
 		<h3 class="section-header">Display</h3>
 		<div class="toggle-list">
 			<label class="toggle-row">
@@ -155,7 +164,7 @@
 		</div>
 	</div>
 
-	{#if filters.view === 'map'}
+	{#if filters.view === 'map' || isKitView}
 		<!-- Scale (map only) -->
 		<div class="section">
 			<h3 class="section-header">Scale</h3>
@@ -329,10 +338,11 @@
 		outline-offset: 2px;
 	}
 
-	.section.disabled {
-		opacity: 0.35;
-		pointer-events: none;
-		user-select: none;
+	.kit-note {
+		font-size: calc(var(--text-base) * var(--font-scale, 1));
+		color: var(--text-secondary);
+		line-height: var(--leading-normal);
+		margin-bottom: var(--space-4);
 	}
 
 	.section-header {
