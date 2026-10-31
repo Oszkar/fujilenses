@@ -151,8 +151,9 @@
 	/* Text */
 	--text-primary: #e9eef4; /* headings, model names, data */
 	--text-secondary: #9ba4b2; /* body, secondary data       */
-	--text-muted: #6b7688; /* labels, inactive nav          */
-	--text-faint: #4d5768; /* ticks, footer, decorative     */
+	/* Supporting text stays above 4.5:1 on base, surface, and elevated backgrounds. */
+	--text-muted: #8d98a8; /* labels, inactive nav          */
+	--text-faint: #8490a0; /* ticks, footer                 */
 	--text-on-accent: #0d1117; /* text on a filled accent    */
 
 	/* Accent — interactive UI chrome (indigo; kept clear of maker blue) */
@@ -205,8 +206,8 @@
 
 	--text-primary: #161b22;
 	--text-secondary: #4a5260;
-	--text-muted: #6b7688;
-	--text-faint: #9ba4b2;
+	--text-muted: #566173;
+	--text-faint: #606b7b;
 	--text-on-accent: #ffffff;
 
 	--accent: #4f46e5;
@@ -251,8 +252,8 @@
 
 		--text-primary: #161b22;
 		--text-secondary: #4a5260;
-		--text-muted: #6b7688;
-		--text-faint: #9ba4b2;
+		--text-muted: #566173;
+		--text-faint: #606b7b;
 		--text-on-accent: #ffffff;
 
 		--accent: #4f46e5;

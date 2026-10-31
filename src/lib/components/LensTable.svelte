@@ -405,8 +405,15 @@
 			opacity var(--dur-fast) var(--ease-out);
 	}
 
-	tbody tr:hover .kit-add {
+	tbody tr:hover .kit-add,
+	tbody tr:focus-within .kit-add {
 		opacity: 1;
+	}
+
+	.kit-add:focus-visible {
+		/* Reveal immediately so keyboard focus never lands on an invisible action. */
+		opacity: 1;
+		transition: none;
 	}
 
 	.kit-add:hover {
