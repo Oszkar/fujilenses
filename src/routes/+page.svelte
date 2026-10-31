@@ -7,14 +7,14 @@
 		parseFiltersFromURL,
 		applyFilters,
 		sortLenses,
-		filtersToSearchParams,
+		catalogHref,
+		parseSharedKit,
 		defaultFilters
 	} from '$lib/filters';
 	import { getKitSlugs, toggleKitLens, mergeIntoKit } from '$lib/kit.svelte';
-	import { getLensBySlug } from '$lib/data';
 	import LensTable from '$lib/components/LensTable.svelte';
 	import FocalMap from '$lib/components/FocalMap.svelte';
-	import type { SortField, FilterState, Lens } from '$lib/types';
+	import type { SortField, FilterState } from '$lib/types';
 
 	let filters = $derived(browser ? parseFiltersFromURL(page.url.searchParams) : defaultFilters);
 	let filteredLenses = $derived(applyFilters(allLenses, filters));
@@ -60,16 +60,7 @@
 
 	// --- Shared kit ---
 	let sharedKitParam = $derived(browser ? page.url.searchParams.get('skit') : null);
-	let sharedKitLenses = $derived.by((): Lens[] => {
-		if (!sharedKitParam) return [];
-		const slugs = sharedKitParam.split(',').filter(Boolean);
-		const lenses: Lens[] = [];
-		for (const slug of slugs) {
-			const lens = getLensBySlug(slug);
-			if (lens) lenses.push(lens);
-		}
-		return lenses;
-	});
+	let sharedKitLenses = $derived(parseSharedKit(sharedKitParam, allLenses));
 	let isSharedView = $derived(sharedKitLenses.length > 0);
 	let sharedKitSorted = $derived(
 		sortLenses(sharedKitLenses, filters.sort, filters.sortDir)
@@ -141,9 +132,7 @@
 
 	function updateFilters(updates: Partial<FilterState>) {
 		const next = { ...filters, ...updates };
-		const params = filtersToSearchParams(next);
-		const query = params.toString();
-		goto(query ? `?${query}` : '/', { replaceState: true, noScroll: true, keepFocus: true });
+		goto(catalogHref(next, sharedKitParam), { replaceState: true, noScroll: true, keepFocus: true });
 	}
 
 	function handleSort(field: SortField) {

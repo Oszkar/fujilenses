@@ -97,7 +97,7 @@ Before claiming work is done:
 
 Notes:
 
-- Tests run **locally only** via Vitest (`pnpm test` / `pnpm test:watch`); there is no CI yet, so run them yourself before pushing logic changes.
+- Tests run via Vitest (`pnpm test` / `pnpm test:watch`). GitHub Actions runs check, test, and build on pull requests and main; also run them locally before pushing.
 - There is no linter configured; `pnpm check` (svelte-check) is the type/lint gate.
 - Treat green `pnpm check` **and** green `pnpm build` as the minimum bar before pushing.
 

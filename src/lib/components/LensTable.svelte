@@ -159,10 +159,7 @@
 </div>
 
 <style>
-	.table-wrap {
-		/* overflow-x only on mobile — on desktop it creates a scroll container
-		   that traps position:sticky and prevents the header from sticking */
-	}
+	/* Desktop headers stick within the page; horizontal scrolling is mobile-only. */
 
 	@media (max-width: 1023px) {
 		.table-wrap {
@@ -240,8 +237,6 @@
 	}
 
 	/* Body rows — border on td, not tr (border-collapse: separate ignores tr borders) */
-	tbody tr {
-	}
 
 	@media (prefers-reduced-motion: no-preference) {
 		tbody tr {

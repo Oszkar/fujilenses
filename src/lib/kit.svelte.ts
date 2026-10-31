@@ -1,20 +1,22 @@
-import { browser } from '$app/environment';
+import { readStorage, writeStorage } from '$lib/storage';
+import { allLenses } from '$lib/data';
+
+const validSlugs = new Set(allLenses.map((lens) => lens.slug));
 
 const STORAGE_KEY = 'fujilenses-kit';
 
 function loadKit(): Set<string> {
-	if (!browser) return new Set();
 	try {
-		const raw = localStorage.getItem(STORAGE_KEY);
-		return raw ? new Set(JSON.parse(raw)) : new Set();
+		const raw = readStorage(STORAGE_KEY);
+		const parsed: unknown = raw ? JSON.parse(raw) : [];
+		return new Set(Array.isArray(parsed) ? parsed.filter((slug): slug is string => typeof slug === 'string' && validSlugs.has(slug)) : []);
 	} catch {
 		return new Set();
 	}
 }
 
 function saveKit(kit: Set<string>): void {
-	if (!browser) return;
-	localStorage.setItem(STORAGE_KEY, JSON.stringify([...kit]));
+	writeStorage(STORAGE_KEY, JSON.stringify([...kit]));
 }
 
 let kitSlugs = $state(loadKit());
@@ -28,6 +30,7 @@ export function getKitCount(): number {
 }
 
 export function toggleKitLens(slug: string): void {
+	if (!validSlugs.has(slug)) return;
 	const next = new Set(kitSlugs);
 	if (next.has(slug)) {
 		next.delete(slug);
@@ -47,7 +50,7 @@ export function mergeIntoKit(slugs: string[]): number {
 	const next = new Set(kitSlugs);
 	let added = 0;
 	for (const slug of slugs) {
-		if (!next.has(slug)) {
+		if (validSlugs.has(slug) && !next.has(slug)) {
 			next.add(slug);
 			added++;
 		}
