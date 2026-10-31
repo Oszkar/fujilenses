@@ -7,6 +7,15 @@ Lens data lives in JSON files under `src/lib/data/`:
 
 ## Adding a Lens
 
+### Sources and verification
+
+Keep supporting sources in [the lens data audit](docs/data-audit/README.md). When correcting an existing field, update its manufacturer report to show the current value and retain the source URL, checked date, mount, evidence type, and any qualifications. Record applied corrections in [applied-corrections.json](docs/data-audit/applied-corrections.json), including the previous value and evidence report.
+
+- Use the exact Fujifilm X version and generation. Do not average weights across mounts or substitute another mount's weight.
+- Record whether weight excludes caps, hood or tripod foot/collar. Keep reviewer measurements distinct from manufacturer nominal specifications.
+- Verify physical aperture rings from manuals, product photographs or explicit hands-on reviews. Clickless rings count; silence in a specification table does not establish absence.
+- If evidence remains ambiguous, mark it unresolved in the audit. Do not present a range midpoint as a verified value. Existing unresolved fields are listed in the audit and need evidence before correction.
+
 Each lens entry must conform to the `Lens` interface in `src/lib/types.ts`:
 
 ```json

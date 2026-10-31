@@ -1,0 +1,134 @@
+{
+  "checkedDate": "2026-10-31",
+  "mount": "Fujifilm X",
+  "corrections": [
+    {
+      "slug": "xc-13-33mm-f35-ois",
+      "field": "weightGrams",
+      "previousValue": 130,
+      "value": 125,
+      "evidenceReport": "fujinon.md",
+      "status": "applied"
+    },
+    {
+      "slug": "xc-15-45mm-f35-ois-pz",
+      "field": "weightGrams",
+      "previousValue": 136,
+      "value": 135,
+      "evidenceReport": "fujinon.md",
+      "status": "applied"
+    },
+    {
+      "slug": "tamron-17-70mm-f28",
+      "field": "weightGrams",
+      "previousValue": 525,
+      "value": 530,
+      "evidenceReport": "sigma-tamron-voigtlander.md",
+      "status": "applied"
+    },
+    {
+      "slug": "tamron-17-70mm-f28",
+      "field": "releaseYear",
+      "previousValue": 2023,
+      "value": 2022,
+      "evidenceReport": "sigma-tamron-voigtlander.md",
+      "status": "applied"
+    },
+    {
+      "slug": "tamron-18-300mm-f35",
+      "field": "releaseYear",
+      "previousValue": 2023,
+      "value": 2021,
+      "evidenceReport": "sigma-tamron-voigtlander.md",
+      "status": "applied"
+    },
+    {
+      "slug": "tamron-150-500mm-f50",
+      "field": "weightGrams",
+      "previousValue": 1725,
+      "value": 1710,
+      "evidenceReport": "sigma-tamron-voigtlander.md",
+      "status": "applied"
+    },
+    {
+      "slug": "tamron-150-500mm-f50",
+      "field": "releaseYear",
+      "previousValue": 2023,
+      "value": 2022,
+      "evidenceReport": "sigma-tamron-voigtlander.md",
+      "status": "applied"
+    },
+    {
+      "slug": "sirui-aurora-85mm-f14",
+      "field": "weightGrams",
+      "previousValue": 540,
+      "value": 550,
+      "evidenceReport": "viltrox-sirui.md",
+      "status": "applied"
+    },
+    {
+      "slug": "voigtlander-nokton-50mm-f12",
+      "field": "filterDiameterMm",
+      "previousValue": 52,
+      "value": 58,
+      "evidenceReport": "sigma-tamron-voigtlander.md",
+      "status": "applied"
+    },
+    {
+      "slug": "viltrox-af-23mm-f14",
+      "field": "apertureRing",
+      "previousValue": false,
+      "value": true,
+      "evidenceReport": "viltrox-sirui.md",
+      "status": "applied"
+    },
+    {
+      "slug": "viltrox-af-33mm-f14",
+      "field": "apertureRing",
+      "previousValue": false,
+      "value": true,
+      "evidenceReport": "viltrox-sirui.md",
+      "status": "applied"
+    },
+    {
+      "slug": "viltrox-af-56mm-f14",
+      "field": "apertureRing",
+      "previousValue": false,
+      "value": true,
+      "evidenceReport": "viltrox-sirui.md",
+      "status": "applied"
+    },
+    {
+      "slug": "viltrox-af-85mm-f18-ii",
+      "field": "weightGrams",
+      "previousValue": 484,
+      "value": 492,
+      "evidenceReport": "viltrox-sirui.md",
+      "status": "applied-qualified"
+    },
+    {
+      "slug": "ttartisan-af-17mm-f18-air",
+      "field": "apertureRing",
+      "previousValue": true,
+      "value": false,
+      "evidenceReport": "ttartisan.md",
+      "status": "applied"
+    },
+    {
+      "slug": "ttartisan-af-27mm-f28",
+      "field": "weightGrams",
+      "previousValue": 84,
+      "value": 93,
+      "evidenceReport": "ttartisan.md",
+      "status": "applied"
+    },
+    {
+      "slug": "ttartisan-af-27mm-f28",
+      "field": "releaseYear",
+      "previousValue": 2023,
+      "value": 2022,
+      "evidenceReport": "ttartisan.md",
+      "status": "applied"
+    }
+  ]
+}
