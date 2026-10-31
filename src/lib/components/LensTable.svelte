@@ -1,4 +1,6 @@
 <script lang="ts">
+	import KitButton from './KitButton.svelte';
+	import { apertureDisplay } from '$lib/aperture';
 	import { flip } from 'svelte/animate';
 	import { fly, fade } from 'svelte/transition';
 	import type { Lens, SortField, SortDirection } from '$lib/types';
@@ -33,11 +35,11 @@
 		{ key: null, label: 'Maker', sortable: false },
 		{ key: null, label: 'Model', sortable: false },
 		{ key: 'minFocalLength', label: 'Focal Length', sortable: true },
-		{ key: 'maxAperture', label: 'Aperture', sortable: true },
+		{ key: 'maxAperture', label: 'Max aperture', sortable: true },
 		{ key: 'weightGrams', label: 'Weight', sortable: true },
 		{ key: 'releaseYear', label: 'Year', sortable: true },
 		{ key: null, label: 'Specs', sortable: false },
-		{ key: null, label: '', sortable: false }
+		{ key: null, label: 'My Kit', sortable: false }
 	];
 
 	function focalDisplay(lens: Lens): string {
@@ -48,6 +50,7 @@
 	}
 </script>
 
+<p class="aperture-hint">Max aperture ranges show wide → telephoto values; aperture sorting uses the wide end first.</p>
 <div class="table-wrap">
 	<table class="lens-table">
 		<thead>
@@ -120,7 +123,7 @@
 					<td class="mono">{focalDisplay(lens)}</td>
 
 					<!-- Aperture -->
-					<td class="mono">f/{lens.maxAperture}</td>
+					<td class="mono">{apertureDisplay(lens)}</td>
 
 					<!-- Weight -->
 					<td class="mono">{lens.weightGrams}g</td>
@@ -146,11 +149,7 @@
 
 					<!-- Kit toggle -->
 					<td class="kit-cell">
-						{#if inKit}
-							<button class="kit-badge" title="Remove from kit" onclick={() => onToggleKit(lens.slug)}>IN KIT</button>
-						{:else}
-							<button class="kit-add" onclick={() => onToggleKit(lens.slug)}>+ kit</button>
-						{/if}
+						<KitButton {inKit} model={lens.model} onToggle={() => onToggleKit(lens.slug)} />
 					</td>
 				</tr>
 			{/each}
@@ -159,6 +158,7 @@
 </div>
 
 <style>
+	.aperture-hint { font-size: calc(var(--text-sm) * var(--font-scale, 1)); color: var(--text-muted); margin-bottom: var(--space-2); }
 	/* Desktop headers stick within the page; horizontal scrolling is mobile-only. */
 
 	@media (max-width: 1023px) {
@@ -366,70 +366,4 @@
 		text-align: right;
 	}
 
-	.kit-badge {
-		display: inline-block;
-		padding: 2px 10px;
-		border-radius: var(--radius-sm);
-		font-family: var(--font-mono);
-		font-weight: var(--weight-medium);
-		font-size: var(--text-xs);
-		letter-spacing: var(--tracking-badge);
-		text-transform: uppercase;
-		color: var(--kit);
-		background: color-mix(in srgb, var(--kit) 15%, transparent);
-		cursor: pointer;
-		border: none;
-		transition:
-			background var(--dur-fast) var(--ease-out),
-			color var(--dur-fast) var(--ease-out);
-	}
-
-	.kit-badge:hover {
-		background: var(--danger-bg);
-		color: var(--danger);
-	}
-
-	.kit-add {
-		padding: 2px 10px;
-		border-radius: var(--radius-sm);
-		border: none;
-		background: transparent;
-		font-family: var(--font-sans);
-		font-size: var(--text-sm);
-		color: var(--text-faint);
-		cursor: pointer;
-		opacity: 0;
-		transition:
-			color var(--dur-fast) var(--ease-out),
-			background var(--dur-fast) var(--ease-out),
-			opacity var(--dur-fast) var(--ease-out);
-	}
-
-	tbody tr:hover .kit-add,
-	tbody tr:focus-within .kit-add {
-		opacity: 1;
-	}
-
-	.kit-add:focus-visible {
-		/* Reveal immediately so keyboard focus never lands on an invisible action. */
-		opacity: 1;
-		transition: none;
-	}
-
-	.kit-add:hover {
-		color: var(--text-secondary);
-		background: var(--bg-elevated);
-	}
-
-	@media (max-width: 1023px) {
-		.kit-add {
-			opacity: 1;
-		}
-	}
-
-	.kit-add:focus-visible,
-	.kit-badge:focus-visible {
-		outline: 2px solid var(--accent);
-		outline-offset: 2px;
-	}
 </style>

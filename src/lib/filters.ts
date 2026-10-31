@@ -1,3 +1,4 @@
+import { telephotoAperture } from './aperture';
 import type { Lens, FilterState, SortField, SortDirection, ScaleType } from '$lib/types';
 
 export const defaultFilters: FilterState = {
@@ -69,7 +70,9 @@ export function sortLenses(
 			const delta = overlapScore(b, focalRange.fmin, focalRange.fmax) - overlapScore(a, focalRange.fmin, focalRange.fmax);
 			if (delta !== 0) return delta;
 		}
-		return directional(a[field], b[field]);
+		const delta = directional(a[field], b[field]);
+		if (delta !== 0 || field !== 'maxAperture') return delta;
+		return directional(telephotoAperture(a), telephotoAperture(b));
 	});
 }
 

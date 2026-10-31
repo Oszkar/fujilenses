@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { apertureDisplay } from '$lib/aperture';
 	import type { PageData } from './$types';
 	import { manufacturerColors, isNewLens } from '$lib/data';
 	import { getFFMultiplier } from '$lib/filters';
@@ -73,7 +74,7 @@
 	<title>{lens.model} — FujiLenses</title>
 	<meta
 		name="description"
-		content="{lens.manufacturer} {lens.model} — {focalDisplay} f/{lens.maxAperture} {lens.mountType} mount lens."
+		content="{lens.manufacturer} {lens.model} — {focalDisplay} {apertureDisplay(lens)} {lens.mountType} mount lens."
 	/>
 	<link rel="canonical" href="https://fujilenses.com/lens/{lens.slug}" />
 	<meta property="og:type" content="website" />
@@ -81,7 +82,7 @@
 	<meta property="og:title" content="{lens.model} — FujiLenses" />
 	<meta
 		property="og:description"
-		content="{lens.manufacturer} {lens.model} — {focalDisplay} f/{lens.maxAperture}. {lens.weightGrams}g, {lens.releaseYear}."
+		content="{lens.manufacturer} {lens.model} — {focalDisplay} {apertureDisplay(lens)}. {lens.weightGrams}g, {lens.releaseYear}."
 	/>
 	<meta property="og:image" content="https://fujilenses.com/og-image.png" />
 	<meta name="twitter:card" content="summary_large_image" />
@@ -107,7 +108,7 @@
 			</div>
 			<div class="stat">
 				<span class="stat-label">Max Aperture</span>
-				<span class="stat-value">f/{lens.maxAperture}</span>
+				<span class="stat-value">{apertureDisplay(lens)}</span>
 			</div>
 			<div class="stat">
 				<span class="stat-label">Weight</span>
@@ -277,7 +278,7 @@
 					<span class="also-specs">
 						<span>{simFocal}</span>
 						<span class="also-sep">&middot;</span>
-						<span>f/{similar.maxAperture}</span>
+						<span>{apertureDisplay(similar)}</span>
 						<span class="also-sep">&middot;</span>
 						<span>{similar.weightGrams}g</span>
 					</span>
