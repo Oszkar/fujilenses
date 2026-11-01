@@ -44,14 +44,14 @@ function property(name: string, value: string | number | boolean, unitText?: str
 }
 
 /**
- * schema.org Product for a lens. Deliberately no `offers`/`aggregateRating`: we have no
+ * schema.org ProductModel for a lens (a Product subtype that Google does not hold to the offers/review rule). Deliberately no `offers`/`aggregateRating`: we have no
  * reliable price data or reviews, and fabricating them violates structured-data guidelines.
  */
 export function lensJsonLd(lens: Lens): JsonLd {
 	return {
 		'@context': 'https://schema.org',
-		'@type': 'Product',
-		'@id': `${SITE_URL}/lens/${lens.slug}#product`,
+		'@type': 'ProductModel',
+		'@id': `${SITE_URL}/lens/${lens.slug}#model`,
 		url: `${SITE_URL}/lens/${lens.slug}`,
 		name: `${lens.manufacturer} ${lens.model}`,
 		description: lensDescription(lens),

@@ -72,9 +72,9 @@ describe('lensDescription', () => {
 });
 
 describe('lensJsonLd', () => {
-	it('is a Product with canonical url and no offers or ratings', () => {
+	it('is a ProductModel with canonical url and no offers or ratings', () => {
 		const ld = lensJsonLd(makeLens());
-		expect(ld['@type']).toBe('Product');
+		expect(ld['@type']).toBe('ProductModel');
 		expect(ld.url).toBe('https://fujilenses.com/lens/xf-8mm-f35-wr');
 		expect(ld).not.toHaveProperty('offers');
 		expect(ld).not.toHaveProperty('aggregateRating');
