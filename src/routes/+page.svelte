@@ -4,6 +4,7 @@
 	import { browser } from '$app/environment';
 	import { focalCoverage } from '$lib/coverage';
 	import { allLenses } from '$lib/data';
+	import { homeJsonLd, jsonLdScript } from '$lib/seo';
 	import {
 		parseFiltersFromURL,
 		applyFilters,
@@ -224,6 +225,12 @@
 	/>
 	<meta property="og:image" content="https://fujilenses.com/og-image.png" />
 	<meta name="twitter:card" content="summary_large_image" />
+	<meta name="twitter:title" content="FujiLenses — Fujifilm X-Mount Lens Explorer" />
+	<meta
+		name="twitter:description"
+		content="Browse and compare Fujifilm X-mount lenses — Fujinon, Sigma, Viltrox, Tamron and more."
+	/>
+	{@html jsonLdScript(homeJsonLd())}
 </svelte:head>
 
 {#if !isSharedView && filters.view === 'kit' && kitLenses.length > 0}
