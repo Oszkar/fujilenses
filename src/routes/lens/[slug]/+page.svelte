@@ -1,7 +1,8 @@
 <script lang="ts">
 	import { apertureDisplay } from '$lib/aperture';
 	import { focalDisplay as formatFocal } from '$lib/format';
-	import { lensDescription, lensJsonLd, jsonLdScript } from '$lib/seo';
+	import { lensDescription, lensJsonLd } from '$lib/seo';
+	import Seo from '$lib/components/Seo.svelte';
 	import type { PageData } from './$types';
 	import { manufacturerColors, isNewLens } from '$lib/data';
 	import { getFFMultiplier } from '$lib/filters';
@@ -70,19 +71,14 @@
 	{#if hasReviews}
 		<link rel="stylesheet" href="/lite-yt-embed.css" />
 	{/if}
-	<title>{lens.model} — FujiLenses</title>
-	<meta name="description" content={description} />
-	<link rel="canonical" href="https://fujilenses.com/lens/{lens.slug}" />
-	<meta property="og:type" content="website" />
-	<meta property="og:url" content="https://fujilenses.com/lens/{lens.slug}" />
-	<meta property="og:title" content="{lens.model} — FujiLenses" />
-	<meta property="og:description" content={description} />
-	<meta property="og:image" content="https://fujilenses.com/og-image.png" />
-	<meta name="twitter:card" content="summary_large_image" />
-	<meta name="twitter:title" content="{lens.model} — FujiLenses" />
-	<meta name="twitter:description" content={description} />
-	{@html jsonLdScript(lensJsonLd(lens))}
 </svelte:head>
+
+<Seo
+	title="{lens.model} — FujiLenses"
+	{description}
+	path="/lens/{lens.slug}"
+	jsonLd={lensJsonLd(lens)}
+/>
 
 <a href="/" class="back-link">&larr; Back to browse</a>
 

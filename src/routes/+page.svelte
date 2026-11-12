@@ -4,7 +4,8 @@
 	import { browser } from '$app/environment';
 	import { focalCoverage } from '$lib/coverage';
 	import { allLenses } from '$lib/data';
-	import { homeJsonLd, jsonLdScript } from '$lib/seo';
+	import { homeJsonLd, SITE_DESCRIPTION } from '$lib/seo';
+	import Seo from '$lib/components/Seo.svelte';
 	import {
 		parseFiltersFromURL,
 		applyFilters,
@@ -209,29 +210,11 @@
 	});
 </script>
 
-<svelte:head>
-	<title>FujiLenses — Fujifilm X-Mount Lens Explorer</title>
-	<meta
-		name="description"
-		content="Browse and compare Fujifilm X-mount lenses — Fujinon, Sigma, Viltrox, Tamron and more."
-	/>
-	<link rel="canonical" href="https://fujilenses.com" />
-	<meta property="og:type" content="website" />
-	<meta property="og:url" content="https://fujilenses.com" />
-	<meta property="og:title" content="FujiLenses — Fujifilm X-Mount Lens Explorer" />
-	<meta
-		property="og:description"
-		content="Browse and compare Fujifilm X-mount lenses — Fujinon, Sigma, Viltrox, Tamron and more."
-	/>
-	<meta property="og:image" content="https://fujilenses.com/og-image.png" />
-	<meta name="twitter:card" content="summary_large_image" />
-	<meta name="twitter:title" content="FujiLenses — Fujifilm X-Mount Lens Explorer" />
-	<meta
-		name="twitter:description"
-		content="Browse and compare Fujifilm X-mount lenses — Fujinon, Sigma, Viltrox, Tamron and more."
-	/>
-	{@html jsonLdScript(homeJsonLd())}
-</svelte:head>
+<Seo
+	title="FujiLenses — Fujifilm X-Mount Lens Explorer"
+	description={SITE_DESCRIPTION}
+	jsonLd={homeJsonLd()}
+/>
 
 {#if !isSharedView && filters.view === 'kit' && kitLenses.length > 0}
 	<div class="page-heading-row">

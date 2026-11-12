@@ -1,6 +1,5 @@
 import { allLenses } from '$lib/data';
-
-const SITE_URL = 'https://fujilenses.com';
+import { SITE_URL } from '$lib/seo';
 
 export const prerender = true;
 

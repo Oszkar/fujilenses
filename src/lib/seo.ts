@@ -4,6 +4,8 @@ import type { Lens } from './types';
 
 export const SITE_URL = 'https://fujilenses.com';
 export const SITE_NAME = 'FujiLenses';
+export const SITE_OG_IMAGE = `${SITE_URL}/og-image.png`;
+export const SITE_OG_IMAGE_ALT = 'FujiLenses — Fujifilm X-mount lens explorer';
 export const SITE_DESCRIPTION =
 	'Browse and compare Fujifilm X-mount lenses — Fujinon, Sigma, Viltrox, Tamron and more.';
 
