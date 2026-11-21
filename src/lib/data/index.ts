@@ -33,5 +33,7 @@ export const manufacturerColors: Record<string, string> = {
 	Tamron: 'var(--mfr-tamron)',
 	Sirui: 'var(--mfr-sirui)',
 	'Voigtländer': 'var(--mfr-voigtlander)',
-	TTArtisan: 'var(--mfr-ttartisan)'
+	TTArtisan: 'var(--mfr-ttartisan)',
+	Laowa: 'var(--mfr-laowa)',
+	Thypoch: 'var(--mfr-thypoch)'
 };
