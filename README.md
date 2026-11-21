@@ -6,7 +6,7 @@
 
 Interactive lens explorer for the Fujifilm X-mount ecosystem. Browse, filter, and compare lenses from Fujinon, TTArtisan, Viltrox, Sigma, Sirui, Voigtländer, and Tamron.
 
-**[www.fujilenses.com](https://www.fujilenses.com)**
+**[fujilenses.com](https://fujilenses.com)**
 
 ## Stack
 
@@ -23,7 +23,8 @@ Interactive lens explorer for the Fujifilm X-mount ecosystem. Browse, filter, an
 - **Focal map** — D3 log/linear-scale SVG showing focal ranges. Primes as circles, zooms as bars, color-coded by manufacturer. Hover tooltips.
 - **Filters** — manufacturer, lens type, features (WR, OIS, aperture ring, autofocus), full-frame equivalent toggle. All filter state reflected in URL for bookmarking/sharing.
 - **My Kit** — mark lenses you own via localStorage. Focal coverage map, filter size summary, and lens list. Kit persists across sessions.
-- **Lens detail pages** — deep-linkable spec cards with OG tags for every lens.
+- **Lens detail pages** — deep-linkable spec cards with OG tags and `ProductModel` JSON-LD for every lens.
+- **Agent-readable** — [`/llms.txt`](https://fujilenses.com/llms.txt) (index) and [`/lenses.json`](https://fujilenses.com/lenses.json) (full spec dataset), both generated from the lens data at build time.
 - **Dark/light theme** — system theme detection, manual toggle, persisted in localStorage.
 - **Font size (S/M/L)** — scales all UI proportionally.
 - **Mobile responsive** — sidebar drawer, scrollable tables and maps.
@@ -31,19 +32,7 @@ Interactive lens explorer for the Fujifilm X-mount ecosystem. Browse, filter, an
 
 ## Lens Data
 
-116 lenses across 7 manufacturers:
-
-| Manufacturer | Lenses |
-|---|---|
-| Fujinon | 49 (42 XF + 7 XC) |
-| TTArtisan | 21 |
-| Viltrox | 16 |
-| Sigma | 12 |
-| Sirui | 7 |
-| Voigtländer | 7 |
-| Tamron | 4 |
-
-Data files: `src/lib/data/xf-lenses.json` and `src/lib/data/third-party-lenses.json`.
+Specs for Fujinon, TTArtisan, Viltrox, Sigma, Sirui, Voigtländer and Tamron lenses live in `src/lib/data/xf-lenses.json` and `src/lib/data/third-party-lenses.json`. Sourcing and corrections are tracked in [docs/data-audit](docs/data-audit/README.md); see [CONTRIBUTING.md](CONTRIBUTING.md) to add or fix a lens.
 
 ## Development
 
@@ -70,7 +59,3 @@ pnpm test:watch  # watch mode
 ```
 
 CI runs `pnpm check`, `pnpm test`, and `pnpm build` on pull requests and main. Dependabot checks npm dependencies and GitHub Actions on Mondays at 09:00 Asia/Tokyo; security updates run independently.
-
-## Contributing
-
-See [CONTRIBUTING.md](CONTRIBUTING.md) for how to add or correct lens data.
