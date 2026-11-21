@@ -178,7 +178,7 @@
 		if (isSharedView) return 'Shared Kit';
 		if (filters.view === 'kit') return 'My Kit';
 		if (filters.view === 'map') return 'Focal Range Map';
-		return 'Lens Inventory';
+		return 'Fujifilm Lens Inventory';
 	});
 
 	let pageSubtitle = $derived.by(() => {
