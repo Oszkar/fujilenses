@@ -64,6 +64,8 @@ Shared lightness & chroma, hue varies. Badge fill = maker color at `--mfr-badge-
 | `--mfr-tamron` | `0.81 0.10 168` | `#7fcdb0` | `0.55 0.12 165` | Tamron — mint |
 | `--mfr-sirui` | `0.78 0.11 350` | `#e5a3bd` | `0.56 0.16 352` | Sirui — rose |
 | `--mfr-ttartisan` | `0.76 0.12 28` | `#e69f8e` | `0.56 0.18 28` | TTArtisan — coral |
+| `--mfr-laowa` | `0.81 0.10 205` | — | `0.53 0.10 205` | Laowa — cyan |
+| `--mfr-thypoch` | `0.79 0.11 275` | — | `0.52 0.17 275` | Thypoch — periwinkle |
 
 Hex values are approximate; **author against the `oklch()` tokens**, not the hex.
 

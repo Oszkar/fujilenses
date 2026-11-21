@@ -12,8 +12,12 @@ The systematic pass covers physical aperture rings and weight provenance for eve
 | [Sigma / Tamron / Voigtländer](sigma-tamron-voigtlander.md) | 22 | Mount-labelled specifications, control evidence, Tamron dates, Voigtländer filters |
 | [Viltrox / Sirui](viltrox-sirui.md) | 21 | X-specific weight tables and reviews, clickless rings, remaining control-evidence gaps |
 | [TTArtisan](ttartisan.md) | 20 | Manufacturer ranges, ring reviews/manuals, uncertain weights and possible midpoint entries |
+| [Laowa](laowa.md) | 7 added | Requested native-X lenses, Amazon identities, hood-mounted filters and 12–24mm Shift weight conflict |
+| [Thypoch](thypoch.md) | 4 added | Requested Simera models plus released Eureka and Sculptor X models; mount-specific weights and source qualifications |
 
 ## Known open weight issues
+
+- Laowa 12–24mm F5.6 Zoom Shift CF stores **575 g** from the current manufacturer product table and exact-X retailer. Its manual instead gives **604 g excluding caps**; the accessory basis of the difference remains unresolved. See [Laowa evidence](laowa.md).
 
 - TTArtisan AF56 stores **225 g**, outside the [official 233–245 g range](https://ttartisan.com/static/upload/file/20240219/1708329488136330.pdf). No reliable X-specific replacement was found. Do not replace it with an average.
 - Two TTArtisan values equal the exact midpoint of an official range, which suggests averaging but does not prove it: 35mm F0.95 **257** (range [247–267](https://www.ttartisan.com/?aps-c-lenses/70.html=)) and 100mm Macro **724** (range [700–748](https://www.ttartisan.com/?full-frame-lenses/TS-100-Macro.html=)). Neither is verified as an X-specific weight. Other TTArtisan values copy an endpoint or generic number; see the row-level findings.

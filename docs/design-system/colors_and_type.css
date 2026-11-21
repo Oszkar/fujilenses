@@ -9,8 +9,8 @@
    (prefers-color-scheme); an explicit data-theme on <html> wins.
 
    Maker colors are one harmonized OKLCH family (shared lightness &
-   chroma, hue is the only variable) so seven brands read as a single
-   data palette rather than seven unrelated swatches.
+	chroma, hue is the only variable) so brands read as a single
+	data palette.
    ============================================================ */
 
 @import url('https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap');
@@ -137,6 +137,8 @@
 	--mfr-tamron: oklch(0.81 0.1 168); /* mint              */
 	--mfr-sirui: oklch(0.78 0.11 350); /* rose              */
 	--mfr-ttartisan: oklch(0.76 0.12 28); /* coral           */
+	--mfr-laowa: oklch(0.81 0.1 205); /* cyan              */
+	--mfr-thypoch: oklch(0.79 0.11 275); /* periwinkle      */
 
 	/* Semantic */
 	--kit: oklch(0.82 0.16 150); /* ownership green           */
@@ -189,6 +191,8 @@
 	--mfr-tamron: oklch(0.55 0.12 165);
 	--mfr-sirui: oklch(0.56 0.16 352);
 	--mfr-ttartisan: oklch(0.56 0.18 28);
+	--mfr-laowa: oklch(0.53 0.1 205);
+	--mfr-thypoch: oklch(0.52 0.17 275);
 
 	--kit: oklch(0.58 0.15 150);
 	--kit-bg: color-mix(in srgb, var(--kit) 10%, transparent);
@@ -235,6 +239,8 @@
 		--mfr-tamron: oklch(0.55 0.12 165);
 		--mfr-sirui: oklch(0.56 0.16 352);
 		--mfr-ttartisan: oklch(0.56 0.18 28);
+		--mfr-laowa: oklch(0.53 0.1 205);
+		--mfr-thypoch: oklch(0.52 0.17 275);
 
 		--kit: oklch(0.58 0.15 150);
 		--kit-bg: color-mix(in srgb, var(--kit) 10%, transparent);
