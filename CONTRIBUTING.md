@@ -51,7 +51,7 @@ Slugs follow `{mount}-{focal}-f{aperture}-{suffix}`:
 - Aperture: `f14` (drop the decimal — `1.4` becomes `f14`, `2.8` becomes `f28`)
 - Suffix: short Fujifilm model suffix if part of official name (`r`, `wr`, `lm`); omit for third-party unless needed for disambiguation
 
-**Slugs must be unique.** The build will fail if duplicates are detected.
+**Slugs must be unique.** The build will fail if duplicates are detected. Slugs are also public URLs (`/lens/{slug}`): don't rename a published slug without adding a redirect.
 
 ## Optional Fields
 
@@ -82,4 +82,8 @@ Each lens can have an optional `reviews` array of curated YouTube video reviews:
 
 ## Fields Not Yet in Use
 
-`approxPriceUSD`, `priceUpdatedYear`, and `retailerUrl` are reserved for a future version. Set them to `0`, `0`, and `""` respectively.
+`approxPriceUSD`, `priceUpdatedYear`, and `retailerUrl` are reserved for a future version. Set them to `0`, `0`, and `""` respectively. They are deliberately left out of `/lenses.json` and the JSON-LD until real prices exist.
+
+## After Editing
+
+Run `pnpm test` and `pnpm build`. The lens pages, sitemap, `/llms.txt`, `/lenses.json`, JSON-LD and meta descriptions regenerate from the data automatically; nothing else needs updating.

@@ -2,23 +2,10 @@
 
 The visual language and component reference for **FujiLenses** — an interactive lens explorer for the Fujifilm X-mount ecosystem (browse, filter, compare lenses from Fujinon, Sigma, Viltrox, Tamron, Sirui, Voigtländer, and TTArtisan).
 
-This design system codifies and *refines* the existing **"Technical Clarity"** direction: a calm, data-dense interface where the lens data is the only thing allowed to carry color. The refresh keeps the bones of the live product and tightens type, spacing, and color into one coherent, documented system.
+This design system documents the **"Technical Clarity"** direction: a calm, data-dense interface where the lens data is the only thing allowed to carry color.
 
-> **Live product:** [www.fujilenses.com](https://www.fujilenses.com)
+> **Live product:** [fujilenses.com](https://fujilenses.com)
 > **Source:** [github.com/Oszkar/fujilenses](https://github.com/Oszkar/fujilenses) — SvelteKit (static) · Tailwind CSS v4 · TypeScript · d3-scale · Vercel
-
----
-
-## What changed in this refresh
-
-This system is a **light refresh**, not a rebuild. Concretely:
-
-1. **Reconciled the tokens.** The old `DESIGN-TOKENS.md` and the live `layout.css` had drifted apart (e.g. `--bg-surface` was `#161C24` in the doc but `#181f28` in code; the doc was missing the Sirui / Voigtländer / TTArtisan maker colors and the `--danger` token the code uses). There is now one source of truth: **`colors_and_type.css`**.
-2. **Harmonized the maker palette.** The seven maker colors are now one OKLCH family — shared lightness and chroma, hue is the only variable — so they read as a single data set instead of seven unrelated swatches.
-3. **Distinct UI accent.** The interactive accent moved off sky-blue (which collided with Fujinon) to **indigo**, so chrome and catalogue never get confused. Four alternates are documented and switchable in the styleguide.
-4. **Fresh type pairing.** **Geist + Geist Mono** replace Instrument Sans + JetBrains Mono — cleaner, more neutral, closer to the "Linear, but simpler" target. (Instrument Sans + JetBrains Mono remain documented fallbacks.)
-5. **System-preference theming.** Default now follows the OS; an explicit `data-theme` still wins. Both modes are fully tuned.
-6. **Layout headroom for roadmap features.** The lens-detail layout now has first-class slots for **product photos** (4:3 frame) and **retailer / price links** — supporting the planned photo + affiliate work. The **My Kit coverage map** was redesigned around a single full-width, percentage-positioned band so it stays legible on phones (the previous chart was finicky on small screens).
 
 ---
 
@@ -84,13 +71,8 @@ The motifs that make it feel like FujiLenses.
 
 ## Using this system
 
-**In the app (production):** replace the `:root` / `[data-theme]` block in `src/routes/layout.css` with `colors_and_type.css` (it `@import`s Geist from Google Fonts — for production, self-host the Geist + Geist Mono woff2 files in `static/fonts/` and swap the `@import` for `@font-face`, mirroring the existing Instrument Sans setup). Component CSS in `ui_kits/web/app.css` maps 1:1 onto the existing Svelte components.
+**Source of truth:** `colors_and_type.css` defines the tokens (both themes + OS-preference fallback). The app's tokens live in `src/routes/layout.css`, with Geist and Geist Mono self-hosted from `static/fonts/`. Keep the two in sync when changing a token. Component CSS in `ui_kits/web/app.css` maps onto the Svelte components.
 
-**For prototypes / mocks:** open `styleguide.html` to grab tokens and component markup, or lift screens straight out of `ui_kits/web/`.
+**For prototypes / mocks:** open `styleguide.html` to grab tokens and component markup, or lift screens from `ui_kits/web/`.
 
----
-
-## Caveats / fonts
-
-- **Font substitution flag:** the system specifies **Geist + Geist Mono**, loaded via Google Fonts in the styleguide. This is a deliberate proposed upgrade from Instrument Sans + JetBrains Mono, not a fallback for missing files. If you'd rather keep the current pair, every token still works — just change `--font-sans` / `--font-mono`.
-- The maker, kit, and semantic colors are authored in **`oklch()`** (supported by all current browsers and Tailwind v4). Hex equivalents are listed in `DESIGN-TOKENS.md` for any tooling that needs them.
+**Notes:** maker, kit and semantic colors are authored in `oklch()` (hex equivalents in `DESIGN-TOKENS.md`). The brand mark in the mockups is a token-built stand-in; the real asset is `static/favicon.png`.
